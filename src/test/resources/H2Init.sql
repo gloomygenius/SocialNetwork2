@@ -12,7 +12,7 @@ CREATE TABLE Users (
   university VARCHAR(50),
   team       INT,
   position   INT,
-  about      VARCHAR(500),
+  about      VARCHAR(255),
 );
 INSERT INTO Users (email, password, first_name, last_name, gender)
 VALUES ('admin@exam.com', '123456', 'Василий', 'Бобков', 1);

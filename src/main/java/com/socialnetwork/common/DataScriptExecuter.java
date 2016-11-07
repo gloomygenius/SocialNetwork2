@@ -1,4 +1,4 @@
-package com.socialnetwork.dao;
+package com.socialnetwork.common;
 
 import com.socialnetwork.connection_pool.ConnectionPool;
 import com.socialnetwork.connection_pool.ConnectionPoolException;

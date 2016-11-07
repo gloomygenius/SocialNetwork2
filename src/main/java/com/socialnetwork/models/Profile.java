@@ -9,6 +9,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class Profile {
     private final long id;
+    private final long userId;
     private final String telephone;
     private final LocalDate birthday;
     private final String country;

@@ -2,7 +2,7 @@ package com.socialnetwork.dao.h2;
 
 import com.socialnetwork.connection_pool.ConnectionPool;
 import com.socialnetwork.connection_pool.ConnectionPoolException;
-import com.socialnetwork.dao.DataScriptExecuter;
+import com.socialnetwork.common.DataScriptExecuter;
 import com.socialnetwork.dao.UserDao;
 import com.socialnetwork.models.User;
 import lombok.SneakyThrows;
@@ -30,6 +30,7 @@ public class UserDaoImplTest {
     }
 
     @Test
+    @SneakyThrows
     public void getById() throws Exception {
         UserDao userDao = new UserDaoImpl(connectionPool);
         assertTrue(userDao.getById(1).isPresent());
@@ -40,6 +41,13 @@ public class UserDaoImplTest {
     public void getByEmail() throws Exception {
         UserDao userDao = new UserDaoImpl(connectionPool);
         assertTrue(userDao.getByEmail("admin@exam.com").isPresent());
+    }
+
+    @Test
+    @SneakyThrows
+    public void getByNames() throws Exception {
+        UserDao userDao = new UserDaoImpl(connectionPool);
+        assertTrue(userDao.getByNames("Василий","Бобков").isPresent());
     }
 
     @Test
@@ -66,7 +74,7 @@ public class UserDaoImplTest {
                 user1.getGender()
         );
         userDao.update(user2);
-        User user3=userDao.getById(user2.getId()).get();
+        User user3 = userDao.getById(user2.getId()).get();
         assertTrue(user3.getEmail().equals("newmail@exam.com"));
     }
 
@@ -75,7 +83,7 @@ public class UserDaoImplTest {
     public void remove() throws Exception {
         UserDao userDao = new UserDaoImpl(connectionPool);
         userDao.add(new User(0, "example3@ya.ru", "123456", "Иван", "Иванов", MALE.ordinal()));
-        Optional<User> userOptional=userDao.getByEmail("example3@ya.ru");
+        Optional<User> userOptional = userDao.getByEmail("example3@ya.ru");
         assertTrue(userOptional.isPresent());
         userDao.remove(userOptional.get().getId());
         assertFalse(userDao.getByEmail("example3@ya.ru").isPresent());

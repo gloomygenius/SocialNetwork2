@@ -9,8 +9,9 @@ import java.util.Optional;
  * Created by Vasiliy Bobkov on 06.11.2016.
  */
 public interface UserDao {
-    Optional<User> getById(long id);
+    Optional<User> getById(long id) throws DaoException;
     Optional<User> getByEmail(String email) throws DaoException;
+    Optional<User> getByNames(String firstName, String lastName) throws DaoException;
     void add(User user) throws DaoException;
     void update(User user) throws DaoException;
     void remove(long id) throws DaoException;

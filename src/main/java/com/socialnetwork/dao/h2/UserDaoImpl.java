@@ -23,7 +23,7 @@ public class UserDaoImpl implements UserDao {
     private final ConnectionPool connectionPool;
 
     @Override
-    public Optional<User> getById(long id) {
+    public Optional<User> getById(long id) throws DaoException {
         Optional<User> user = Optional.empty();
         try (Connection connection = connectionPool.takeConnection();
              Statement statement = connection.createStatement();
@@ -35,6 +35,7 @@ public class UserDaoImpl implements UserDao {
             }
         } catch (SQLException | ConnectionPoolException e) {
             log.warn("Error requesting data from the database", e);
+            throw new DaoException();
         }
         return user;
     }
@@ -82,6 +83,27 @@ public class UserDaoImpl implements UserDao {
             log.error("Error requesting data from the database", e);
             throw new DaoException();
         }
+        return user;
+    }
+
+    @Override
+    public Optional<User> getByNames(String firstName, String lastName) throws DaoException {
+        Optional<User> user = Optional.empty();
+        try (Connection connection = connectionPool.takeConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(
+                     "SELECT id, email, password, first_name, last_name,  gender FROM Users WHERE "
+                             .concat("first_name='"+firstName+"' AND ")
+                             .concat("last_name='"+lastName+"'")
+             )) {
+            if (resultSet.next()) {
+                user = Optional.of(createUserFromResultSet(resultSet));
+            }
+        } catch (SQLException | ConnectionPoolException e) {
+            log.error("Error requesting data from the database", e);
+            throw new DaoException();
+        }
+        // TODO: 07.11.2016 оптимизировать SQL запрос
         return user;
     }
 

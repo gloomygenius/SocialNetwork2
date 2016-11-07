@@ -12,6 +12,7 @@ import org.junit.Test;
 import java.util.Optional;
 
 import static com.socialnetwork.dao.enums.Gender.MALE;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -70,7 +71,13 @@ public class UserDaoImplTest {
     }
 
     @Test
+    @SneakyThrows
     public void remove() throws Exception {
-
+        UserDao userDao = new UserDaoImpl(connectionPool);
+        userDao.add(new User(0, "example3@ya.ru", "123456", "Иван", "Иванов", MALE.ordinal()));
+        Optional<User> userOptional=userDao.getByEmail("example3@ya.ru");
+        assertTrue(userOptional.isPresent());
+        userDao.remove(userOptional.get().getId());
+        assertFalse(userDao.getByEmail("example3@ya.ru").isPresent());
     }
 }

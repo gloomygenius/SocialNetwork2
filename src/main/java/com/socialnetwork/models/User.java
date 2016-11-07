@@ -9,6 +9,7 @@ public class User {
     private final long id;
     private final String email;
     private final String password;
-    private final String first_name;
-    private final String last_name;
+    private final String firstName;
+    private final String lastName;
+    private final int gender;
 }

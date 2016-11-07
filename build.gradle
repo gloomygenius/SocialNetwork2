@@ -12,11 +12,9 @@ dependencies {
 
     compile 'log4j:log4j:+'
     compile 'javax.servlet.jsp.jstl:javax.servlet.jsp.jstl-api:+'
-    compile 'org.glassfish.web:javax.servlet.jsp.jstl:+'
-    compile 'commons-validator:commons-validator:+'
-    compile 'commons-dbutils:commons-dbutils:+'
-
+    compile 'com.h2database:h2:+'
     compileOnly 'org.projectlombok:lombok:+'
+    testCompile 'org.projectlombok:lombok:+'
 
     providedCompile 'org.apache.tomcat:tomcat-api:+'
     providedCompile 'org.apache.tomcat:tomcat-jsp-api:+'

@@ -11,6 +11,8 @@ import lombok.extern.log4j.Log4j;
 import java.sql.*;
 import java.util.Optional;
 
+import static com.socialnetwork.dao.enums.Roles.USER;
+
 /**
  * Created by Vasiliy Bobkov on 06.11.2016.
  */
@@ -21,13 +23,13 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Optional<User> getById(long id) throws DaoException {
-        String sqlReqest = "SELECT id, email, password, first_name, last_name, gender FROM Users WHERE id='" + id + "'";
+        String sqlReqest = "SELECT id, email, password, first_name, last_name, gender, role FROM Users WHERE id='" + id + "'";
         return getByAny(sqlReqest);
     }
 
     @Override
     public Optional<User> getByEmail(String email) throws DaoException {
-        String sqlReqest = "SELECT id, email, password, first_name, last_name,  gender FROM Users WHERE email = '"
+        String sqlReqest = "SELECT id, email, password, first_name, last_name,  gender, role FROM Users WHERE email = '"
                 .concat(email)
                 .concat("'");
         return getByAny(sqlReqest);
@@ -35,7 +37,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Optional<User> getByNames(String firstName, String lastName) throws DaoException {
-        String sqlReqest = "SELECT id, email, password, first_name, last_name,  gender FROM Users WHERE "
+        String sqlReqest = "SELECT id, email, password, first_name, last_name,  gender, role FROM Users WHERE "
                 .concat("first_name='" + firstName + "' AND ")
                 .concat("last_name='" + lastName + "'");
         return getByAny(sqlReqest);
@@ -46,13 +48,14 @@ public class UserDaoImpl implements UserDao {
     public void add(User user) throws DaoException {
         try (Connection connection = connectionPool.takeConnection();
              PreparedStatement statement = connection.prepareStatement(
-                     "INSERT INTO Users (email, password, first_name, last_name, gender) VALUES (?, ?, ?, ?, ?)"
+                     "INSERT INTO Users (email, password, first_name, last_name, gender, role) VALUES (?, ?, ?, ?, ?, ?)"
              )) {
             statement.setString(1, user.getEmail());
             statement.setString(2, user.getPassword());
             statement.setString(3, user.getFirstName());
             statement.setString(4, user.getLastName());
             statement.setInt(5, user.getGender());
+            statement.setInt(6, user.getRole());
             statement.execute();
         } catch (SQLException | ConnectionPoolException e) {
             log.error("Error add new user", e);
@@ -64,14 +67,15 @@ public class UserDaoImpl implements UserDao {
     public void update(User user) throws DaoException {
         try (Connection connection = connectionPool.takeConnection();
              PreparedStatement statement = connection.prepareStatement(
-                     "UPDATE Users SET email=?, password=?, first_name=?, last_name=?, gender=? WHERE id=?"
+                     "UPDATE Users SET email=?, password=?, first_name=?, last_name=?, gender=?, role=? WHERE id=?"
              )) {
             statement.setString(1, user.getEmail());
             statement.setString(2, user.getPassword());
             statement.setString(3, user.getFirstName());
             statement.setString(4, user.getLastName());
             statement.setInt(5, user.getGender());
-            statement.setLong(6, user.getId());
+            statement.setInt(6, user.getRole());
+            statement.setLong(7, user.getId());
             statement.execute();
         } catch (SQLException | ConnectionPoolException e) {
             log.error("Error update user", e);
@@ -110,7 +114,8 @@ public class UserDaoImpl implements UserDao {
                     resultSet.getString("password"),
                     resultSet.getString("first_name"),
                     resultSet.getString("last_name"),
-                    resultSet.getInt("gender")
+                    resultSet.getInt("gender"),
+                    resultSet.getInt("role")
             );
         } catch (SQLException e) {
             log.error("Error of creating user from result set", e);

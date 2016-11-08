@@ -12,6 +12,8 @@ import org.junit.Test;
 import java.util.Optional;
 
 import static com.socialnetwork.dao.enums.Gender.MALE;
+import static com.socialnetwork.dao.enums.Roles.ADMIN;
+import static com.socialnetwork.dao.enums.Roles.USER;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -54,7 +56,7 @@ public class UserDaoImplTest {
     @SneakyThrows
     public void add() throws Exception {
         UserDao userDao = new UserDaoImpl(connectionPool);
-        userDao.add(new User(0, "vasya@ya.ru", "123456", "Иван", "Иванов", MALE.ordinal()));
+        userDao.add(new User(0, "vasya@ya.ru", "123456", "Иван", "Иванов", MALE.ordinal(), ADMIN.ordinal()));
         assertTrue(userDao.getByEmail("vasya@ya.ru").isPresent());
     }
 
@@ -71,7 +73,8 @@ public class UserDaoImplTest {
                 user1.getPassword(),
                 user1.getFirstName(),
                 user1.getLastName(),
-                user1.getGender()
+                user1.getGender(),
+                user1.getRole()
         );
         userDao.update(user2);
         User user3 = userDao.getById(user2.getId()).get();
@@ -82,7 +85,7 @@ public class UserDaoImplTest {
     @SneakyThrows
     public void remove() throws Exception {
         UserDao userDao = new UserDaoImpl(connectionPool);
-        userDao.add(new User(0, "example3@ya.ru", "123456", "Иван", "Иванов", MALE.ordinal()));
+        userDao.add(new User(0, "example3@ya.ru", "123456", "Иван", "Иванов", MALE.ordinal(), USER.ordinal()));
         Optional<User> userOptional = userDao.getByEmail("example3@ya.ru");
         assertTrue(userOptional.isPresent());
         userDao.remove(userOptional.get().getId());

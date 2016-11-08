@@ -5,6 +5,7 @@ CREATE TABLE Users (
   first_name VARCHAR(255) NOT NULL,
   last_name  VARCHAR(255) NOT NULL,
   gender     INT          NOT NULL,
+  role       INT          NOT NULL,
   telephone  VARCHAR(20),
   birthday   DATE,
   country    VARCHAR(20),
@@ -14,8 +15,8 @@ CREATE TABLE Users (
   position   INT,
   about      VARCHAR(255),
 );
-INSERT INTO Users (email, password, first_name, last_name, gender)
-VALUES ('admin@exam.com', '123456', 'Василий', 'Бобков', 1);
+INSERT INTO Users (email, password, first_name, last_name, gender, role)
+VALUES ('admin@exam.com', '123456', 'Василий', 'Бобков', 1, 2);
 
-INSERT INTO Users (email, password, first_name, last_name, gender)
-VALUES ('oldmail@exam.com', '123456', 'Петя', 'Петров', 1);
+INSERT INTO Users (email, password, first_name, last_name, gender, role)
+VALUES ('oldmail@exam.com', '123456', 'Петя', 'Петров', 1, 0);

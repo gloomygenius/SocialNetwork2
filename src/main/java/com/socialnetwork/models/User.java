@@ -12,4 +12,5 @@ public class User {
     private final String firstName;
     private final String lastName;
     private final int gender;
+    private final int role;
 }

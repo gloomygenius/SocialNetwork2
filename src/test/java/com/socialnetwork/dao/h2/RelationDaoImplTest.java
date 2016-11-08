@@ -21,8 +21,8 @@ import static org.junit.Assert.*;
  * Created by Vasiliy Bobkov on 08.11.2016.
  */
 public class RelationDaoImplTest {
-
     private static ConnectionPool connectionPool;
+    private RelationDao relationDao = new RelationDaoImpl(connectionPool);
 
     @BeforeClass
     public static void DBinit() throws ConnectionPoolException {
@@ -40,7 +40,7 @@ public class RelationDaoImplTest {
     @Test
     @SneakyThrows
     public void getFriends() throws Exception {
-        RelationDao relationDao = new RelationDaoImpl(connectionPool);
+
         Relation relation = relationDao.getFriends(1);
         Set<Long> friends = new HashSet<>();
         friends.add(2L);
@@ -51,7 +51,7 @@ public class RelationDaoImplTest {
     @Test
     @SneakyThrows
     public void getIncoming() throws Exception {
-        RelationDao relationDao = new RelationDaoImpl(connectionPool);
+
         Relation relation = relationDao.getIncoming(1);
         Set<Long> incoming = new HashSet<>();
         incoming.add(5L);
@@ -61,7 +61,7 @@ public class RelationDaoImplTest {
     @Test
     @SneakyThrows
     public void getRequest() throws Exception {
-        RelationDao relationDao = new RelationDaoImpl(connectionPool);
+
         Relation relation = relationDao.getRequest(1);
         Set<Long> request = new HashSet<>();
         request.add(4L);
@@ -71,7 +71,7 @@ public class RelationDaoImplTest {
     @Test
     @SneakyThrows
     public void getRelationBetween() throws Exception {
-        RelationDao relationDao = new RelationDaoImpl(connectionPool);
+
         relationDao.add(3, 4, RelationType.REQUEST);
         int relation = relationDao.getRelationBetween(3, 4);
         assertTrue(relation == RelationType.REQUEST.ordinal());
@@ -80,7 +80,7 @@ public class RelationDaoImplTest {
     @Test
     @SneakyThrows
     public void add() throws Exception {
-        RelationDao relationDao = new RelationDaoImpl(connectionPool);
+
         relationDao.add(4, 5, RelationType.INCOMING);
         int relation = relationDao.getRelationBetween(4, 5);
         assertTrue(relation == RelationType.INCOMING.ordinal());
@@ -98,7 +98,7 @@ public class RelationDaoImplTest {
     @Test
     @SneakyThrows
     public void remove() throws Exception {
-        RelationDao relationDao = new RelationDaoImpl(connectionPool);
+
         relationDao.add(3, 4, RelationType.REQUEST);
         int relation = relationDao.getRelationBetween(3, 4);
         assertTrue(relation == RelationType.REQUEST.ordinal());

@@ -22,6 +22,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class UserDaoImplTest {
     private static ConnectionPool connectionPool;
+    private static UserDao userDao;
 
     @BeforeClass
     public static void DBinit() throws ConnectionPoolException {
@@ -29,33 +30,33 @@ public class UserDaoImplTest {
         connectionPool = ConnectionPool.getInstance();
         connectionPool.initPoolData();
         DataScriptExecuter.initSqlData("src/test/resources/H2Init.sql");
+        userDao = new UserDaoImpl(connectionPool);
     }
 
     @Test
     @SneakyThrows
     public void getById() throws Exception {
-        UserDao userDao = new UserDaoImpl(connectionPool);
         assertTrue(userDao.getById(1).isPresent());
     }
 
     @Test
     @SneakyThrows
     public void getByEmail() throws Exception {
-        UserDao userDao = new UserDaoImpl(connectionPool);
+
         assertTrue(userDao.getByEmail("admin@exam.com").isPresent());
     }
 
     @Test
     @SneakyThrows
     public void getByNames() throws Exception {
-        UserDao userDao = new UserDaoImpl(connectionPool);
-        assertTrue(userDao.getByNames("Василий","Бобков").isPresent());
+
+        assertTrue(userDao.getByNames("Василий", "Бобков").isPresent());
     }
 
     @Test
     @SneakyThrows
     public void add() throws Exception {
-        UserDao userDao = new UserDaoImpl(connectionPool);
+
         userDao.add(new User(0, "vasya@ya.ru", "123456", "Иван", "Иванов", MALE.ordinal(), ADMIN.ordinal()));
         assertTrue(userDao.getByEmail("vasya@ya.ru").isPresent());
     }
@@ -63,7 +64,7 @@ public class UserDaoImplTest {
     @Test
     @SneakyThrows
     public void update() throws Exception {
-        UserDao userDao = new UserDaoImpl(connectionPool);
+
         Optional<User> userOptional = userDao.getByEmail("oldmail@exam.com");
         if (!userOptional.isPresent()) throw new Exception();
         User user1 = userOptional.get();
@@ -84,7 +85,7 @@ public class UserDaoImplTest {
     @Test
     @SneakyThrows
     public void remove() throws Exception {
-        UserDao userDao = new UserDaoImpl(connectionPool);
+
         userDao.add(new User(0, "example3@ya.ru", "123456", "Иван", "Иванов", MALE.ordinal(), USER.ordinal()));
         Optional<User> userOptional = userDao.getByEmail("example3@ya.ru");
         assertTrue(userOptional.isPresent());

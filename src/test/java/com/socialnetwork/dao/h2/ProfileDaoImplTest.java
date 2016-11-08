@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
  */
 public class ProfileDaoImplTest {
     private static ConnectionPool connectionPool;
-
+    ProfileDao profileDao = new ProfileDaoImpl(connectionPool);
     @BeforeClass
 
     public static void DBinit() throws ConnectionPoolException {
@@ -34,7 +34,7 @@ public class ProfileDaoImplTest {
     @Test
     @SneakyThrows
     public void getByUserId() throws Exception {
-        ProfileDao profileDao = new ProfileDaoImpl(connectionPool);
+
         Profile profile = new Profile(
                 1,
                 "+791100299",
@@ -64,7 +64,7 @@ public class ProfileDaoImplTest {
     @Test
     @SneakyThrows
     public void remove() throws Exception {
-        ProfileDao profileDao = new ProfileDaoImpl(connectionPool);
+
         Profile profile = new Profile(
                 2,
                 "+791100299",

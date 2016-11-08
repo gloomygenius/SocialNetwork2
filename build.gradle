@@ -16,6 +16,9 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:+'
     testCompile 'org.projectlombok:lombok:+'
 
+    // https://mvnrepository.com/artifact/javax.servlet/jstl
+    compile group: 'javax.servlet', name: 'jstl', version: '1.2'
+
     providedCompile 'org.apache.tomcat:tomcat-api:+'
     providedCompile 'org.apache.tomcat:tomcat-jsp-api:+'
     providedCompile 'org.apache.tomcat:tomcat-catalina:+'

@@ -1,0 +1,40 @@
+body {
+    background-color: #ccffcc;
+}
+
+#container {
+    width: 1200px; /* Ширина макета */
+    margin: 0 auto; /* Выравнивание по центру */
+    border: dashed brown;
+}
+
+#header {
+    font-size: 2em; /* Размер текста */
+    text-align: center; /* Выравнивание по центру */
+    padding: 5px; /* Отступы вокруг текста */
+    background: #66cc33; /* Цвет фона шапки */
+}
+
+#nav {
+    width: 200px; /* Ширина левой колонки */
+    float: left;
+    border: dashed blue;
+}
+
+#aside {
+    width: 300px; /* Ширина правой колонки */
+    float: right;
+    border: dashed blue;
+}
+
+#content {
+    margin: 0 300px 0 200px; /* Отступ на ширину левой и правой колонки*/
+    border: dashed blue;
+    min-height: 800px;
+}
+
+#footer {
+    clear: both; /* Отменяем действие float */
+    padding: 5px; /* Отступы вокруг текста */
+    background: #66cc33; /* Цвет фона подвала */
+}

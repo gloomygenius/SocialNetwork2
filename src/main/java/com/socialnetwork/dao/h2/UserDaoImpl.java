@@ -11,8 +11,6 @@ import lombok.extern.log4j.Log4j;
 import java.sql.*;
 import java.util.Optional;
 
-import static com.socialnetwork.dao.enums.Roles.USER;
-
 /**
  * Created by Vasiliy Bobkov on 06.11.2016.
  */

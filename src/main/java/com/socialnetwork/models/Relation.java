@@ -4,7 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
 
-import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -15,6 +16,7 @@ import java.util.HashMap;
 @AllArgsConstructor
 @Builder
 public class Relation {
-    long senderId;
-    HashMap<Long, Integer> relationMap;
+    private long senderId;
+    private Set<Long> idSet;
+    private int relationType;
 }

@@ -1,4 +1,4 @@
-package com.socialnetwork.models;
+package com.socialnetwork.dao.enums;
 
 /**
  * Created by Vasiliy Bobkov on 06.11.2016.

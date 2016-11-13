@@ -6,29 +6,19 @@
 <fmt:setLocale value="${language}"/>
 <fmt:setBundle basename="text"/>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
-<!DOCTYPE html>
-<html lang="${language}">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>Страница авторизации</title>
-    <link href="/css/style.css" rel="stylesheet" type="text/css" >
-</head>
-<body>
-<div id="container">
-    <div id="header">[В]Отряде</div>
-    <div id="nav">Левая колонка</div>
-    <div id="aside">Правая колонка</div>
-    <div id="content">
-        Надо залогиниться! <br>
-        <form method="POST" action="j_security_check">
-            <input name="j_username" title="Login"/><br/>
-            <input type="password" name="j_password" autocomplete="off" title="Password"/><br/>
-            <input type="submit" value="submit"/>
-        </form><br>
-        <a href="/regpage">Зарегистрироваться</a>
+<div class="row">
+    <div class="col-xs-12 col-md-8 col-lg-6 center-block">
+        <h1 class="text-center login-title">Sign in to continue to Bootsnipp</h1>
+        <div class="account-wall">
+            <img class="profile-img center-block" src="/img/login/photo.png" alt="">
+            <form class="form-signin" action="/j_security_check" method="post">
+                <input type="text" class="form-control" placeholder="Email" name="j_username" required autofocus>
+                <input type="password" class="form-control " placeholder="Password" name="j_password" required>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">
+                    Sign in
+                </button>
+            </form>
+        </div>
+        <p class="text-center"><a href="/regpage" class="new-account">Create an account</a></p>
     </div>
-    <div id="footer">&copy; Василий Бобков</div>
 </div>
-</body>
-</html>

@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,6 +24,7 @@ import java.util.regex.Pattern;
 import static com.socialnetwork.filters.SecurityFilter.CURRENT_USER;
 import static com.socialnetwork.listeners.Initializer.PROFILE_DAO;
 import static com.socialnetwork.listeners.Initializer.USER_DAO;
+import static com.socialnetwork.servlets.FriendsServlet.INCLUDED_PAGE;
 
 @Log4j
 public class IdPageFilter implements HttpFilter {
@@ -48,7 +50,7 @@ public class IdPageFilter implements HttpFilter {
         HttpSession session = request.getSession(true);
         User user = (User) session.getAttribute(CURRENT_USER);
         if (matcher.find()) {
-            if (user == null) request.getRequestDispatcher("/jsp/login.jsp").forward(request, response);
+            if (user == null) response.sendRedirect("/index.jsp");
             else {
                 log.info("ID in url was found, put into session");
                 int id = Integer.parseInt(matcher.group(1));
@@ -75,7 +77,8 @@ public class IdPageFilter implements HttpFilter {
                     session.setAttribute(REFERENCE_USER, new User(0, null, null, null, null, 0, 0));
                 }
                 log.info("forward to personal page");
-                request.getRequestDispatcher("/jsp/personal_page.jsp").forward(request, response);
+                request.setAttribute(INCLUDED_PAGE, "profile");
+                request.getRequestDispatcher("/index.jsp").forward(request, response);
             }
         } else
             chain.doFilter(request, response);

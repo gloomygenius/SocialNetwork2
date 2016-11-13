@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static com.socialnetwork.listeners.Initializer.USER_DAO;
+import static com.socialnetwork.servlets.FriendsServlet.INCLUDED_PAGE;
 
 
 @Log4j
@@ -31,42 +32,12 @@ public class SecurityFilter implements HttpFilter {
     @Override
     public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpSession session = request.getSession(true);
+        log.info("Start SecurityFilter");
         if (session.getAttribute(CURRENT_USER) != null)
             chain.doFilter(request, response);
         else {
-            log.info("Start security filter");
-            Map<String, String[]> parameterMap = request.getParameterMap();
-            if (parameterMap.containsKey("j_password") && parameterMap.containsKey("j_username")) {
-                log.info("User try to login...");
-                Optional<User> authorize = authorize(parameterMap);
-                if (authorize.isPresent()) {
-                    log.info("Login success");
-                    session.setAttribute(CURRENT_USER, authorize.get());
-                    response.sendRedirect("/");
-                } else {
-                    log.info("Login fail");
-                    request.getRequestDispatcher("/jsp/error.jsp").forward(request, response);
-                }
-            } else {
-                log.info("Redirecting to login page");
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/jsp/login.jsp");
-                // TODO: 22/10/2016 посмотреть что можно сделать что бы не терять информацию о странице куда пользователь зашёл
-                requestDispatcher.forward(request, response);
-            }
+            request.setAttribute(INCLUDED_PAGE, "login");
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
         }
-    }
-
-    private Optional<User> authorize(Map<String, String[]> parameterMap) {
-        String login = parameterMap.get("j_username")[0];
-        String password = parameterMap.get("j_password")[0];
-        Optional<User> userOptional = Optional.empty();
-        try {
-            userOptional = userDao.getByEmail(login);
-        } catch (DaoException e) {
-            e.printStackTrace();
-            // TODO: 08.11.2016 отправить к Error
-        }
-        if (userOptional.isPresent() && userOptional.get().getPassword().equals(password)) return userOptional;
-        return Optional.empty();
     }
 }

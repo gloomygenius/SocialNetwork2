@@ -17,7 +17,7 @@
     <!--<servlet>
         <display-name>personalPage</display-name>
         <servlet-name>personalPage</servlet-name>
-        <jsp-file>/personal_page.jsp</jsp-file>
+        <jsp-file>/profile.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>personalPage</servlet-name>
@@ -31,13 +31,13 @@
         <servlet-class>com.socialnetwork.controllers.Logout</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>UserRecorder</servlet-name>
-        <servlet-class>com.socialnetwork.controllers.UserRecorder</servlet-class>
+        <servlet-name>Registration</servlet-name>
+        <servlet-class>com.socialnetwork.servlets.RegistrationServlet</servlet-class>
     </servlet>
 
     <servlet>
-        <servlet-name>registration.jsp</servlet-name>
-        <jsp-file>/jsp/registration.jsp</jsp-file>
+        <servlet-name>RegPage</servlet-name>
+        <servlet-class>com.socialnetwork.servlets.RegPageServlet</servlet-class>
     </servlet>
     <!--Servlet mapping-->
     <servlet-mapping>
@@ -46,12 +46,12 @@
     </servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>UserRecorder</servlet-name>
+        <servlet-name>Registration</servlet-name>
         <url-pattern>/registration</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>registration.jsp</servlet-name>
+        <servlet-name>RegPage</servlet-name>
         <url-pattern>/regpage</url-pattern>
     </servlet-mapping>
 
@@ -76,7 +76,6 @@
         <url-pattern>/</url-pattern>
         <url-pattern>/index.jsp</url-pattern>
         <url-pattern>/jsp/*</url-pattern>
-        <url-pattern>/j_security_check</url-pattern>
     </filter-mapping>
 
     <filter-mapping>

@@ -4,8 +4,8 @@ import com.socialnetwork.common.HttpFilter;
 import com.socialnetwork.dao.ProfileDao;
 import com.socialnetwork.dao.UserDao;
 import com.socialnetwork.dao.exception.DaoException;
-import com.socialnetwork.models.Profile;
-import com.socialnetwork.models.User;
+import com.socialnetwork.entities.Profile;
+import com.socialnetwork.entities.User;
 import lombok.extern.log4j.Log4j;
 
 import javax.servlet.FilterChain;
@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

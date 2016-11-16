@@ -4,7 +4,7 @@ import com.socialnetwork.common.DataScriptExecuter;
 import com.socialnetwork.connection_pool.ConnectionPool;
 import com.socialnetwork.connection_pool.ConnectionPoolException;
 import com.socialnetwork.dao.ProfileDao;
-import com.socialnetwork.models.Profile;
+import com.socialnetwork.entities.Profile;
 import lombok.SneakyThrows;
 import org.junit.BeforeClass;
 import org.junit.Test;

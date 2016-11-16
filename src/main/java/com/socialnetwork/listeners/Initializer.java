@@ -3,9 +3,7 @@ package com.socialnetwork.listeners;
 import com.socialnetwork.common.DataScriptExecuter;
 import com.socialnetwork.connection_pool.ConnectionPool;
 import com.socialnetwork.connection_pool.ConnectionPoolException;
-import com.socialnetwork.dao.h2.ProfileDaoImpl;
-import com.socialnetwork.dao.h2.RelationDaoImpl;
-import com.socialnetwork.dao.h2.UserDaoImpl;
+import com.socialnetwork.dao.h2.*;
 import lombok.extern.log4j.Log4j;
 
 import javax.servlet.ServletContext;
@@ -19,6 +17,8 @@ public class Initializer implements ServletContextListener {
     public static final String USER_DAO = "userDao";
     public static final String PROFILE_DAO = "profileDao";
     public static final String RELATION_DAO = "relationDao";
+    public static final String MESSAGE_DAO = "messageDao";
+    public static final String DIALOG_DAO = "dialogDao";
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
@@ -41,5 +41,7 @@ public class Initializer implements ServletContextListener {
         context.setAttribute(USER_DAO, new UserDaoImpl(connectionPool));
         context.setAttribute(PROFILE_DAO, new ProfileDaoImpl(connectionPool));
         context.setAttribute(RELATION_DAO, new RelationDaoImpl(connectionPool));
+        context.setAttribute(MESSAGE_DAO, new MessageDaoImpl(connectionPool));
+        context.setAttribute(DIALOG_DAO, new DialogDaoImpl(connectionPool));
     }
 }

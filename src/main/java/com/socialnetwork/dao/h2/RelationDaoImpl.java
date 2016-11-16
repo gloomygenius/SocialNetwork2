@@ -5,7 +5,7 @@ import com.socialnetwork.connection_pool.ConnectionPoolException;
 import com.socialnetwork.dao.RelationDao;
 import com.socialnetwork.dao.enums.RelationType;
 import com.socialnetwork.dao.exception.DaoException;
-import com.socialnetwork.models.Relation;
+import com.socialnetwork.entities.Relation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 
@@ -106,6 +106,20 @@ public class RelationDaoImpl implements RelationDao {
                 recipientId = buf;
                 relationType = REQUEST;
             }
+            if (relationType == FRIEND) {
+                try (PreparedStatement preparedStatement = connection.prepareStatement(
+                        "SELECT relation_type FROM Relations WHERE (sender_id=? AND recipient_id=?) ")) {
+                    preparedStatement.setLong(1, recipientId);
+                    preparedStatement.setLong(2, senderId);
+                    try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                        if (resultSet.next()) {
+                            int relationTypeFromRS = resultSet.getInt("relation_type");
+                            if (relationTypeFromRS != REQUEST.ordinal())
+                                throw new DaoException("Add friends without right");
+                        } else relationType = REQUEST;
+                    }
+                }
+            }
             try (PreparedStatement preparedStatement = connection.prepareStatement(
                     "DELETE FROM Relations WHERE (sender_id=? AND recipient_id=?) " +
                             "OR (sender_id=? AND recipient_id=?)"
@@ -122,6 +136,7 @@ public class RelationDaoImpl implements RelationDao {
             statement.execute();
             connection.commit();
         } catch (SQLException | ConnectionPoolException e) {
+
             e.printStackTrace();
             //// TODO: 08.11.2016 нормально обработать exception
         }
@@ -135,13 +150,40 @@ public class RelationDaoImpl implements RelationDao {
     @Override
     public void remove(long senderId, long recipientId, RelationType relationType) throws DaoException {
         String sqlRequest;
-        if (relationType == FRIEND)
+
+        if (relationType == INCOMING) {
+            long buf = senderId;
+            senderId = recipientId;
+            recipientId = buf;
+            relationType = REQUEST;
+        }
+
+        if (relationType == FRIEND) {
+            try (Connection connection = connectionPool.takeConnection();
+                 PreparedStatement preparedStatement = connection.prepareStatement(
+                         "SELECT relation_type FROM Relations WHERE (sender_id=? AND recipient_id=?) " +
+                                 "OR (sender_id=? AND recipient_id=?)")) {
+                preparedStatement.setLong(1, recipientId);
+                preparedStatement.setLong(2, senderId);
+                preparedStatement.setLong(3, senderId);
+                preparedStatement.setLong(4, recipientId);
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        int relationTypeFromRS = resultSet.getInt("relation_type");
+                        if (relationTypeFromRS != FRIEND.ordinal())
+                            throw new DaoException("Remove friends without right");
+                    } else throw new DaoException("Remove friends without right");
+                }
+            } catch (SQLException | ConnectionPoolException e) {
+                e.printStackTrace(); // TODO: 14.11.2016 Обработать
+            }
+
             sqlRequest = String.format("DELETE FROM Relations WHERE ((sender_id=%d AND recipient_id=%d) " +
-                    "OR (sender_id=%d AND recipient_id=%d)) AND relation_type=%d",
+                            "OR (sender_id=%d AND recipient_id=%d)) AND relation_type=%d",
                     senderId, recipientId, recipientId, senderId, relationType.ordinal());
-        else sqlRequest = String.
+        } else sqlRequest = String.
                 format("DELETE FROM Relations WHERE sender_id=%d AND recipient_id=%d AND relation_type=%d",
-                senderId, recipientId, relationType.ordinal());
+                        senderId, recipientId, relationType.ordinal());
 
         try (Connection connection = connectionPool.takeConnection();
              Statement statement = connection.createStatement();

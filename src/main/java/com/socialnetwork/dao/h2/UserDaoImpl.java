@@ -4,12 +4,14 @@ import com.socialnetwork.connection_pool.ConnectionPool;
 import com.socialnetwork.connection_pool.ConnectionPoolException;
 import com.socialnetwork.dao.UserDao;
 import com.socialnetwork.dao.exception.DaoException;
-import com.socialnetwork.models.User;
+import com.socialnetwork.entities.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 
 import java.sql.*;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Created by Vasiliy Bobkov on 06.11.2016.
@@ -34,11 +36,22 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public Optional<User> getByNames(String firstName, String lastName) throws DaoException {
-        String sqlReqest = "SELECT id, email, password, first_name, last_name,  gender, role FROM Users WHERE "
+    public Set<Long> getByNames(String firstName, String lastName) throws DaoException {
+        String sqlRequest = "SELECT id FROM Users WHERE "
                 .concat("first_name='" + firstName + "' AND ")
                 .concat("last_name='" + lastName + "'");
-        return getByAny(sqlReqest);
+        Set<Long> idSet = new HashSet<>();
+        try (Connection connection = connectionPool.takeConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(sqlRequest)) {
+            while (resultSet.next()) {
+                idSet.add(resultSet.getLong("id"));
+            }
+        } catch (SQLException | ConnectionPoolException e) {
+            log.warn("Error requesting data from the database", e);
+            throw new DaoException();
+        }
+        return idSet;
         // TODO: 07.11.2016 оптимизировать SQL запрос
     }
 
@@ -121,11 +134,11 @@ public class UserDaoImpl implements UserDao {
         return user;
     }
 
-    private Optional<User> getByAny(String sqlRequst) throws DaoException {
+    private Optional<User> getByAny(String sqlRequest) throws DaoException {
         Optional<User> user = Optional.empty();
         try (Connection connection = connectionPool.takeConnection();
              Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(sqlRequst)) {
+             ResultSet resultSet = statement.executeQuery(sqlRequest)) {
             if (resultSet.next()) {
                 user = Optional.of(createUserFromResultSet(resultSet));
             }
@@ -135,5 +148,4 @@ public class UserDaoImpl implements UserDao {
         }
         return user;
     }
-
 }

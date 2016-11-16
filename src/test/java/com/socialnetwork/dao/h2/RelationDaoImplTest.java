@@ -5,14 +5,12 @@ import com.socialnetwork.connection_pool.ConnectionPool;
 import com.socialnetwork.connection_pool.ConnectionPoolException;
 import com.socialnetwork.dao.RelationDao;
 import com.socialnetwork.dao.enums.RelationType;
-import com.socialnetwork.models.Relation;
+import com.socialnetwork.entities.Relation;
 import lombok.SneakyThrows;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.Assert.*;

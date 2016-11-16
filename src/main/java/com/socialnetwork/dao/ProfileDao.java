@@ -1,8 +1,7 @@
 package com.socialnetwork.dao;
 
 import com.socialnetwork.dao.exception.DaoException;
-import com.socialnetwork.models.Profile;
-import com.socialnetwork.models.User;
+import com.socialnetwork.entities.Profile;
 
 import java.util.Optional;
 

@@ -3,8 +3,8 @@ package com.socialnetwork.servlets;
 import com.socialnetwork.dao.RelationDao;
 import com.socialnetwork.dao.UserDao;
 import com.socialnetwork.dao.exception.DaoException;
-import com.socialnetwork.models.Relation;
-import com.socialnetwork.models.User;
+import com.socialnetwork.entities.Relation;
+import com.socialnetwork.entities.User;
 import lombok.extern.log4j.Log4j;
 
 import javax.servlet.RequestDispatcher;

@@ -11,5 +11,19 @@
 <div class="row">
     <div class="col-xs-12" id="friends">
         <h3>Здесь будут сообщения</h3>
+        <c:forEach var="dialog" items="${requestScope.dialogues}">
+            <div class="row">
+                <div class="col-xs-6">
+                    <p style="font-size: 2em">${dialog.value.firstName} ${dialog.value.lastName}</p>
+                </div>
+                <div class="col-xs-4">
+                    <a href="#">Открыть диалог</a>
+                </div>
+                <div class="col-xs-2">
+                    <p>Последнее сообщение:<br>
+                    ${dialog.key.lastUpdate}</p>
+                </div>
+            </div>
+        </c:forEach>
     </div>
 </div>

@@ -2,8 +2,6 @@ package com.socialnetwork.filters;
 
 import com.socialnetwork.common.HttpFilter;
 import com.socialnetwork.dao.UserDao;
-import com.socialnetwork.dao.exception.DaoException;
-import com.socialnetwork.models.User;
 import lombok.extern.log4j.Log4j;
 
 import javax.servlet.*;
@@ -11,8 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Map;
-import java.util.Optional;
 
 import static com.socialnetwork.listeners.Initializer.USER_DAO;
 import static com.socialnetwork.servlets.FriendsServlet.INCLUDED_PAGE;

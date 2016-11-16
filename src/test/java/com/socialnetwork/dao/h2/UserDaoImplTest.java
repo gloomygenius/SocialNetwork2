@@ -4,7 +4,7 @@ import com.socialnetwork.connection_pool.ConnectionPool;
 import com.socialnetwork.connection_pool.ConnectionPoolException;
 import com.socialnetwork.common.DataScriptExecuter;
 import com.socialnetwork.dao.UserDao;
-import com.socialnetwork.models.User;
+import com.socialnetwork.entities.User;
 import lombok.SneakyThrows;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -50,7 +50,7 @@ public class UserDaoImplTest {
     @SneakyThrows
     public void getByNames() throws Exception {
 
-        assertTrue(userDao.getByNames("Василий", "Бобков").isPresent());
+        assertTrue(userDao.getByNames("Василий", "Бобков").size()>0);
     }
 
     @Test

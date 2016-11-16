@@ -1,4 +1,4 @@
-package com.socialnetwork.controllers;
+package com.socialnetwork.servlets;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;

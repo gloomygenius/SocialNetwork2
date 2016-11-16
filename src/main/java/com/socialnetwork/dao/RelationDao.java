@@ -2,9 +2,7 @@ package com.socialnetwork.dao;
 
 import com.socialnetwork.dao.enums.RelationType;
 import com.socialnetwork.dao.exception.DaoException;
-import com.socialnetwork.models.Relation;
-
-import java.util.Optional;
+import com.socialnetwork.entities.Relation;
 
 /**
  * Created by Vasiliy Bobkov on 08.11.2016.

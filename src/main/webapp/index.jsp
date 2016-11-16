@@ -25,7 +25,7 @@
     <!-- Bootstrap theme -->
     <link href="css/bootstrap-theme.min.css" rel="stylesheet">
     <!-- Custom styles for this template -->
-    <link href="theme.css" rel="stylesheet">
+    <link href="css/theme.css" rel="stylesheet">
 
 </head>
 <body>

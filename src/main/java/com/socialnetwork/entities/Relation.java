@@ -1,10 +1,9 @@
-package com.socialnetwork.models;
+package com.socialnetwork.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
 
-import java.util.Map;
 import java.util.Set;
 
 

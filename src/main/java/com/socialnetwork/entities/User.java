@@ -1,4 +1,4 @@
-package com.socialnetwork.models;
+package com.socialnetwork.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Value;

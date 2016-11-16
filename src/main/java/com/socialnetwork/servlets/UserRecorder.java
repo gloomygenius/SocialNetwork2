@@ -7,6 +7,7 @@ import com.socialnetwork.dao.h2.UserDaoImpl;
 import com.socialnetwork.entities.User;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -36,9 +37,9 @@ public class UserRecorder extends HttpServlet {
         String firstName = (String) request.getParameter("first_name");
         String lastName = (String) request.getParameter("last_name");
         String email = (String) request.getParameter("email");
-        String password = (String) request.getParameter("password");
+        String password = DigestUtils.md5Hex((String) request.getParameter("password"));
         // TODO: 08.11.2016  допилить
-        int gender = 1;
+        int gender = Integer.parseInt(request.getParameter("gender"));
         int role = USER.ordinal();
         //Boolean male = true;
 

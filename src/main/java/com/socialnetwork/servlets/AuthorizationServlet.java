@@ -6,6 +6,7 @@ import com.socialnetwork.dao.exception.DaoException;
 import com.socialnetwork.entities.Relation;
 import com.socialnetwork.entities.User;
 import lombok.extern.log4j.Log4j;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -74,7 +75,7 @@ public class AuthorizationServlet extends HttpServlet {
 
     private Optional<User> authorize(Map<String, String[]> parameterMap) {
         String login = parameterMap.get("j_username")[0];
-        String password = parameterMap.get("j_password")[0];
+        String password = DigestUtils.md5Hex(parameterMap.get("j_password")[0]);
         Optional<User> userOptional = Optional.empty();
         try {
             userOptional = userDao.getByEmail(login);
@@ -94,7 +95,6 @@ public class AuthorizationServlet extends HttpServlet {
             e.printStackTrace();
             // TODO: 13.11.2016 обработать
         }
-        int count = incoming.getIdSet().size();
-        return count;
+        return incoming.getIdSet().size();
     }
 }

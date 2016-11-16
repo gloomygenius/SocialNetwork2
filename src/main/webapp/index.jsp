@@ -6,7 +6,7 @@
 <fmt:setLocale value="${language}"/>
 <fmt:setBundle basename="text"/>
 <c:set var="currentUser" scope="page" value="${sessionScope.currentUser}"/>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="${language}">
 <head>
@@ -39,7 +39,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Отрядники</a>
+            <a class="navbar-brand" href="/">Отрядники</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
@@ -72,7 +72,7 @@
                     <li><a href="/id${currentUser.id}"><fmt:message key="menu.mypage"/></a></li>
                     <li><a href="/messages"><fmt:message key="menu.messages"/></a></li>
                     <li><a href="/friends"><fmt:message key="menu.friends"/>
-                        <c:if test="${sessionScope.newFriends!=0}">
+                        <c:if test="${sessionScope.newFriends!=0 and not empty sessionScope.newFriends}">
                             [+${sessionScope.newFriends}]
                         </c:if>
                     </a></li>
@@ -82,6 +82,7 @@
             </c:if>
         </div>
         <div class="col-xs-6 col-lg-8">
+
             <c:choose>
                 <c:when test="${includedPage=='login'}">
                     <jsp:include page="jsp/login.jsp"/>
@@ -97,6 +98,9 @@
                 </c:when>
                 <c:when test="${includedPage=='regpage'}">
                     <jsp:include page="jsp/regpage.jsp"/>
+                </c:when>
+                <c:when test="${includedPage=='error'}">
+                    <jsp:include page="jsp/error.jsp"/>
                 </c:when>
                 <c:otherwise>
                     <p>Добро пожаловать в социальную сеть "Отрядники"!</p>

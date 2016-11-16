@@ -1,5 +1,5 @@
 INSERT INTO Users (email, password, first_name, last_name, gender, role, telephone, birthday, country)
-VALUES ('admin@exam.com', '123456', 'Василий', 'Бобков', 0, 2, '+79118556688', '1993-12-01','Россия');
+VALUES ('admin@exam.com', 'e10adc3949ba59abbe56e057f20f883e', 'Василий', 'Бобков', 0, 2, '+79118556688', '1993-12-01','Россия');
 INSERT INTO Users (email, password, first_name, last_name, gender, role)
 VALUES ('oldmail@exam.com', '123456', 'Петя', 'Петров', 0, 0);
 INSERT INTO Users (email, password, first_name, last_name, gender, role)

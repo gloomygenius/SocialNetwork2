@@ -13,6 +13,7 @@ dependencies {
     compile 'log4j:log4j:+'
     compile 'javax.servlet.jsp.jstl:javax.servlet.jsp.jstl-api:+'
     compile 'com.h2database:h2:+'
+    compile 'commons-codec:commons-codec:+'
     compileOnly 'org.projectlombok:lombok:+'
     testCompile 'org.projectlombok:lombok:+'
 

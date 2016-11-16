@@ -8,7 +8,7 @@ CREATE TABLE Users (
   role       INT          NOT NULL,
   telephone  VARCHAR(20),
   birthday   DATE,
-  country    VARCHAR(20),
+  country    VARCHAR(25),
   city       VARCHAR(25),
   university VARCHAR(50),
   team       INT,

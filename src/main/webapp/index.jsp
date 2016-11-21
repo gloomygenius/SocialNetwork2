@@ -65,41 +65,47 @@
 </nav>
 <div class="container" role="main">
     <div class="row">
-        <div class="col-xs-3 col-lg-2">
+        <div class="col-xs-2 col-md-2 col-lg-2">
             <c:if test="${not empty currentUser}">
                 <ul class="nav nav-list">
                     <li class="nav-header">Навигация</li>
-                    <li><a href="/id${currentUser.id}"><fmt:message key="menu.mypage"/></a></li>
-                    <li><a href="/messages"><fmt:message key="menu.messages"/></a></li>
-                    <li><a href="/friends"><fmt:message key="menu.friends"/>
+                    <li ><a href="/id${currentUser.id}"><fmt:message key="menu.mypage"/></a></li>
+                    <li>
+                        <a href="/dialogues"><fmt:message key="menu.dialogues"/></a></li>
+                    <li>
+                        <a href="/friends"><fmt:message key="menu.friends"/>
                         <c:if test="${sessionScope.newFriends!=0 and not empty sessionScope.newFriends}">
                             [+${sessionScope.newFriends}]
                         </c:if>
                     </a></li>
                     <li><a href="#"><fmt:message key="menu.myteam"/></a></li>
                     <li><a href="#"><fmt:message key="menu.events"/></a></li>
+
                 </ul>
             </c:if>
         </div>
-        <div class="col-xs-6 col-lg-8">
+        <div class="col-xs-9 col-md-9 col-lg-9">
 
             <c:choose>
-                <c:when test="${includedPage=='login'}">
+                <c:when test="${requestScope.includedPage=='login'}">
                     <jsp:include page="jsp/login.jsp"/>
                 </c:when>
-                <c:when test="${includedPage=='profile'}">
+                <c:when test="${requestScope.includedPage=='profile'}">
                     <jsp:include page="jsp/profile.jsp"/>
                 </c:when>
-                <c:when test="${includedPage=='friends'}">
+                <c:when test="${requestScope.includedPage=='friends'}">
                     <jsp:include page="jsp/friends.jsp"/>
                 </c:when>
-                <c:when test="${includedPage=='messages'}">
+                <c:when test="${requestScope.includedPage=='dialogues'}">
+                    <jsp:include page="jsp/dialogues.jsp"/>
+                </c:when>
+                <c:when test="${requestScope.includedPage=='messages'}">
                     <jsp:include page="jsp/messages.jsp"/>
                 </c:when>
-                <c:when test="${includedPage=='regpage'}">
+                <c:when test="${requestScope.includedPage=='regpage'}">
                     <jsp:include page="jsp/regpage.jsp"/>
                 </c:when>
-                <c:when test="${includedPage=='error'}">
+                <c:when test="${requestScope.includedPage=='error'}">
                     <jsp:include page="jsp/error.jsp"/>
                 </c:when>
                 <c:otherwise>
@@ -107,7 +113,7 @@
                 </c:otherwise>
             </c:choose>
         </div>
-        <div class="col-xs-3 col-lg-2">
+        <div class="col-xs-1 col-md-1 col-lg-1">
             <p class="text-center">Здесь может быть ваша реклама!</p>
         </div>
     </div>

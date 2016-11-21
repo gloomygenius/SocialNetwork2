@@ -14,8 +14,8 @@
         <p class="text-center">Поиск друзей</p>
         <form class="form-search" action="/friends">
             <input type="hidden" class="hidden" name="section" value="search">
-            <input type="text" class="input-lg search-query" name="names" placeholder="Введите имя и фамилию">
-            <button type="submit" class="btn">Найти</button>
+            <input type="text" class="input-lg search-query col-xs-10" name="names" placeholder="Введите имя и фамилию">
+            <button type="submit" class="btn btn-primary col-xs-2">Найти</button>
         </form>
     </div>
 </div>
@@ -23,7 +23,7 @@
 <c:if test="${sessionScope.newFriends!=0 && param.section !='incoming'}">
     <div class="row">
         <div class="col-xs-12">
-            <p>
+            <p style="font-size: 2em">
                 Есть новые заявки в друзья!
                 <a href="/friends?section=incoming">Перейти к заявкам</a>
             </p>
@@ -45,21 +45,21 @@
                     <p style="font-size: 2em">${user.firstName} ${user.lastName}</p>
                 </div>
                 <div class="col-xs-3">
-                    <a href="#">Написать сообщение</a><br>
-                    <a href="/id${user.id}">Перейти на страницу</a><br>
+                    <a href="#" class="btn btn-success btn-block">Написать сообщение</a><br>
+                    <a href="/id${user.id}" class="btn btn-info btn-block">Перейти на страницу</a><br>
                     <c:choose>
                         <c:when test="${requestScope.relationMap[user.id]==0}">
-                            <a href="/friends?add=${user.id}">Добавить в друзья</a><br>
+                            <a href="/friends?add=${user.id}" class="btn btn-primary btn-block">Добавить в друзья</a><br>
                         </c:when>
                         <c:when test="${requestScope.relationMap[user.id]==1}">
-                            <a href="/friends?remove=${user.id}&relation=1">Отменить заявку в друзья</a><br>
+                            <a href="/friends?remove=${user.id}&relation=1" class="btn btn-warning btn-block">Отменить заявку в друзья</a><br>
                         </c:when>
                         <c:when test="${requestScope.relationMap[user.id]==2}">
-                            <a href="/friends?add=${user.id}">Принять заявку в друзья</a><br>
-                            <a href="/friends?remove=${user.id}&relation=2">Отклонить заявку в друзья</a><br>
+                            <a href="/friends?add=${user.id}" class="btn btn-primary btn-block">Принять заявку в друзья</a><br>
+                            <a href="/friends?remove=${user.id}&relation=2" class="btn btn-danger btn-block">Отклонить заявку в друзья</a><br>
                         </c:when>
                         <c:when test="${requestScope.relationMap[user.id]==3}">
-                            <a href="/friends?remove=${user.id}&relation=3">Удалить из друзей</a><br>
+                            <a href="/friends?remove=${user.id}&relation=3" class="btn btn-danger btn-block">Удалить из друзей</a><br>
                         </c:when>
                     </c:choose>
                 </div>

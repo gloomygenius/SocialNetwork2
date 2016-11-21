@@ -28,8 +28,8 @@ import static com.socialnetwork.listeners.Initializer.USER_DAO;
 /**
  * Created by Vasiliy Bobkov on 10.11.2016.
  */
-@WebServlet("/messages")
-public class MessagesServlet extends HttpServlet {
+@WebServlet("/dialogues")
+public class DialoguesServlet extends HttpServlet {
     public static final String INCLUDED_PAGE = "includedPage";
     private static MessageDao messageDao;
     private static DialogDao dialogDao;
@@ -50,7 +50,7 @@ public class MessagesServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
-        request.setAttribute(INCLUDED_PAGE, "messages");
+        request.setAttribute(INCLUDED_PAGE, "dialogues");
         User currentUser = (User) request.getSession().getAttribute(CURRENT_USER);
         int limit = request.getAttribute("limit") != null ? (int) request.getAttribute("limit") : -1;
         int offset = request.getAttribute("offset") != null ? (int) request.getAttribute("offset") : 0;
@@ -67,11 +67,9 @@ public class MessagesServlet extends HttpServlet {
             }
             request.setAttribute("dialogues", map);
             request.getRequestDispatcher("/index.jsp").forward(request, response);
-        } catch (ServletException | IOException e) {
+        } catch (ServletException | IOException | DaoException e) {
             e.printStackTrace();
             // TODO: 09.11.2016 Обработать
-        } catch (DaoException e) {
-            e.printStackTrace();
         }
     }
 }

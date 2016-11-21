@@ -20,6 +20,7 @@ import static com.socialnetwork.dao.enums.Roles.USER;
 import static com.socialnetwork.filters.SecurityFilter.CURRENT_USER;
 import static com.socialnetwork.servlets.ErrorHandler.ERROR_MSG;
 import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.EMAIL_ALREADY_EXIST;
+import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.LOGIN_FAIL;
 import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.REGISTRATION_FAIL;
 
 /**
@@ -57,8 +58,8 @@ public class RegistrationServlet extends HttpServlet {
             request.getRequestDispatcher("/regpage").forward(request, response);
         } else {
             if (userDao.getByEmail(email).isPresent()) {
-                request.setAttribute(ERROR_MSG, EMAIL_ALREADY_EXIST.getPropertyName());
-                request.getRequestDispatcher("/regpage").forward(request, response);
+                request.setAttribute(ERROR_MSG, LOGIN_FAIL.getPropertyName());
+                request.getRequestDispatcher("/index.jsp").forward(request, response);
             } else {
                 try {
                     password = DigestUtils.md5Hex(request.getParameter("password"));

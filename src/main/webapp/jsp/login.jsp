@@ -8,17 +8,23 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <div class="row">
     <div class="col-xs-12 col-md-8 col-lg-6 center-block">
-        <h1 class="text-center login-title">Sign in to continue to Bootsnipp</h1>
+        <h1 class="text-center login-title"><fmt:message key="login.signin"/></h1>
+        <c:if test="${not empty errorMsg}">
+            <div class="alert alert-danger">
+                <strong><fmt:message key="error.danger"/></strong> <fmt:message key="${errorMsg}"/>
+            </div>
+        </c:if>
         <div class="account-wall">
             <img class="profile-img center-block" src="/img/login/photo.png" alt="">
             <form class="form-signin" action="/j_security_check" method="post">
-                <input type="text" class="form-control" placeholder="Email" name="j_username" required autofocus>
-                <input type="password" class="form-control " placeholder="Password" name="j_password" required>
+                <input type="text" class="form-control" placeholder="Email" name="j_username" value="${param.j_username}" required autofocus>
+                <input type="password" class="form-control " placeholder="<fmt:message key="password"/>" name="j_password" required>
                 <button class="btn btn-lg btn-primary btn-block" type="submit">
-                    Sign in
+                    <fmt:message key="login.signin.btn"/>
                 </button>
             </form>
         </div>
-        <p class="text-center"><a href="/regpage" class="new-account">Create an account</a></p>
+        <p class="text-center"><a href="/regpage" class="new-account btn btn-success btn-block">
+            <fmt:message key="login.create"/></a></p>
     </div>
 </div>

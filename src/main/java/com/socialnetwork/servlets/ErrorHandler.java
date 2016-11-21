@@ -22,7 +22,8 @@ public class ErrorHandler extends HttpServlet {
     @RequiredArgsConstructor
     public enum ErrorCode {
         ERROR_404("error.404"),
-        REGISTRATION_FAIL("error.404"),
+        REGISTRATION_FAIL("error.registrationFail"),
+        LOGIN_FAIL("error.loginFail"),
         EMAIL_ALREADY_EXIST("error.emailExist");
 
         @Getter

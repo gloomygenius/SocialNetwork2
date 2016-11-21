@@ -6,24 +6,36 @@
        scope="session"/>
 <fmt:setLocale value="${language}"/>
 <fmt:setBundle basename="text"/>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 
 <div class="row">
-    <div class="col-xs-12" id="friends">
-        <h3>Здесь будут сообщения</h3>
-        <c:forEach var="dialog" items="${requestScope.dialogues}">
+    <div class="col-xs-12" id="dialogues">
+        <c:if test="${requestScope.messages.size() == requestScope.limit}">
+            <a href="/messages?dialog=${param.dialog}&limit=${requestScope.limit+15}&offset=${requestScope.offset}">
+                Посмотреть предыдущие сообщения</a>
+        </c:if>
+        <c:forEach var="message" items="${requestScope.messages}">
             <div class="row">
-                <div class="col-xs-6">
-                    <p style="font-size: 2em">${dialog.value.firstName} ${dialog.value.lastName}</p>
+                <div class="col-xs-3">
+                    <p style="font-size: 2em">${requestScope.userMap[message.sender]}</p>
                 </div>
-                <div class="col-xs-4">
-                    <a href="#">Открыть диалог</a>
+                <div class="col-xs-7">
+                    <p>${message.message}</p>
                 </div>
                 <div class="col-xs-2">
-                    <p>Последнее сообщение:<br>
-                    ${dialog.key.lastUpdate}</p>
+                    <p>${message.time}</p>
                 </div>
             </div>
         </c:forEach>
+        <form action="/messages" method="post">
+            <div class="form-group">
+                <label for="message">Сообщение:</label>
+                <input type="hidden" class="form-control" name="dialog" value="${param.dialog}">
+                <input type="hidden" class="form-control" name="limit" value="${requestScope.limit}">
+                <input type="hidden" class="form-control" name="offset" value="${requestScope.offset}">
+                <input type="text" class="form-control" id="message" name="message">
+            </div>
+            <button type="submit" class="btn btn-default">Отправить</button>
+        </form>
     </div>
 </div>

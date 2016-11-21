@@ -24,6 +24,9 @@ import java.util.Optional;
 import static com.socialnetwork.filters.SecurityFilter.CURRENT_USER;
 import static com.socialnetwork.listeners.Initializer.RELATION_DAO;
 import static com.socialnetwork.listeners.Initializer.USER_DAO;
+import static com.socialnetwork.servlets.ErrorHandler.ERROR_MSG;
+import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.EMAIL_ALREADY_EXIST;
+import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.LOGIN_FAIL;
 import static com.socialnetwork.servlets.FriendsServlet.INCLUDED_PAGE;
 
 /**
@@ -62,7 +65,9 @@ public class AuthorizationServlet extends HttpServlet {
                 response.sendRedirect("/");
             } else {
                 log.info("Login fail");
-                request.getRequestDispatcher("/jsp/error.jsp").forward(request, response);
+                request.setAttribute(ERROR_MSG, LOGIN_FAIL.getPropertyName());
+                request.setAttribute(INCLUDED_PAGE, "login");
+                request.getRequestDispatcher("/index.jsp").forward(request, response);
             }
         } else {
             log.info("Redirecting to login page");

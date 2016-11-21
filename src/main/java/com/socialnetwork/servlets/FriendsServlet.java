@@ -1,5 +1,6 @@
 package com.socialnetwork.servlets;
 
+import com.socialnetwork.common.NameNormolizer;
 import com.socialnetwork.dao.RelationDao;
 import com.socialnetwork.dao.UserDao;
 import com.socialnetwork.dao.enums.RelationType;
@@ -23,6 +24,9 @@ import static com.socialnetwork.filters.SecurityFilter.CURRENT_USER;
 import static com.socialnetwork.listeners.Initializer.RELATION_DAO;
 import static com.socialnetwork.listeners.Initializer.USER_DAO;
 import static com.socialnetwork.servlets.AuthorizationServlet.NEW_FRIENDS;
+import static com.socialnetwork.servlets.ErrorHandler.ERROR_MSG;
+import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.FRIENDS_SEARCH_FAIL;
+import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.LOGIN_FAIL;
 
 /**
  * Created by Vasiliy Bobkov on 09.11.2016.
@@ -82,7 +86,7 @@ public class FriendsServlet extends HttpServlet {
     }
 
     @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         request.setAttribute(INCLUDED_PAGE, "friends");
         HttpSession session = request.getSession(true);
@@ -99,8 +103,11 @@ public class FriendsServlet extends HttpServlet {
                 if (request.getParameter("section").equals("search")) {
                     String[] names = request.getParameter("names").split(" ");
                     if (names.length != 2) {
-                        // TODO: 14.11.2016 handler
+                        request.setAttribute(ERROR_MSG, FRIENDS_SEARCH_FAIL.getPropertyName());
+                        request.getRequestDispatcher("/index.jsp").forward(request, response);
                     } else {
+                        names[0]=NameNormolizer.normolize(names[0]);
+                        names[1]=NameNormolizer.normolize(names[1]);
                         friendIdSet = searchFriends(names);
                     }
                 }

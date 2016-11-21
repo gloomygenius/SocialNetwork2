@@ -25,7 +25,6 @@ import static com.socialnetwork.filters.SecurityFilter.CURRENT_USER;
 import static com.socialnetwork.listeners.Initializer.RELATION_DAO;
 import static com.socialnetwork.listeners.Initializer.USER_DAO;
 import static com.socialnetwork.servlets.ErrorHandler.ERROR_MSG;
-import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.EMAIL_ALREADY_EXIST;
 import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.LOGIN_FAIL;
 import static com.socialnetwork.servlets.FriendsServlet.INCLUDED_PAGE;
 
@@ -37,7 +36,7 @@ import static com.socialnetwork.servlets.FriendsServlet.INCLUDED_PAGE;
 public class AuthorizationServlet extends HttpServlet {
     private static UserDao userDao;
     private static RelationDao relationDao;
-    public static final String NEW_FRIENDS = "newFriends";
+    static final String NEW_FRIENDS = "newFriends";
     @Override
     public void init(ServletConfig servletConfig) {
         ServletContext servletContext = servletConfig.getServletContext();
@@ -73,7 +72,6 @@ public class AuthorizationServlet extends HttpServlet {
             log.info("Redirecting to login page");
             request.setAttribute(INCLUDED_PAGE, "login");
             RequestDispatcher requestDispatcher = request.getRequestDispatcher("/index.jsp");
-            // TODO: 22/10/2016 посмотреть что можно сделать что бы не терять информацию о странице куда пользователь зашёл
             requestDispatcher.forward(request, response);
         }
     }
@@ -85,8 +83,7 @@ public class AuthorizationServlet extends HttpServlet {
         try {
             userOptional = userDao.getByEmail(login);
         } catch (DaoException e) {
-            e.printStackTrace();
-            // TODO: 08.11.2016 отправить к Error
+            log.error("Error in userDao when user "+login+" try login",e);
         }
         if (userOptional.isPresent() && userOptional.get().getPassword().equals(password)) return userOptional;
         return Optional.empty();
@@ -98,8 +95,8 @@ public class AuthorizationServlet extends HttpServlet {
             incoming = relationDao.getIncoming(id);
         } catch (DaoException e) {
             e.printStackTrace();
-            // TODO: 13.11.2016 обработать
+            log.error("Error in relationDao when user "+id+" try get count of new friends",e);
         }
-        return incoming.getIdSet().size();
+        return incoming != null ? incoming.getIdSet().size() : 0;
     }
 }

@@ -24,6 +24,7 @@ public class ErrorHandler extends HttpServlet {
         ERROR_404("error.404"),
         REGISTRATION_FAIL("error.registrationFail"),
         LOGIN_FAIL("error.loginFail"),
+        FRIENDS_SEARCH_FAIL("error.friends.search"),
         EMAIL_ALREADY_EXIST("error.emailExist");
 
         @Getter

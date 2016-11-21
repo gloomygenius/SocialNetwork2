@@ -1,5 +1,6 @@
 package com.socialnetwork.servlets;
 
+import com.socialnetwork.common.NameNormolizer;
 import com.socialnetwork.connection_pool.ConnectionPool;
 import com.socialnetwork.dao.UserDao;
 import com.socialnetwork.dao.h2.UserDaoImpl;
@@ -58,12 +59,19 @@ public class RegistrationServlet extends HttpServlet {
             request.getRequestDispatcher("/regpage").forward(request, response);
         } else {
             if (userDao.getByEmail(email).isPresent()) {
-                request.setAttribute(ERROR_MSG, LOGIN_FAIL.getPropertyName());
+                request.setAttribute(ERROR_MSG, EMAIL_ALREADY_EXIST.getPropertyName());
                 request.getRequestDispatcher("/index.jsp").forward(request, response);
             } else {
                 try {
                     password = DigestUtils.md5Hex(request.getParameter("password"));
-                    userDao.add(new User(0, email, password, firstName, lastName, gender, USER.ordinal()));
+                    userDao.add(new User(
+                            0,
+                            email,
+                            password,
+                            NameNormolizer.normolize(firstName),
+                            NameNormolizer.normolize(lastName),
+                            gender,
+                            USER.ordinal()));
                     Optional<User> userOptional = userDao.getByEmail(email);
                     if (userOptional.isPresent()) {
                         log.info("New user registered! Login:" + email);

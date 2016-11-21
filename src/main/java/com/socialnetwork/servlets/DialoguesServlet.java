@@ -67,7 +67,7 @@ public class DialoguesServlet extends HttpServlet {
             }
             request.setAttribute("dialogues", map);
             request.getRequestDispatcher("/index.jsp").forward(request, response);
-        } catch (ServletException | IOException | DaoException e) {
+        } catch (IOException | DaoException | ServletException e) {
             e.printStackTrace();
             // TODO: 09.11.2016 Обработать
         }

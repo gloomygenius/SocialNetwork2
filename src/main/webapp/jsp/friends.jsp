@@ -15,7 +15,7 @@
         <p class="text-center">Поиск друзей</p>
         <form class="form-search" action="/friends">
             <input type="hidden" class="hidden" name="section" value="search">
-            <input type="text" class="input-lg search-query col-xs-10" name="names" placeholder="Введите имя и фамилию">
+            <input type="text" class="input-lg search-query col-xs-10" name="names" value="${param.names}" placeholder="Введите имя и фамилию">
             <button type="submit" class="btn btn-primary col-xs-2">Найти</button>
         </form>
     </div>

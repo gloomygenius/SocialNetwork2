@@ -3,25 +3,27 @@ package com.socialnetwork.dao.h2;
 import com.socialnetwork.connection_pool.ConnectionPool;
 import com.socialnetwork.connection_pool.ConnectionPoolException;
 import com.socialnetwork.dao.MessageDao;
+import com.socialnetwork.dao.exception.DaoException;
 import com.socialnetwork.entities.Message;
 import lombok.Cleanup;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j;
 
 import java.sql.*;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
 /**
  * Created by Vasiliy Bobkov on 15.11.2016.
  */
+@Log4j
 @RequiredArgsConstructor
 public class MessageDaoImpl implements MessageDao {
     private final ConnectionPool connectionPool;
 
     @Override
-    public Set<Message> getMessages(long dialog, int limit, int offSet) {
+    public Set<Message> getMessages(long dialog, int limit, int offSet) throws DaoException {
         Set<Message> messageSet = new TreeSet<>();
         try (Connection connection = connectionPool.takeConnection();
              PreparedStatement selectStatement = connection.prepareStatement(
@@ -42,13 +44,15 @@ public class MessageDaoImpl implements MessageDao {
                 ));
             }
         } catch (SQLException | ConnectionPoolException e) {
-            e.printStackTrace(); // TODO: 15.11.2016 обработать
+            e.printStackTrace();
+            log.error("MessageDaoImpl error", e);
+            throw new DaoException("MessageDaoImpl error", e);
         }
         return messageSet;
     }
 
     @Override
-    public void sendMessage(long sender, long dialog, String message) {
+    public void sendMessage(long sender, long dialog, String message) throws DaoException {
         try (Connection connection = connectionPool.takeConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(
                      "INSERT INTO Messages (sender, dialog, message, msg_time) VALUES (?, ?, ?, ?)"
@@ -59,7 +63,9 @@ public class MessageDaoImpl implements MessageDao {
             preparedStatement.setTimestamp(4, Timestamp.valueOf(LocalDateTime.now()));
             preparedStatement.execute();
         } catch (SQLException | ConnectionPoolException e) {
-            e.printStackTrace(); // TODO: 15.11.2016 обработать
+            e.printStackTrace();
+            log.error("MessageDaoImpl error", e);
+            throw new DaoException("MessageDaoImpl error", e);
         }
     }
 }

@@ -13,11 +13,19 @@
 <div class="row">
     <div class="col-md-12">
         <p class="text-center">Поиск друзей</p>
+        <c:if test="${not empty errorMsg}">
+            <div class="alert alert-danger">
+                <strong><fmt:message key="error.danger"/></strong> <fmt:message key="${errorMsg}"/>
+            </div>
+        </c:if>
         <form class="form-search" action="/friends">
             <input type="hidden" class="hidden" name="section" value="search">
             <input type="text" class="input-lg search-query col-xs-10" name="names" value="${param.names}" placeholder="Введите имя и фамилию">
             <button type="submit" class="btn btn-primary col-xs-2">Найти</button>
         </form>
+        <c:if test="${param.section=='search'} && ${requestScope.friendSet.size==0}">
+            <p>Ничего не найдено по запросу "${param.names}" </p>
+        </c:if>
     </div>
 </div>
 
@@ -34,9 +42,6 @@
 
 <div class="row">
     <div class="col-xs-12" id="friends">
-        <c:if test="${param.section=='search' && requestScope.friendSet.isEmpty}">
-            <p>Ничего не найдено по запросу "${param.names}" </p>
-        </c:if>
         <c:forEach var="user" items="${requestScope.friendsSet}">
             <div class="row">
                 <div class="col-xs-3">

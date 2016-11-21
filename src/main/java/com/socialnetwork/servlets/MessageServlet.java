@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -55,24 +56,25 @@ public class MessageServlet extends HttpServlet {
 
         User currentUser = (User) request.getSession().getAttribute(CURRENT_USER);
 
-        if (request.getParameter("message")!=null)
-            messageDao.sendMessage(currentUser.getId(),dialog,request.getParameter("message"));
-
+        if (request.getParameter("message") != null) {
+            messageDao.sendMessage(currentUser.getId(), dialog, request.getParameter("message"));
+            dialogDao.updateTime(dialog, LocalDateTime.now());
+        }
         int limit = request.getParameter("limit") != null ? Integer.parseInt(request.getParameter("limit")) : 15;
-        request.setAttribute("limit",limit);
+        request.setAttribute("limit", limit);
         int offset = request.getParameter("offset") != null ? Integer.parseInt(request.getParameter("offset")) : 0;
-        request.setAttribute("offset",offset);
+        request.setAttribute("offset", offset);
 
         try {
-            Map<Long,String> userMap= new HashMap<>();
-            Set<Message> messageSet = messageDao.getMessages(dialog,limit,offset);
-            request.setAttribute("messages",messageSet);
-            for (Message message:messageSet){
-                if (userMap.get(message.getSender())!=null) continue;
+            Map<Long, String> userMap = new HashMap<>();
+            Set<Message> messageSet = messageDao.getMessages(dialog, limit, offset);
+            request.setAttribute("messages", messageSet);
+            for (Message message : messageSet) {
+                if (userMap.get(message.getSender()) != null) continue;
                 Optional<User> userOptional = userDao.getById(message.getSender());
-                userOptional.ifPresent((user)->userMap.put(user.getId(),user.getFirstName()));
+                userOptional.ifPresent((user) -> userMap.put(user.getId(), user.getFirstName()));
             }
-            request.setAttribute("userMap",userMap);
+            request.setAttribute("userMap", userMap);
             request.getRequestDispatcher("/index.jsp").forward(request, response);
         } catch (ServletException | IOException e) {
             e.printStackTrace();

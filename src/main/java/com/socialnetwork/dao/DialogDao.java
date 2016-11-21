@@ -3,6 +3,7 @@ package com.socialnetwork.dao;
 import com.socialnetwork.dao.exception.DaoException;
 import com.socialnetwork.entities.Dialog;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 /**
@@ -17,4 +18,6 @@ public interface DialogDao {
     void createDialog(long creator, Set<Long> participantIdSet, String description);
     void updateDescription();
     void updatePartiсipant();
+
+    void updateTime(long dialog, LocalDateTime time) throws DaoException;
 }

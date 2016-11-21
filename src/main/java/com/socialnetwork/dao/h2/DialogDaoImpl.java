@@ -5,7 +5,6 @@ import com.socialnetwork.connection_pool.ConnectionPoolException;
 import com.socialnetwork.dao.DialogDao;
 import com.socialnetwork.dao.exception.DaoException;
 import com.socialnetwork.entities.Dialog;
-import com.socialnetwork.entities.Message;
 import lombok.Cleanup;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -19,6 +18,7 @@ import java.util.TreeSet;
 /**
  * Created by Vasiliy Bobkov on 15.11.2016.
  */
+@SuppressWarnings({"SqlNoDataSourceInspection", "SqlResolve"})
 @Log4j
 @RequiredArgsConstructor
 public class DialogDaoImpl implements DialogDao {
@@ -55,7 +55,7 @@ public class DialogDaoImpl implements DialogDao {
             }
 
         } catch (SQLException | ConnectionPoolException e) {
-            throw new DaoException(); // TODO: 15.11.2016 обработать
+            throw new DaoException("Error in DialogDao");
         }
     }
 
@@ -65,7 +65,7 @@ public class DialogDaoImpl implements DialogDao {
         try (Connection connection = connectionPool.takeConnection();
              PreparedStatement selectStatement = connection.prepareStatement(
                      "SELECT DISTINCT d.id, d.last_update FROM Dialogues d, Dialog_Participants dp  WHERE  (d.id=dp.dialog_id AND dp.user_id=?) " +
-                             "OR d.creator= ? ORDER BY d.last_update DESC LIMIT ? OFFSET ? ");
+                             "OR d.creator= ? ORDER BY d.last_update DESC LIMIT ? OFFSET ? ")
         ) {
             selectStatement.setLong(1, participant);
             selectStatement.setLong(2, participant);
@@ -77,8 +77,7 @@ public class DialogDaoImpl implements DialogDao {
                 dialogSet.add(getDialog(resultSet.getLong("id")));
             }
         } catch (SQLException | ConnectionPoolException e) {
-            e.printStackTrace(); // TODO: 15.11.2016 обработать
-            throw new DaoException();
+            throw new DaoException("Error in DialogDao");
         }
         return dialogSet;
     }
@@ -102,10 +101,9 @@ public class DialogDaoImpl implements DialogDao {
                         dialogRS.getBoolean("is_private"),
                         dialogRS.getTimestamp("last_update").toLocalDateTime()
                 );
-            } else throw new DaoException();
+            } else throw new DaoException("Error in DialogDao");
         } catch (SQLException | ConnectionPoolException e) {
-            e.printStackTrace();
-            throw new DaoException();
+            throw new DaoException("Error in DialogDao");
         }
     }
 
@@ -119,12 +117,13 @@ public class DialogDaoImpl implements DialogDao {
                 if (generatedKeys.next()) {
                     statement.executeUpdate(
                             "INSERT INTO Dialog_Participants(dialog_id, user_id) VALUES ("
-                                    .concat(String.valueOf(generatedKeys.getLong(1)))
-                                    .concat(",")
-                                    .concat(String.valueOf(participant))
-                                    .concat(")"));
+                                    + String.valueOf(generatedKeys.getLong(1))
+                                    + ","
+                                    + String.valueOf(participant)
+                                    + ")"
+                    );
                 } else
-                    throw new DaoException();
+                    throw new DaoException("Error in DialogDao");
             } catch (DaoException e) {
                 connection.rollback();
                 connection.setAutoCommit(true);
@@ -133,7 +132,7 @@ public class DialogDaoImpl implements DialogDao {
             connection.commit();
         } catch (SQLException | ConnectionPoolException e) {
             e.printStackTrace();
-            throw new DaoException();
+            throw new DaoException("Error in DialogDao");
         }
     }
 
@@ -155,5 +154,19 @@ public class DialogDaoImpl implements DialogDao {
     @Override
     public void updatePartiсipant() {
 
+    }
+
+    @Override
+    public void updateTime(long dialog, LocalDateTime time) throws DaoException {
+        try (Connection connection = connectionPool.takeConnection();
+             Statement statement = connection.createStatement()) {
+            statement.executeUpdate("UPDATE Dialogues SET last_update='"
+                    + Timestamp.valueOf(time)
+                    + "' WHERE id="
+                    + dialog+";");
+        } catch (SQLException | ConnectionPoolException e) {
+            e.printStackTrace();
+            throw new DaoException("Error in DialogDao", e);
+        }
     }
 }

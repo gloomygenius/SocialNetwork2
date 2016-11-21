@@ -73,7 +73,7 @@ public class FriendsServlet extends HttpServlet {
                 try {
                     long id = Long.parseLong(request.getParameter("add"));
                     relationDao.add(currentUser.getId(), id, FRIEND);
-                    int count = (int) session.getAttribute(NEW_FRIENDS);
+                    int count = session.getAttribute(NEW_FRIENDS)!=null?(int) session.getAttribute(NEW_FRIENDS):1;
                     session.setAttribute(NEW_FRIENDS, --count);
                 } catch (DaoException e) {
                     log.warn("Error when user try to add friend");

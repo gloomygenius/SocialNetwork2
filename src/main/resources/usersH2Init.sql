@@ -3,7 +3,7 @@ VALUES ('admin@exam.com', 'e10adc3949ba59abbe56e057f20f883e', 'Василий', 
 INSERT INTO Users (email, password, first_name, last_name, gender, role)
 VALUES ('oldmail@exam.com', '123456', 'Петя', 'Петров', 0, 0);
 INSERT INTO Users (email, password, first_name, last_name, gender, role)
-VALUES ('user3@exam.com', '123456', 'Антон', 'Чехов', 0, 0);
+VALUES ('user3@exam.com', 'e10adc3949ba59abbe56e057f20f883e', 'Антон', 'Чехов', 0, 0);
 INSERT INTO Users (email, password, first_name, last_name, gender, role)
 VALUES ('pushkin@exam.com', '123456', 'Александр', 'Пушкин', 0, 1);
 INSERT INTO Users (email, password, first_name, last_name, gender, role)

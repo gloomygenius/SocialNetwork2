@@ -38,8 +38,8 @@ public class UserDaoImpl implements UserDao {
     @Override
     public Set<Long> getByNames(String firstName, String lastName) throws DaoException {
         String sqlRequest = "SELECT id FROM Users WHERE "
-                .concat("first_name='" + firstName + "' AND ")
-                .concat("last_name='" + lastName + "'");
+                + "first_name='" + firstName + "' AND "
+                + "last_name='" + lastName + "'";
         Set<Long> idSet = new HashSet<>();
         try (Connection connection = connectionPool.takeConnection();
              Statement statement = connection.createStatement();
@@ -48,8 +48,9 @@ public class UserDaoImpl implements UserDao {
                 idSet.add(resultSet.getLong("id"));
             }
         } catch (SQLException | ConnectionPoolException e) {
-            log.warn("Error requesting data from the database", e);
-            throw new DaoException();
+            e.printStackTrace();
+            log.error("UserDaoImpl error", e);
+            throw new DaoException("UserDaoImpl error", e);
         }
         return idSet;
         // TODO: 07.11.2016 оптимизировать SQL запрос
@@ -69,8 +70,9 @@ public class UserDaoImpl implements UserDao {
             statement.setInt(6, user.getRole());
             statement.execute();
         } catch (SQLException | ConnectionPoolException e) {
-            log.error("Error add new user", e);
-            throw new DaoException();
+            e.printStackTrace();
+            log.error("UserDaoImpl error", e);
+            throw new DaoException("UserDaoImpl error", e);
         }
     }
 
@@ -89,8 +91,9 @@ public class UserDaoImpl implements UserDao {
             statement.setLong(7, user.getId());
             statement.execute();
         } catch (SQLException | ConnectionPoolException e) {
-            log.error("Error update user", e);
-            throw new DaoException();
+            e.printStackTrace();
+            log.error("UserDaoImpl error", e);
+            throw new DaoException("UserDaoImpl error", e);
         }
     }
 
@@ -106,31 +109,28 @@ public class UserDaoImpl implements UserDao {
                 connection.commit();
             } catch (SQLException e) {
                 connection.rollback();
-                log.error("Error remove user", e);
-                throw new DaoException();
+                e.printStackTrace();
+                log.error("UserDaoImpl error", e);
+                throw new DaoException("UserDaoImpl error", e);
             }
         } catch (SQLException | ConnectionPoolException e) {
-            log.error("Error remove user", e);
-            throw new DaoException();
+            e.printStackTrace();
+            log.error("UserDaoImpl error", e);
+            throw new DaoException("UserDaoImpl error", e);
         }
     }
 
 
-    private User createUserFromResultSet(ResultSet resultSet) {
-        User user = null;
-        try {
-            user = new User(
-                    resultSet.getLong("id"),
-                    resultSet.getString("email"),
-                    resultSet.getString("password"),
-                    resultSet.getString("first_name"),
-                    resultSet.getString("last_name"),
-                    resultSet.getInt("gender"),
-                    resultSet.getInt("role")
-            );
-        } catch (SQLException e) {
-            log.error("Error of creating user from result set", e);
-        }
+    private User createUserFromResultSet(ResultSet resultSet) throws SQLException {
+        User user = new User(
+                resultSet.getLong("id"),
+                resultSet.getString("email"),
+                resultSet.getString("password"),
+                resultSet.getString("first_name"),
+                resultSet.getString("last_name"),
+                resultSet.getInt("gender"),
+                resultSet.getInt("role")
+        );
         return user;
     }
 
@@ -143,8 +143,9 @@ public class UserDaoImpl implements UserDao {
                 user = Optional.of(createUserFromResultSet(resultSet));
             }
         } catch (SQLException | ConnectionPoolException e) {
-            log.warn("Error requesting data from the database", e);
-            throw new DaoException();
+            e.printStackTrace();
+            log.error("UserDaoImpl error", e);
+            throw new DaoException("UserDaoImpl error");
         }
         return user;
     }

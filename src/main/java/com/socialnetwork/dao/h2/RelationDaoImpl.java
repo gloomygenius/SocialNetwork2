@@ -6,6 +6,7 @@ import com.socialnetwork.dao.RelationDao;
 import com.socialnetwork.dao.enums.RelationType;
 import com.socialnetwork.dao.exception.DaoException;
 import com.socialnetwork.entities.Relation;
+import lombok.Cleanup;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 
@@ -30,12 +31,11 @@ public class RelationDaoImpl implements RelationDao {
         sqlRequst = String.format(
                 "SELECT sender_id FROM relations WHERE recipient_id=%d AND relation_type=%d", userId, FRIEND.ordinal());
         set.addAll(getIdSet(sqlRequst, "sender_id"));
-        Relation relation = new Relation(
+        return new Relation(
                 userId,
                 set,
                 FRIEND.ordinal()
         );
-        return relation;
     }
 
     @Override
@@ -43,12 +43,11 @@ public class RelationDaoImpl implements RelationDao {
         String sqlRequst = String.format(
                 "SELECT sender_id FROM relations WHERE recipient_id=%d AND relation_type=%d", userId, REQUEST.ordinal());
         Set<Long> set = getIdSet(sqlRequst, "sender_id");
-        Relation relation = new Relation(
+        return new Relation(
                 userId,
                 set,
                 INCOMING.ordinal()
         );
-        return relation;
     }
 
     @Override
@@ -56,12 +55,11 @@ public class RelationDaoImpl implements RelationDao {
         String sqlRequst = String.format(
                 "SELECT recipient_id FROM relations WHERE sender_id=%d AND relation_type=%d", userId, REQUEST.ordinal());
         Set<Long> set = getIdSet(sqlRequst, "recipient_id");
-        Relation relation = new Relation(
+        return new Relation(
                 userId,
                 set,
                 REQUEST.ordinal()
         );
-        return relation;
     }
 
     @Override
@@ -87,8 +85,9 @@ public class RelationDaoImpl implements RelationDao {
                 }
             }
         } catch (SQLException | ConnectionPoolException e) {
-            log.warn("Error requesting data from the database", e);
-            throw new DaoException();
+            e.printStackTrace();
+            log.error("RelationDaoImpl error", e);
+            throw new DaoException("RelationDaoImpl error", e);
         }
         return relationType;
     }
@@ -136,9 +135,9 @@ public class RelationDaoImpl implements RelationDao {
             statement.execute();
             connection.commit();
         } catch (SQLException | ConnectionPoolException e) {
-
             e.printStackTrace();
-            //// TODO: 08.11.2016 нормально обработать exception
+            log.error("RelationDaoImpl error", e);
+            throw new DaoException("RelationDaoImpl error", e);
         }
     }
 
@@ -167,15 +166,16 @@ public class RelationDaoImpl implements RelationDao {
                 preparedStatement.setLong(2, senderId);
                 preparedStatement.setLong(3, senderId);
                 preparedStatement.setLong(4, recipientId);
-                try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                    if (resultSet.next()) {
-                        int relationTypeFromRS = resultSet.getInt("relation_type");
-                        if (relationTypeFromRS != FRIEND.ordinal())
-                            throw new DaoException("Remove friends without right");
-                    } else throw new DaoException("Remove friends without right");
-                }
+                @Cleanup ResultSet resultSet = preparedStatement.executeQuery();
+                if (resultSet.next()) {
+                    int relationTypeFromRS = resultSet.getInt("relation_type");
+                    if (relationTypeFromRS != FRIEND.ordinal())
+                        throw new DaoException("Remove friends without right");
+                } else throw new DaoException("Remove friends without right");
             } catch (SQLException | ConnectionPoolException e) {
-                e.printStackTrace(); // TODO: 14.11.2016 Обработать
+                e.printStackTrace();
+                log.error("RelationDaoImpl error", e);
+                throw new DaoException("RelationDaoImpl error", e);
             }
 
             sqlRequest = String.format("DELETE FROM Relations WHERE ((sender_id=%d AND recipient_id=%d) " +
@@ -186,12 +186,13 @@ public class RelationDaoImpl implements RelationDao {
                         senderId, recipientId, relationType.ordinal());
 
         try (Connection connection = connectionPool.takeConnection();
-             Statement statement = connection.createStatement();
+             Statement statement = connection.createStatement()
         ) {
             statement.executeUpdate(sqlRequest);
         } catch (SQLException | ConnectionPoolException e) {
             e.printStackTrace();
-            //// TODO: 08.11.2016 нормально обработать exception
+            log.error("RelationDaoImpl error", e);
+            throw new DaoException("RelationDaoImpl error", e);
         }
     }
 
@@ -203,8 +204,9 @@ public class RelationDaoImpl implements RelationDao {
             while (resultSet.next())
                 idSet.add(resultSet.getLong(field));
         } catch (SQLException | ConnectionPoolException e) {
-            log.warn("Error requesting data from the database", e);
-            throw new DaoException();
+            e.printStackTrace();
+            log.error("RelationDaoImpl error", e);
+            throw new DaoException("RelationDaoImpl error", e);
         }
         return idSet;
     }

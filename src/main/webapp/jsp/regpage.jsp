@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%--suppress ELValidationInJSP --%>
 <c:set var="language"
        value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}"
        scope="session"/>
@@ -9,10 +10,10 @@
 
 <div class="row">
     <div class="col-xs-12">
-        <form class="form-horizontal" action='/registration' method="POST">
+        <form class="form-horizontal" action="/registration" method="POST">
             <fieldset>
                 <div id="legend">
-                    <legend class="">Register</legend>
+                    <legend class="area-legend-symbol">Register</legend>
                 </div>
                 <c:if test="${not empty errorMsg}">
                     <div class="alert alert-danger">

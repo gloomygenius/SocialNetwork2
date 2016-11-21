@@ -1,22 +1,21 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="language"
-       value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}"
+       value="${not empty param.language ? param.language : not empty sessionScope.language ? sessionScope.language : pageContext.request.locale}"
        scope="session"/>
 <fmt:setLocale value="${language}"/>
 <fmt:setBundle basename="text"/>
 <c:set var="currentUser" scope="page" value="${sessionScope.currentUser}"/>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="${language}">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="favicon.ico">
+    <link rel="icon" href="<c:url value="/favicon.ico"/>">
 
     <title>Отрядники</title>
 
@@ -39,7 +38,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/">Отрядники</a>
+            <a class="navbar-brand" href="<c:url value="/"/>">Отрядники</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
@@ -48,12 +47,13 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">Выбрать язык<span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="/?language=ru_RU">Русский</a></li>
-                        <li><a href="/?language=en_US">English</a></li>
+                        <li><a href="<c:url value="/?language=ru_RU"/>">Русский</a></li>
+                        <li><a href="<c:url value="/?language=en_US"/>">English</a></li>
                     </ul>
                 </li>
                 <c:if test="${not empty currentUser}">
                     <li><a href="${pageContext.request.contextPath}/logout"><fmt:message key="menu.logout"/></a></li>
+                    <%--suppress ELValidationInJSP --%>
                     <c:if test="${currentUser.role==2}">
                         <li><a href="#">Админка</a></li>
                     </c:if>
@@ -69,15 +69,15 @@
             <c:if test="${not empty currentUser}">
                 <ul class="nav nav-list">
                     <li class="nav-header">Навигация</li>
-                    <li ><a href="/id${currentUser.id}"><fmt:message key="menu.mypage"/></a></li>
+                    <li><a href="/id${currentUser.id}"><fmt:message key="menu.mypage"/></a></li>
                     <li>
-                        <a href="/dialogues"><fmt:message key="menu.dialogues"/></a></li>
+                        <a href="<c:url value="/dialogues"/>"><fmt:message key="menu.dialogues"/></a></li>
                     <li>
-                        <a href="/friends"><fmt:message key="menu.friends"/>
-                        <c:if test="${sessionScope.newFriends!=0 and not empty sessionScope.newFriends}">
-                            [+${sessionScope.newFriends}]
-                        </c:if>
-                    </a></li>
+                        <a href="<c:url value="/friends"/>"><fmt:message key="menu.friends"/>
+                            <c:if test="${sessionScope.newFriends!=0 and not empty sessionScope.newFriends}">
+                                [+${sessionScope.newFriends}]
+                            </c:if>
+                        </a></li>
                     <li><a href="#"><fmt:message key="menu.myteam"/></a></li>
                     <li><a href="#"><fmt:message key="menu.events"/></a></li>
 

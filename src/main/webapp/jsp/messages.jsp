@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+<%--suppress ELValidationInJSP --%>
 <c:set var="language"
        value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}"
        scope="session"/>
@@ -11,7 +12,7 @@
 <div class="row">
     <div class="col-xs-12" id="dialogues">
         <c:if test="${requestScope.messages.size() == requestScope.limit}">
-            <a href="/messages?dialog=${param.dialog}&limit=${requestScope.limit+15}&offset=${requestScope.offset}">
+            <a href="<c:url value="/messages?dialog=${param.dialog}&limit=${requestScope.limit+15}&offset=${requestScope.offset}"/>">
                 Посмотреть предыдущие сообщения</a>
         </c:if>
         <c:forEach var="message" items="${requestScope.messages}">

@@ -1,6 +1,8 @@
+<%--suppress ELValidationInJSP --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+<%--suppress ELValidationInJSP --%>
 <c:set var="language"
        value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}"
        scope="session"/>
@@ -26,12 +28,11 @@
 
 <div class="row">
     <div class="col-xs-6" id="avatar">
-        <img src="/img/default_ava.png" alt="avatar"/>
+        <img src="<c:url value="/img/default_ava.png"/>" alt="avatar"/>
     </div>
     <div class="col-xs-6">
         <div class="row">
-            <p class="text-center">
-            <h2>${firstName} ${lastName}</h2></p>
+            <h2>${firstName} ${lastName}</h2>
         </div>
         <div>
             <p>Информация о пользователе:</p>

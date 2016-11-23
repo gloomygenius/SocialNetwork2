@@ -16,6 +16,7 @@ import java.util.Set;
 /**
  * Created by Vasiliy Bobkov on 06.11.2016.
  */
+@SuppressWarnings({"SqlNoDataSourceInspection", "SqlResolve"})
 @Log4j
 @RequiredArgsConstructor
 public class UserDaoImpl implements UserDao {
@@ -51,7 +52,6 @@ public class UserDaoImpl implements UserDao {
             throw new DaoException("UserDaoImpl error",e);
         }
         return idSet;
-        // TODO: 07.11.2016 оптимизировать SQL запрос
     }
 
     @Override
@@ -96,16 +96,16 @@ public class UserDaoImpl implements UserDao {
         try (Connection connection = connectionPool.takeConnection()) {
             try (Statement statement = connection.createStatement()) {
                 connection.setAutoCommit(false);
+                statement.addBatch("DELETE FROM Relations WHERE sender_id='"+id+"'");
+                statement.addBatch("DELETE FROM Relations WHERE recipient_id='"+id+"'");
+                statement.addBatch("DELETE FROM Messages WHERE sender='"+id+"'");
+                statement.addBatch("DELETE FROM Dialogues WHERE creator='"+id+"'");
                 statement.addBatch("DELETE FROM Users WHERE id='" + id + "'");
-                //statement.addBatch("DELETE FROM Users WHERE id='"+id+"'");
-                // TODO: 07.11.2016 удалить из других таблиц
                 statement.executeBatch();
                 connection.commit();
             } catch (SQLException e) {
                 connection.rollback();
-                e.printStackTrace();
-                log.error("UserDaoImpl error", e);
-                throw new DaoException("UserDaoImpl error", e);
+                throw e;
             }
         } catch (SQLException | ConnectionPoolException e) {
             throw new DaoException("UserDaoImpl error",e);
@@ -114,7 +114,7 @@ public class UserDaoImpl implements UserDao {
 
 
     private User createUserFromResultSet(ResultSet resultSet) throws SQLException {
-        User user = new User(
+        return new User(
                 resultSet.getLong("id"),
                 resultSet.getString("email"),
                 resultSet.getString("password"),
@@ -123,7 +123,6 @@ public class UserDaoImpl implements UserDao {
                 resultSet.getInt("gender"),
                 resultSet.getInt("role")
         );
-        return user;
     }
 
     private Optional<User> getByAny(String sqlRequest) throws DaoException {

@@ -3,7 +3,9 @@ package com.socialnetwork.dao.h2;
 import com.socialnetwork.connection_pool.ConnectionPool;
 import com.socialnetwork.connection_pool.ConnectionPoolException;
 import com.socialnetwork.common.DataScriptExecuter;
+import com.socialnetwork.dao.RelationDao;
 import com.socialnetwork.dao.UserDao;
+import com.socialnetwork.dao.enums.RelationType;
 import com.socialnetwork.entities.User;
 import lombok.SneakyThrows;
 import org.junit.BeforeClass;
@@ -12,9 +14,12 @@ import org.junit.Test;
 import java.util.Optional;
 
 import static com.socialnetwork.dao.enums.Gender.MALE;
+import static com.socialnetwork.dao.enums.RelationType.NEUTRAL;
 import static com.socialnetwork.dao.enums.Roles.ADMIN;
 import static com.socialnetwork.dao.enums.Roles.USER;
+import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -23,6 +28,7 @@ import static org.junit.Assert.assertTrue;
 public class UserDaoImplTest {
     private static ConnectionPool connectionPool;
     private static UserDao userDao;
+    private static RelationDao relationDao;
 
     @BeforeClass
     public static void DBinit() throws ConnectionPoolException {
@@ -31,6 +37,7 @@ public class UserDaoImplTest {
         connectionPool.initPoolData();
         DataScriptExecuter.initSqlData("src/test/resources/H2Init.sql");
         userDao = new UserDaoImpl(connectionPool);
+        relationDao = new RelationDaoImpl(connectionPool);
     }
 
     @Test
@@ -50,7 +57,7 @@ public class UserDaoImplTest {
     @SneakyThrows
     public void getByNames() throws Exception {
 
-        assertTrue(userDao.getByNames("Василий", "Бобков").size()>0);
+        assertTrue(userDao.getByNames("Василий", "Бобков").size() > 0);
     }
 
     @Test
@@ -89,7 +96,10 @@ public class UserDaoImplTest {
         userDao.add(new User(0, "example3@ya.ru", "123456", "Иван", "Иванов", MALE.ordinal(), USER.ordinal()));
         Optional<User> userOptional = userDao.getByEmail("example3@ya.ru");
         assertTrue(userOptional.isPresent());
-        userDao.remove(userOptional.get().getId());
+        long user_id = userOptional.get().getId();
+        relationDao.add(user_id, 1, RelationType.FRIEND);
+        userDao.remove(user_id);
         assertFalse(userDao.getByEmail("example3@ya.ru").isPresent());
+        assertThat(relationDao.getRelationBetween(1, user_id),is(NEUTRAL.ordinal()));
     }
 }

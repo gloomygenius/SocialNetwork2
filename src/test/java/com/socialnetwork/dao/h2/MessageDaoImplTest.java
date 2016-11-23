@@ -30,6 +30,7 @@ public class MessageDaoImplTest {
     }
 
     @Test
+    @SneakyThrows
     public void getMessages() throws Exception {
         final int TOTAL_MESSAGES = 3;
         final int START = 0;
@@ -39,6 +40,7 @@ public class MessageDaoImplTest {
     }
 
     @Test
+    @SneakyThrows
     public void sendMessage() throws Exception {
         final int TOTAL_MESSAGES = -1;
         final int START = 0;

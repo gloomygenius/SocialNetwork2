@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import static com.socialnetwork.servlets.ErrorHandler.ERROR_MSG;
-import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.REGISTRATION_FAIL;
+import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.LOCALE_ERROR;
 
 /**
  * Created by Vasiliy Bobkov on 23.11.2016.
@@ -36,8 +36,8 @@ public class LocaleServlet extends HttpServlet {
         try {
             response.sendRedirect(uri);
         } catch (IOException e) {
-            log.error("Changing locale error", e);
-            request.setAttribute(ERROR_MSG, REGISTRATION_FAIL.getPropertyName());
+            log.error("Changing language error", e);
+            request.setAttribute(ERROR_MSG, LOCALE_ERROR.getPropertyName());
             request.getRequestDispatcher("/error").forward(request, response);
         }
     }

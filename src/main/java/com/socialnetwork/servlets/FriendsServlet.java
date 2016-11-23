@@ -23,11 +23,8 @@ import static com.socialnetwork.dao.enums.RelationType.FRIEND;
 import static com.socialnetwork.filters.SecurityFilter.CURRENT_USER;
 import static com.socialnetwork.listeners.Initializer.RELATION_DAO;
 import static com.socialnetwork.listeners.Initializer.USER_DAO;
-import static com.socialnetwork.servlets.AuthorizationServlet.NEW_FRIENDS;
 import static com.socialnetwork.servlets.ErrorHandler.ERROR_MSG;
-import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.FRIENDS_SEARCH_FAIL;
-import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.LOGIN_FAIL;
-import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.REGISTRATION_FAIL;
+import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.*;
 
 /**
  * Created by Vasiliy Bobkov on 09.11.2016.
@@ -36,9 +33,8 @@ import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.REGISTRATION_FAI
 @WebServlet("/friends")
 public class FriendsServlet extends HttpServlet {
     public static final String INCLUDED_PAGE = "includedPage";
-    public static final String FRIENDS_SET = "friendsSet";
-    public static final String RELATION_MAP = "relationMap";
-
+    private static final String FRIENDS_SET = "friendsSet";
+    private static final String RELATION_MAP = "relationMap";
     private static RelationDao relationDao;
     private static UserDao userDao;
     private static final int maxFriendPerPage = 10;
@@ -52,38 +48,7 @@ public class FriendsServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (request.getParameter("remove") != null || request.getParameter("add") != null) {
-            HttpSession session = request.getSession(true);
-            User currentUser = (User) session.getAttribute(CURRENT_USER);
-
-            if (request.getParameter("remove") != null) {
-                try {
-                    long id = Long.parseLong(request.getParameter("remove"));
-                    relationDao.remove(
-                            currentUser.getId(),
-                            id,
-                            RelationType.getType(Integer.parseInt(request.getParameter("relation"))));
-                    int count = (int) session.getAttribute(NEW_FRIENDS);
-                    session.setAttribute(NEW_FRIENDS, --count);
-                } catch (DaoException e) {
-                    log.warn("Error when user try to remove relation");
-                    e.printStackTrace();
-                }
-            }
-            if (request.getParameter("add") != null) {
-                try {
-                    long id = Long.parseLong(request.getParameter("add"));
-                    relationDao.add(currentUser.getId(), id, FRIEND);
-                    int count = session.getAttribute(NEW_FRIENDS) != null ? (int) session.getAttribute(NEW_FRIENDS) : 1;
-                    session.setAttribute(NEW_FRIENDS, --count);
-                } catch (DaoException e) {
-                    log.warn("Error when user try to add friend");
-                    e.printStackTrace();
-                }
-            }
-            response.sendRedirect("/friends");
-        } else
-            doPost(request, response);
+        doPost(request, response);
     }
 
     @Override
@@ -94,7 +59,7 @@ public class FriendsServlet extends HttpServlet {
         User currentUser = (User) session.getAttribute(CURRENT_USER);
         Set<Long> friendIdSet = new HashSet<>();
         try {
-            String section = request.getParameter("section") == null ? "friends" : request.getParameter("section");
+            String section = request.getParameter("action") == null ? "friends" : request.getParameter("action");
 
             switch (section) {
                 case "incoming":
@@ -114,18 +79,38 @@ public class FriendsServlet extends HttpServlet {
                         friendIdSet = searchFriends(names);
                     }
                     break;
+                case "remove":
+                    long id = Long.parseLong(request.getParameter("id"));
+                    relationDao.remove(
+                            currentUser.getId(),
+                            id,
+                            RelationType.getType(Integer.parseInt(request.getParameter("relation"))));
+                    friendIdSet = relationDao.getFriends(currentUser.getId()).getIdSet();
+                    break;
+                case "add":
+                    id = Long.parseLong(request.getParameter("id"));
+                    relationDao.add(currentUser.getId(), id, FRIEND);
+                    friendIdSet = relationDao.getFriends(currentUser.getId()).getIdSet();
+                    break;
                 default:
                     friendIdSet = relationDao.getFriends(currentUser.getId()).getIdSet();
             }
         } catch (DaoException e) {
             log.error("Friends page error", e);
-            request.setAttribute(ERROR_MSG, REGISTRATION_FAIL.getPropertyName());
+            request.setAttribute(ERROR_MSG, COMMON_ERROR.getPropertyName());
             request.getRequestDispatcher("/error").forward(request, response);
         }
+
+        loadUsersAndRelations(request, response, friendIdSet);
+        request.getRequestDispatcher("/index.jsp").forward(request, response);
+    }
+
+    private void loadUsersAndRelations(HttpServletRequest request, HttpServletResponse response, Set<Long> friendIdSet) throws ServletException, IOException {
+        User currentUser = (User) request.getSession().getAttribute(CURRENT_USER);
         int since = request.getParameter("since") != null ? Integer.parseInt(request.getParameter("since")) : 0;
-        Optional<User> userOptional = Optional.empty();
+        Optional<User> userOptional;
         Map<Long, Integer> relationSet = new HashMap<>();
-        Set<User> friendSet = new HashSet<>();
+        Set<User> friendSet = new TreeSet<>();
         int count = 0;
         for (long id : friendIdSet) {
             if (count < since) {
@@ -139,13 +124,14 @@ public class FriendsServlet extends HttpServlet {
                     relationSet.put(id, relationDao.getRelationBetween(currentUser.getId(), id));
                 }
             } catch (DaoException e) {
-                e.printStackTrace();
+                log.error("Getting friends of id" + currentUser.getId() + " error", e);
+                request.setAttribute(ERROR_MSG, COMMON_ERROR.getPropertyName());
+                request.getRequestDispatcher("/error").forward(request, response);
             }
             if (count >= since + maxFriendPerPage) break;
         }
         request.setAttribute(RELATION_MAP, relationSet);
         request.setAttribute(FRIENDS_SET, friendSet);
-        request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
 
     private Set<Long> searchFriends(String names[]) throws DaoException {

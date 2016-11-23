@@ -9,7 +9,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 @Log4j
-public abstract class DataScriptExecuter {
+public abstract class DataScriptExecutor {
 
     public static void initSqlData(String pathToInitSQL) {
         ConnectionPool connectionPool = ConnectionPool.getInstance();

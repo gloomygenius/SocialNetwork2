@@ -1,6 +1,6 @@
 package com.socialnetwork.dao.h2;
 
-import com.socialnetwork.common.DataScriptExecuter;
+import com.socialnetwork.common.DataScriptExecutor;
 import com.socialnetwork.connection_pool.ConnectionPool;
 import com.socialnetwork.connection_pool.ConnectionPoolException;
 import com.socialnetwork.dao.ProfileDao;
@@ -16,18 +16,20 @@ import java.util.Optional;
 import static org.junit.Assert.*;
 
 /**
+ * Test for ProfileDaoImpl
  * Created by Vasiliy Bobkov on 07.11.2016.
  */
 public class ProfileDaoImplTest {
-    private static ConnectionPool connectionPool;
-    ProfileDao profileDao = new ProfileDaoImpl(connectionPool);
+    private static ProfileDao profileDao;
+
     @BeforeClass
 
     public static void DBinit() throws ConnectionPoolException {
         ConnectionPool.create("src/test/resources/db.properties");
-        connectionPool = ConnectionPool.getInstance();
+        ConnectionPool connectionPool = ConnectionPool.getInstance();
         connectionPool.initPoolData();
-        DataScriptExecuter.initSqlData("src/test/resources/H2Init.sql");
+        profileDao = new ProfileDaoImpl(connectionPool);
+        DataScriptExecutor.initSqlData("src/test/resources/H2Init.sql");
 
     }
 
@@ -80,6 +82,6 @@ public class ProfileDaoImplTest {
         assertTrue(profileOptional.isPresent());
         profileDao.remove(profile.getId());
         profileOptional = profileDao.getByUserId(profile.getId());
-        assertTrue(profileOptional.get().equals(new Profile(profile.getId(),null,null,null,null,null,0,0,null)));
+        assertTrue(profileOptional.get().equals(new Profile(profile.getId(), null, null, null, null, null, 0, 0, null)));
     }
 }

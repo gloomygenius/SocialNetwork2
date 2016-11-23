@@ -1,6 +1,6 @@
 package com.socialnetwork.listeners;
 
-import com.socialnetwork.common.DataScriptExecuter;
+import com.socialnetwork.common.DataScriptExecutor;
 import com.socialnetwork.connection_pool.ConnectionPool;
 import com.socialnetwork.connection_pool.ConnectionPoolException;
 import com.socialnetwork.dao.h2.*;
@@ -34,8 +34,8 @@ public class Initializer implements ServletContextListener {
             log.error("Connection pool initialization error ", e);
         }
 
-        DataScriptExecuter.initSqlData(pathToDbConfig + "H2Init.sql");
-        DataScriptExecuter.initSqlData(pathToDbConfig + "usersH2Init.sql");
+        DataScriptExecutor.initSqlData(pathToDbConfig + "H2Init.sql");
+        DataScriptExecutor.initSqlData(pathToDbConfig + "usersH2Init.sql");
         log.info("SQL initialization has done successfully");
 
         context.setAttribute(USER_DAO, new UserDaoImpl(connectionPool));

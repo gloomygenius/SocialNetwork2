@@ -1,6 +1,6 @@
 package com.socialnetwork.dao.h2;
 
-import com.socialnetwork.common.DataScriptExecuter;
+import com.socialnetwork.common.DataScriptExecutor;
 import com.socialnetwork.connection_pool.ConnectionPool;
 import com.socialnetwork.dao.DialogDao;
 import com.socialnetwork.entities.Dialog;
@@ -10,9 +10,9 @@ import org.junit.Test;
 
 import java.util.Set;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
-/**
+/**Test for DialogDaoImpl
  * Created by Vasiliy Bobkov on 15.11.2016.
  */
 public class DialogDaoImplTest {
@@ -25,7 +25,7 @@ public class DialogDaoImplTest {
         ConnectionPool.create("src/test/resources/db.properties");
         connectionPool = ConnectionPool.getInstance();
         connectionPool.initPoolData();
-        DataScriptExecuter.initSqlData("src/test/resources/H2Init.sql");
+        DataScriptExecutor.initSqlData("src/test/resources/H2Init.sql");
     }
 
     @Test

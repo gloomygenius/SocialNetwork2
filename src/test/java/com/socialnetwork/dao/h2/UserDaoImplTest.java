@@ -1,8 +1,8 @@
 package com.socialnetwork.dao.h2;
 
+import com.socialnetwork.common.DataScriptExecutor;
 import com.socialnetwork.connection_pool.ConnectionPool;
 import com.socialnetwork.connection_pool.ConnectionPoolException;
-import com.socialnetwork.common.DataScriptExecuter;
 import com.socialnetwork.dao.RelationDao;
 import com.socialnetwork.dao.UserDao;
 import com.socialnetwork.dao.enums.RelationType;
@@ -23,6 +23,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 /**
+ * Test for UserDaoImpl
  * Created by Vasiliy Bobkov on 07.11.2016.
  */
 public class UserDaoImplTest {
@@ -34,7 +35,7 @@ public class UserDaoImplTest {
         ConnectionPool.create("src/test/resources/db.properties");
         ConnectionPool connectionPool = ConnectionPool.getInstance();
         connectionPool.initPoolData();
-        DataScriptExecuter.initSqlData("src/test/resources/H2Init.sql");
+        DataScriptExecutor.initSqlData("src/test/resources/H2Init.sql");
         userDao = new UserDaoImpl(connectionPool);
         relationDao = new RelationDaoImpl(connectionPool);
     }

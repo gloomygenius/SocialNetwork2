@@ -1,4 +1,4 @@
-FATAL main com.socialnetwork.common.DataScriptExecuter - Init SQL script error
+FATAL main com.socialnetwork.common.DataScriptExecutor - Init SQL script error
 } FATAL DataScriptExecuter:34 - Init SQL script error
 org.h2.jdbc.JdbcSQLException: Таблица "DIALOGS" не найдена
 Table "DIALOGS" not found; SQL statement:
@@ -14,7 +14,7 @@ CREATE TABLE Messages (  id      BIGINT        NOT NULL PRIMARY KEY AUTO_INCREME
 	at org.h2.command.Command.executeUpdate(Command.java:258)
 	at org.h2.jdbc.JdbcStatement.executeUpdateInternal(JdbcStatement.java:130)
 	at org.h2.jdbc.JdbcStatement.executeUpdate(JdbcStatement.java:115)
-	at com.socialnetwork.common.DataScriptExecuter.initSqlData(DataScriptExecuter.java:31)
+	at com.socialnetwork.common.DataScriptExecutor.initSqlData(DataScriptExecuter.java:31)
 	at com.socialnetwork.dao.h2.MessageDaoImplTest.initTest(MessageDaoImplTest.java:28)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
@@ -43,7 +43,7 @@ CREATE TABLE Messages (  id      BIGINT        NOT NULL PRIMARY KEY AUTO_INCREME
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
 	at java.lang.reflect.Method.invoke(Method.java:498)
 	at com.intellij.rt.execution.application.AppMain.main(AppMain.java:147)
-FATAL main com.socialnetwork.common.DataScriptExecuter - Init SQL script error
+FATAL main com.socialnetwork.common.DataScriptExecutor - Init SQL script error
 } FATAL DataScriptExecuter:34 - Init SQL script error
 org.h2.jdbc.JdbcSQLException: Таблица "USERS" уже существует
 Table "USERS" already exists; SQL statement:
@@ -56,7 +56,7 @@ CREATE TABLE Users (  id         BIGINT PRIMARY KEY AUTO_INCREMENT,  email      
 	at org.h2.command.Command.executeUpdate(Command.java:258)
 	at org.h2.jdbc.JdbcStatement.executeUpdateInternal(JdbcStatement.java:130)
 	at org.h2.jdbc.JdbcStatement.executeUpdate(JdbcStatement.java:115)
-	at com.socialnetwork.common.DataScriptExecuter.initSqlData(DataScriptExecuter.java:31)
+	at com.socialnetwork.common.DataScriptExecutor.initSqlData(DataScriptExecuter.java:31)
 	at com.socialnetwork.dao.h2.MessageDaoImplTest.initTest(MessageDaoImplTest.java:28)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
@@ -85,7 +85,7 @@ CREATE TABLE Users (  id         BIGINT PRIMARY KEY AUTO_INCREMENT,  email      
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
 	at java.lang.reflect.Method.invoke(Method.java:498)
 	at com.intellij.rt.execution.application.AppMain.main(AppMain.java:147)
-FATAL main com.socialnetwork.common.DataScriptExecuter - Init SQL script error
+FATAL main com.socialnetwork.common.DataScriptExecutor - Init SQL script error
 } FATAL DataScriptExecuter:34 - Init SQL script error
 org.h2.jdbc.JdbcSQLException: Таблица "USERS" уже существует
 Table "USERS" already exists; SQL statement:
@@ -98,7 +98,7 @@ CREATE TABLE Users (  id         BIGINT PRIMARY KEY AUTO_INCREMENT,  email      
 	at org.h2.command.Command.executeUpdate(Command.java:258)
 	at org.h2.jdbc.JdbcStatement.executeUpdateInternal(JdbcStatement.java:130)
 	at org.h2.jdbc.JdbcStatement.executeUpdate(JdbcStatement.java:115)
-	at com.socialnetwork.common.DataScriptExecuter.initSqlData(DataScriptExecuter.java:31)
+	at com.socialnetwork.common.DataScriptExecutor.initSqlData(DataScriptExecuter.java:31)
 	at com.socialnetwork.dao.h2.MessageDaoImplTest.initTest(MessageDaoImplTest.java:28)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
@@ -127,7 +127,7 @@ CREATE TABLE Users (  id         BIGINT PRIMARY KEY AUTO_INCREMENT,  email      
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
 	at java.lang.reflect.Method.invoke(Method.java:498)
 	at com.intellij.rt.execution.application.AppMain.main(AppMain.java:147)
-FATAL main com.socialnetwork.common.DataScriptExecuter - Init SQL script error
+FATAL main com.socialnetwork.common.DataScriptExecutor - Init SQL script error
 } FATAL DataScriptExecuter:34 - Init SQL script error
 org.h2.jdbc.JdbcSQLException: Таблица "USERS" уже существует
 Table "USERS" already exists; SQL statement:
@@ -140,7 +140,7 @@ CREATE TABLE Users (  id         BIGINT PRIMARY KEY AUTO_INCREMENT,  email      
 	at org.h2.command.Command.executeUpdate(Command.java:258)
 	at org.h2.jdbc.JdbcStatement.executeUpdateInternal(JdbcStatement.java:130)
 	at org.h2.jdbc.JdbcStatement.executeUpdate(JdbcStatement.java:115)
-	at com.socialnetwork.common.DataScriptExecuter.initSqlData(DataScriptExecuter.java:31)
+	at com.socialnetwork.common.DataScriptExecutor.initSqlData(DataScriptExecuter.java:31)
 	at com.socialnetwork.dao.h2.MessageDaoImplTest.initTest(MessageDaoImplTest.java:28)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
@@ -169,7 +169,7 @@ CREATE TABLE Users (  id         BIGINT PRIMARY KEY AUTO_INCREMENT,  email      
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
 	at java.lang.reflect.Method.invoke(Method.java:498)
 	at com.intellij.rt.execution.application.AppMain.main(AppMain.java:147)
-FATAL main com.socialnetwork.common.DataScriptExecuter - Init SQL script error
+FATAL main com.socialnetwork.common.DataScriptExecutor - Init SQL script error
 } FATAL DataScriptExecuter:34 - Init SQL script error
 org.h2.jdbc.JdbcSQLException: Таблица "USERS" уже существует
 Table "USERS" already exists; SQL statement:
@@ -182,7 +182,7 @@ CREATE TABLE Users (  id         BIGINT PRIMARY KEY AUTO_INCREMENT,  email      
 	at org.h2.command.Command.executeUpdate(Command.java:258)
 	at org.h2.jdbc.JdbcStatement.executeUpdateInternal(JdbcStatement.java:130)
 	at org.h2.jdbc.JdbcStatement.executeUpdate(JdbcStatement.java:115)
-	at com.socialnetwork.common.DataScriptExecuter.initSqlData(DataScriptExecuter.java:31)
+	at com.socialnetwork.common.DataScriptExecutor.initSqlData(DataScriptExecuter.java:31)
 	at com.socialnetwork.dao.h2.MessageDaoImplTest.initTest(MessageDaoImplTest.java:28)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
@@ -211,7 +211,7 @@ CREATE TABLE Users (  id         BIGINT PRIMARY KEY AUTO_INCREMENT,  email      
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
 	at java.lang.reflect.Method.invoke(Method.java:498)
 	at com.intellij.rt.execution.application.AppMain.main(AppMain.java:147)
-FATAL main com.socialnetwork.common.DataScriptExecuter - Init SQL script error
+FATAL main com.socialnetwork.common.DataScriptExecutor - Init SQL script error
 } FATAL DataScriptExecuter:34 - Init SQL script error
 org.h2.jdbc.JdbcSQLException: Таблица "USERS" уже существует
 Table "USERS" already exists; SQL statement:
@@ -224,7 +224,7 @@ CREATE TABLE Users (  id         BIGINT PRIMARY KEY AUTO_INCREMENT,  email      
 	at org.h2.command.Command.executeUpdate(Command.java:258)
 	at org.h2.jdbc.JdbcStatement.executeUpdateInternal(JdbcStatement.java:130)
 	at org.h2.jdbc.JdbcStatement.executeUpdate(JdbcStatement.java:115)
-	at com.socialnetwork.common.DataScriptExecuter.initSqlData(DataScriptExecuter.java:31)
+	at com.socialnetwork.common.DataScriptExecutor.initSqlData(DataScriptExecuter.java:31)
 	at com.socialnetwork.dao.h2.MessageDaoImplTest.initTest(MessageDaoImplTest.java:28)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
@@ -253,7 +253,7 @@ CREATE TABLE Users (  id         BIGINT PRIMARY KEY AUTO_INCREMENT,  email      
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
 	at java.lang.reflect.Method.invoke(Method.java:498)
 	at com.intellij.rt.execution.application.AppMain.main(AppMain.java:147)
-FATAL main com.socialnetwork.common.DataScriptExecuter - Init SQL script error
+FATAL main com.socialnetwork.common.DataScriptExecutor - Init SQL script error
 } FATAL DataScriptExecuter:34 - Init SQL script error
 org.h2.jdbc.JdbcSQLException: Таблица "DIALOGS" не найдена
 Table "DIALOGS" not found; SQL statement:
@@ -269,7 +269,7 @@ CREATE TABLE Messages (  id       BIGINT        NOT NULL PRIMARY KEY AUTO_INCREM
 	at org.h2.command.Command.executeUpdate(Command.java:258)
 	at org.h2.jdbc.JdbcStatement.executeUpdateInternal(JdbcStatement.java:130)
 	at org.h2.jdbc.JdbcStatement.executeUpdate(JdbcStatement.java:115)
-	at com.socialnetwork.common.DataScriptExecuter.initSqlData(DataScriptExecuter.java:31)
+	at com.socialnetwork.common.DataScriptExecutor.initSqlData(DataScriptExecuter.java:31)
 	at com.socialnetwork.dao.h2.DialogDaoImplTest.initTest(DialogDaoImplTest.java:27)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)

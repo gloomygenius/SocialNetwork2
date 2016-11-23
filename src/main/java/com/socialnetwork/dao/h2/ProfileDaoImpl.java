@@ -33,14 +33,12 @@ public class ProfileDaoImpl implements ProfileDao {
                 profile = Optional.of(createProfileFromResultSet(resultSet));
             }
         } catch (SQLException | ConnectionPoolException e) {
-            e.printStackTrace();
-            log.error("Error requesting data from the database", e);
-            throw new DaoException("Error requesting data from the database");
+            throw new DaoException("Error in ProfileDaoImpl",e);
         }
         return profile;
     }
 
-    private Profile createProfileFromResultSet(ResultSet resultSet) {
+    private Profile createProfileFromResultSet(ResultSet resultSet) throws DaoException {
         Profile profile = null;
         try {
             Date date = resultSet.getDate("birthday");
@@ -58,7 +56,7 @@ public class ProfileDaoImpl implements ProfileDao {
                     resultSet.getString("about")
             );
         } catch (SQLException e) {
-            log.error("Error of creating profile from result set", e);
+            throw new DaoException("Error in ProfileDaoImpl",e);
         }
         return profile;
     }
@@ -83,9 +81,7 @@ public class ProfileDaoImpl implements ProfileDao {
 
             statement.execute();
         } catch (SQLException | ConnectionPoolException e) {
-            e.printStackTrace();
-            log.error("Error add profile", e);
-            throw new DaoException("Error add profile");
+            throw new DaoException("Error in ProfileDaoImpl",e);
         }
     }
 

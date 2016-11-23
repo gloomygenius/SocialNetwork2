@@ -48,9 +48,7 @@ public class UserDaoImpl implements UserDao {
                 idSet.add(resultSet.getLong("id"));
             }
         } catch (SQLException | ConnectionPoolException e) {
-            e.printStackTrace();
-            log.error("UserDaoImpl error", e);
-            throw new DaoException("UserDaoImpl error", e);
+            throw new DaoException("UserDaoImpl error",e);
         }
         return idSet;
         // TODO: 07.11.2016 оптимизировать SQL запрос
@@ -70,9 +68,7 @@ public class UserDaoImpl implements UserDao {
             statement.setInt(6, user.getRole());
             statement.execute();
         } catch (SQLException | ConnectionPoolException e) {
-            e.printStackTrace();
-            log.error("UserDaoImpl error", e);
-            throw new DaoException("UserDaoImpl error", e);
+            throw new DaoException("UserDaoImpl error",e);
         }
     }
 
@@ -91,9 +87,7 @@ public class UserDaoImpl implements UserDao {
             statement.setLong(7, user.getId());
             statement.execute();
         } catch (SQLException | ConnectionPoolException e) {
-            e.printStackTrace();
-            log.error("UserDaoImpl error", e);
-            throw new DaoException("UserDaoImpl error", e);
+            throw new DaoException("UserDaoImpl error",e);
         }
     }
 
@@ -114,9 +108,7 @@ public class UserDaoImpl implements UserDao {
                 throw new DaoException("UserDaoImpl error", e);
             }
         } catch (SQLException | ConnectionPoolException e) {
-            e.printStackTrace();
-            log.error("UserDaoImpl error", e);
-            throw new DaoException("UserDaoImpl error", e);
+            throw new DaoException("UserDaoImpl error",e);
         }
     }
 
@@ -143,9 +135,7 @@ public class UserDaoImpl implements UserDao {
                 user = Optional.of(createUserFromResultSet(resultSet));
             }
         } catch (SQLException | ConnectionPoolException e) {
-            e.printStackTrace();
-            log.error("UserDaoImpl error", e);
-            throw new DaoException("UserDaoImpl error");
+            throw new DaoException("UserDaoImpl error",e);
         }
         return user;
     }

@@ -40,9 +40,9 @@ public class RelationDaoImpl implements RelationDao {
 
     @Override
     public Relation getIncoming(long userId) throws DaoException {
-        String sqlRequst = String.format(
+        String sqlRequest = String.format(
                 "SELECT sender_id FROM relations WHERE recipient_id=%d AND relation_type=%d", userId, REQUEST.ordinal());
-        Set<Long> set = getIdSet(sqlRequst, "sender_id");
+        Set<Long> set = getIdSet(sqlRequest, "sender_id");
         return new Relation(
                 userId,
                 set,
@@ -85,8 +85,6 @@ public class RelationDaoImpl implements RelationDao {
                 }
             }
         } catch (SQLException | ConnectionPoolException e) {
-            e.printStackTrace();
-            log.error("RelationDaoImpl error", e);
             throw new DaoException("RelationDaoImpl error", e);
         }
         return relationType;
@@ -135,8 +133,6 @@ public class RelationDaoImpl implements RelationDao {
             statement.execute();
             connection.commit();
         } catch (SQLException | ConnectionPoolException e) {
-            e.printStackTrace();
-            log.error("RelationDaoImpl error", e);
             throw new DaoException("RelationDaoImpl error", e);
         }
     }
@@ -173,8 +169,6 @@ public class RelationDaoImpl implements RelationDao {
                         throw new DaoException("Remove friends without right");
                 } else throw new DaoException("Remove friends without right");
             } catch (SQLException | ConnectionPoolException e) {
-                e.printStackTrace();
-                log.error("RelationDaoImpl error", e);
                 throw new DaoException("RelationDaoImpl error", e);
             }
 
@@ -190,8 +184,6 @@ public class RelationDaoImpl implements RelationDao {
         ) {
             statement.executeUpdate(sqlRequest);
         } catch (SQLException | ConnectionPoolException e) {
-            e.printStackTrace();
-            log.error("RelationDaoImpl error", e);
             throw new DaoException("RelationDaoImpl error", e);
         }
     }
@@ -204,8 +196,6 @@ public class RelationDaoImpl implements RelationDao {
             while (resultSet.next())
                 idSet.add(resultSet.getLong(field));
         } catch (SQLException | ConnectionPoolException e) {
-            e.printStackTrace();
-            log.error("RelationDaoImpl error", e);
             throw new DaoException("RelationDaoImpl error", e);
         }
         return idSet;

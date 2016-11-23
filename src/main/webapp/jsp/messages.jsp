@@ -15,7 +15,26 @@
             <a href="<c:url value="/messages?dialog=${param.dialog}&limit=${requestScope.limit+15}&offset=${requestScope.offset}"/>">
                 Посмотреть предыдущие сообщения</a>
         </c:if>
-        <c:forEach var="message" items="${requestScope.messages}">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Отправитель</th>
+                <th>Сообщение</th>
+                <th>Дата</th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach var="message" items="${requestScope.messages}">
+                <tr>
+                    <td>${requestScope.userMap[message.sender]}</td>
+                    <td>${message.message}</td>
+                    <td>${message.time}</td>
+                </tr>
+
+            </c:forEach>
+            </tbody>
+        </table>
+        <%--<c:forEach var="message" items="${requestScope.messages}">
             <div class="row">
                 <div class="col-xs-3">
                     <p style="font-size: 2em">${requestScope.userMap[message.sender]}</p>
@@ -27,7 +46,7 @@
                     <p>${message.time}</p>
                 </div>
             </div>
-        </c:forEach>
+        </c:forEach>--%>
         <form action="/messages" method="post">
             <div class="form-group">
                 <label for="message">Сообщение:</label>

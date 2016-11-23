@@ -44,8 +44,6 @@ public class MessageDaoImpl implements MessageDao {
                 ));
             }
         } catch (SQLException | ConnectionPoolException e) {
-            e.printStackTrace();
-            log.error("MessageDaoImpl error", e);
             throw new DaoException("MessageDaoImpl error", e);
         }
         return messageSet;
@@ -63,8 +61,6 @@ public class MessageDaoImpl implements MessageDao {
             preparedStatement.setTimestamp(4, Timestamp.valueOf(LocalDateTime.now()));
             preparedStatement.execute();
         } catch (SQLException | ConnectionPoolException e) {
-            e.printStackTrace();
-            log.error("MessageDaoImpl error", e);
             throw new DaoException("MessageDaoImpl error", e);
         }
     }

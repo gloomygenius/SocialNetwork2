@@ -55,7 +55,7 @@ public class DialogDaoImpl implements DialogDao {
             }
 
         } catch (SQLException | ConnectionPoolException e) {
-            throw new DaoException("Error in DialogDao");
+            throw new DaoException("Error in DialogDao ",e);
         }
     }
 
@@ -101,9 +101,9 @@ public class DialogDaoImpl implements DialogDao {
                         dialogRS.getBoolean("is_private"),
                         dialogRS.getTimestamp("last_update").toLocalDateTime()
                 );
-            } else throw new DaoException("Error in DialogDao");
+            } else throw new DaoException("Error in DialogDao ");
         } catch (SQLException | ConnectionPoolException e) {
-            throw new DaoException("Error in DialogDao");
+            throw new DaoException("Error in DialogDao ",e);
         }
     }
 
@@ -123,7 +123,7 @@ public class DialogDaoImpl implements DialogDao {
                                     + ")"
                     );
                 } else
-                    throw new DaoException("Error in DialogDao");
+                    throw new DaoException("Error in DialogDao ");
             } catch (DaoException e) {
                 connection.rollback();
                 connection.setAutoCommit(true);
@@ -131,8 +131,7 @@ public class DialogDaoImpl implements DialogDao {
             }
             connection.commit();
         } catch (SQLException | ConnectionPoolException e) {
-            e.printStackTrace();
-            throw new DaoException("Error in DialogDao");
+            throw new DaoException("Error in DialogDao ",e);
         }
     }
 
@@ -165,8 +164,7 @@ public class DialogDaoImpl implements DialogDao {
                     + "' WHERE id="
                     + dialog+";");
         } catch (SQLException | ConnectionPoolException e) {
-            e.printStackTrace();
-            throw new DaoException("Error in DialogDao", e);
+            throw new DaoException("Error in DialogDao ",e);
         }
     }
 }

@@ -27,6 +27,7 @@ import static com.socialnetwork.servlets.AuthorizationServlet.NEW_FRIENDS;
 import static com.socialnetwork.servlets.ErrorHandler.ERROR_MSG;
 import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.FRIENDS_SEARCH_FAIL;
 import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.LOGIN_FAIL;
+import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.REGISTRATION_FAIL;
 
 /**
  * Created by Vasiliy Bobkov on 09.11.2016.
@@ -73,7 +74,7 @@ public class FriendsServlet extends HttpServlet {
                 try {
                     long id = Long.parseLong(request.getParameter("add"));
                     relationDao.add(currentUser.getId(), id, FRIEND);
-                    int count = session.getAttribute(NEW_FRIENDS)!=null?(int) session.getAttribute(NEW_FRIENDS):1;
+                    int count = session.getAttribute(NEW_FRIENDS) != null ? (int) session.getAttribute(NEW_FRIENDS) : 1;
                     session.setAttribute(NEW_FRIENDS, --count);
                 } catch (DaoException e) {
                     log.warn("Error when user try to add friend");
@@ -93,27 +94,33 @@ public class FriendsServlet extends HttpServlet {
         User currentUser = (User) session.getAttribute(CURRENT_USER);
         Set<Long> friendIdSet = new HashSet<>();
         try {
-            if (request.getParameter("section") != null) {
-                if (request.getParameter("section").equals("incoming")) {
+            String section = request.getParameter("section") == null ? "friends" : request.getParameter("section");
+
+            switch (section) {
+                case "incoming":
                     friendIdSet = relationDao.getIncoming(currentUser.getId()).getIdSet();
-                }
-                if (request.getParameter("section").equals("request")) {
+                    break;
+                case "request":
                     friendIdSet = relationDao.getRequest(currentUser.getId()).getIdSet();
-                }
-                if (request.getParameter("section").equals("search")) {
+                    break;
+                case "search":
                     String[] names = request.getParameter("names").split(" ");
                     if (names.length != 2) {
                         request.setAttribute(ERROR_MSG, FRIENDS_SEARCH_FAIL.getPropertyName());
                         request.getRequestDispatcher("/index.jsp").forward(request, response);
                     } else {
-                        names[0]=NameNormolizer.normolize(names[0]);
-                        names[1]=NameNormolizer.normolize(names[1]);
+                        names[0] = NameNormolizer.normolize(names[0]);
+                        names[1] = NameNormolizer.normolize(names[1]);
                         friendIdSet = searchFriends(names);
                     }
-                }
-            } else friendIdSet = relationDao.getFriends(currentUser.getId()).getIdSet();
+                    break;
+                default:
+                    friendIdSet = relationDao.getFriends(currentUser.getId()).getIdSet();
+            }
         } catch (DaoException e) {
-            e.printStackTrace();
+            log.error("Friends page error", e);
+            request.setAttribute(ERROR_MSG, REGISTRATION_FAIL.getPropertyName());
+            request.getRequestDispatcher("/error").forward(request, response);
         }
         int since = request.getParameter("since") != null ? Integer.parseInt(request.getParameter("since")) : 0;
         Optional<User> userOptional = Optional.empty();
@@ -138,24 +145,12 @@ public class FriendsServlet extends HttpServlet {
         }
         request.setAttribute(RELATION_MAP, relationSet);
         request.setAttribute(FRIENDS_SET, friendSet);
-        try {
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
-        } catch (ServletException | IOException e) {
-            e.printStackTrace();
-            // TODO: 09.11.2016 Обработать
-        }
+        request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
 
-    private Set<Long> searchFriends(String names[]) {
-        log.info("searching friends...");
-        Set<Long> idSet = new HashSet<>();
-        try {
-            idSet = userDao.getByNames(names[0], names[1]);
-        } catch (DaoException e) {
-            e.printStackTrace();
-            // TODO: 14.11.2016 обработать
-        }
-        log.info(idSet.size() + " friends was found");
+    private Set<Long> searchFriends(String names[]) throws DaoException {
+        Set<Long> idSet;
+        idSet = userDao.getByNames(names[0], names[1]);
         return idSet;
     }
 }

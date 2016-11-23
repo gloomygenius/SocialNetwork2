@@ -1,3 +1,4 @@
+<%--suppress JspAbsolutePathInspection --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="language"
@@ -47,8 +48,12 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">Выбрать язык<span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="<c:url value="/?language=ru_RU"/>">Русский</a></li>
-                        <li><a href="<c:url value="/?language=en_US"/>">English</a></li>
+                        <li>
+                            <a href="/locale?language=ru_RU<c:if test="${not empty pageContext.request.queryString}">&${pageContext.request.queryString}</c:if>">Русский</a>
+                        </li>
+                        <li>
+                            <a href="/locale?language=en_US<c:if test="${not empty pageContext.request.queryString}">&${pageContext.request.queryString}</c:if>">English</a>
+                        </li>
                     </ul>
                 </li>
                 <c:if test="${not empty currentUser}">
@@ -84,7 +89,7 @@
                 </ul>
             </c:if>
         </div>
-        <div class="col-xs-9 col-md-9 col-lg-9">
+        <div class="col-xs-10 col-md-10 col-lg-10">
 
             <c:choose>
                 <c:when test="${requestScope.includedPage=='login'}">
@@ -112,9 +117,6 @@
                     <p>Добро пожаловать в социальную сеть "Отрядники"!</p>
                 </c:otherwise>
             </c:choose>
-        </div>
-        <div class="col-xs-1 col-md-1 col-lg-1">
-            <p class="text-center">Здесь может быть ваша реклама!</p>
         </div>
     </div>
 </div>

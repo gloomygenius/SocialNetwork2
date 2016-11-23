@@ -13,7 +13,8 @@ import org.junit.Test;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Test for RelationDaoImpl
@@ -101,14 +102,17 @@ public class RelationDaoImplTest {
         relationDao.add(3, 4, RelationType.REQUEST);
         int relation = relationDao.getRelationBetween(3, 4);
         assertTrue(relation == RelationType.REQUEST.ordinal());
+
         relationDao.remove(3, 4, RelationType.REQUEST);
         relation = relationDao.getRelationBetween(3, 4);
-        System.out.println(relation);
         assertTrue(relation == RelationType.NEUTRAL.ordinal());
 
+        relationDao.add(3,4,RelationType.INCOMING);
         relationDao.add(3, 4, RelationType.FRIEND);
         relation = relationDao.getRelationBetween(3, 4);
+        System.out.println(relation);
         assertTrue(relation == RelationType.FRIEND.ordinal());
+
         relationDao.remove(4, 3, RelationType.FRIEND);
         relation = relationDao.getRelationBetween(3, 4);
         System.out.println(relation);

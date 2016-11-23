@@ -99,6 +99,7 @@ public class UserDaoImplTest {
         Optional<User> userOptional = userDao.getByEmail("example3@ya.ru");
         assertTrue(userOptional.isPresent());
         long user_id = userOptional.get().getId();
+        relationDao.add(user_id, 1, RelationType.INCOMING);
         relationDao.add(user_id, 1, RelationType.FRIEND);
         userDao.remove(user_id);
         assertFalse(userDao.getByEmail("example3@ya.ru").isPresent());

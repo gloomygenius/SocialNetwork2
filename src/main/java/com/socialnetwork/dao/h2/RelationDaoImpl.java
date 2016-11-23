@@ -104,17 +104,8 @@ public class RelationDaoImpl implements RelationDao {
                 relationType = REQUEST;
             }
             if (relationType == FRIEND) {
-                try (PreparedStatement preparedStatement = connection.prepareStatement(
-                        "SELECT relation_type FROM Relations WHERE (sender_id=? AND recipient_id=?) ")) {
-                    preparedStatement.setLong(1, recipientId);
-                    preparedStatement.setLong(2, senderId);
-                    try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                        if (resultSet.next()) {
-                            int relationTypeFromRS = resultSet.getInt("relation_type");
-                            if (relationTypeFromRS != REQUEST.ordinal())
-                                throw new DaoException("Add friends without right");
-                        } else relationType = REQUEST;
-                    }
+                if (getRelationBetween(senderId, recipientId) != INCOMING.ordinal()){
+                    throw new DaoException("Add friends without right");
                 }
             }
             try (PreparedStatement preparedStatement = connection.prepareStatement(

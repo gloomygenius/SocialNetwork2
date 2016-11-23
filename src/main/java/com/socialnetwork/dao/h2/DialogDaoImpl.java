@@ -55,7 +55,7 @@ public class DialogDaoImpl implements DialogDao {
             }
 
         } catch (SQLException | ConnectionPoolException e) {
-            throw new DaoException("Error in DialogDao ",e);
+            throw new DaoException("Error in getPrivateDialog() ",e);
         }
     }
 

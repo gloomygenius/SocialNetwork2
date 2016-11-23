@@ -26,14 +26,13 @@ import static org.junit.Assert.assertTrue;
  * Created by Vasiliy Bobkov on 07.11.2016.
  */
 public class UserDaoImplTest {
-    private static ConnectionPool connectionPool;
     private static UserDao userDao;
     private static RelationDao relationDao;
 
     @BeforeClass
     public static void DBinit() throws ConnectionPoolException {
         ConnectionPool.create("src/test/resources/db.properties");
-        connectionPool = ConnectionPool.getInstance();
+        ConnectionPool connectionPool = ConnectionPool.getInstance();
         connectionPool.initPoolData();
         DataScriptExecuter.initSqlData("src/test/resources/H2Init.sql");
         userDao = new UserDaoImpl(connectionPool);
@@ -85,8 +84,10 @@ public class UserDaoImplTest {
                 user1.getRole()
         );
         userDao.update(user2);
-        User user3 = userDao.getById(user2.getId()).get();
-        assertTrue(user3.getEmail().equals("newmail@exam.com"));
+
+        Optional<User> user3 = userDao.getById(user2.getId());
+        if (user3.isPresent()) assertTrue(user3.get().getEmail().equals("newmail@exam.com"));
+        else throw new Exception();
     }
 
     @Test
@@ -100,6 +101,6 @@ public class UserDaoImplTest {
         relationDao.add(user_id, 1, RelationType.FRIEND);
         userDao.remove(user_id);
         assertFalse(userDao.getByEmail("example3@ya.ru").isPresent());
-        assertThat(relationDao.getRelationBetween(1, user_id),is(NEUTRAL.ordinal()));
+        assertThat(relationDao.getRelationBetween(1, user_id), is(NEUTRAL.ordinal()));
     }
 }

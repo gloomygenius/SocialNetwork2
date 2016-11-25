@@ -5,6 +5,7 @@ import com.socialnetwork.dao.RelationDao;
 import com.socialnetwork.dao.UserDao;
 import com.socialnetwork.dao.enums.RelationType;
 import com.socialnetwork.dao.exception.DaoException;
+import com.socialnetwork.entities.Relation;
 import com.socialnetwork.entities.User;
 import lombok.extern.log4j.Log4j;
 
@@ -23,6 +24,7 @@ import static com.socialnetwork.dao.enums.RelationType.FRIEND;
 import static com.socialnetwork.filters.SecurityFilter.CURRENT_USER;
 import static com.socialnetwork.listeners.Initializer.RELATION_DAO;
 import static com.socialnetwork.listeners.Initializer.USER_DAO;
+import static com.socialnetwork.servlets.AuthorizationServlet.NEW_FRIENDS;
 import static com.socialnetwork.servlets.ErrorHandler.ERROR_MSG;
 import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.*;
 
@@ -37,7 +39,6 @@ public class FriendsServlet extends HttpServlet {
     private static final String RELATION_MAP = "relationMap";
     private static RelationDao relationDao;
     private static UserDao userDao;
-    private static final int maxFriendPerPage = 10;
 
     @Override
     public void init(ServletConfig servletConfig) {
@@ -55,12 +56,11 @@ public class FriendsServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         request.setAttribute(INCLUDED_PAGE, "friends");
-        HttpSession session = request.getSession(true);
+        HttpSession session = request.getSession();
         User currentUser = (User) session.getAttribute(CURRENT_USER);
         Set<Long> friendIdSet = new HashSet<>();
         try {
             String section = request.getParameter("action") == null ? "friends" : request.getParameter("action");
-
             switch (section) {
                 case "incoming":
                     friendIdSet = relationDao.getIncoming(currentUser.getId()).getIdSet();
@@ -86,11 +86,13 @@ public class FriendsServlet extends HttpServlet {
                             id,
                             RelationType.getType(Integer.parseInt(request.getParameter("relation"))));
                     friendIdSet = relationDao.getFriends(currentUser.getId()).getIdSet();
+                    session.setAttribute(NEW_FRIENDS,getCountNewFriend(currentUser.getId()));
                     break;
                 case "add":
                     id = Long.parseLong(request.getParameter("id"));
                     relationDao.add(currentUser.getId(), id, FRIEND);
                     friendIdSet = relationDao.getFriends(currentUser.getId()).getIdSet();
+                    session.setAttribute(NEW_FRIENDS,getCountNewFriend(currentUser.getId()));
                     break;
                 default:
                     friendIdSet = relationDao.getFriends(currentUser.getId()).getIdSet();
@@ -107,13 +109,14 @@ public class FriendsServlet extends HttpServlet {
 
     private void loadUsersAndRelations(HttpServletRequest request, HttpServletResponse response, Set<Long> friendIdSet) throws ServletException, IOException {
         User currentUser = (User) request.getSession().getAttribute(CURRENT_USER);
-        int since = request.getParameter("since") != null ? Integer.parseInt(request.getParameter("since")) : 0;
+        int offset = request.getParameter("offset") != null ? Integer.parseInt(request.getParameter("offset")) : 0;
+        int limit = request.getParameter("limit") != null ? Integer.parseInt(request.getParameter("limit")) : 10;
         Optional<User> userOptional;
         Map<Long, Integer> relationSet = new HashMap<>();
         Set<User> friendSet = new TreeSet<>();
         int count = 0;
         for (long id : friendIdSet) {
-            if (count < since) {
+            if (count < offset) {
                 count++;
                 continue;
             }
@@ -128,7 +131,7 @@ public class FriendsServlet extends HttpServlet {
                 request.setAttribute(ERROR_MSG, COMMON_ERROR.getPropertyName());
                 request.getRequestDispatcher("/error").forward(request, response);
             }
-            if (count >= since + maxFriendPerPage) break;
+            if (count >= offset + limit) break;
         }
         request.setAttribute(RELATION_MAP, relationSet);
         request.setAttribute(FRIENDS_SET, friendSet);
@@ -138,5 +141,15 @@ public class FriendsServlet extends HttpServlet {
         Set<Long> idSet;
         idSet = userDao.getByNames(names[0], names[1]);
         return idSet;
+    }
+
+    private int getCountNewFriend(long id) {
+        Relation incoming = null;
+        try {
+            incoming = relationDao.getIncoming(id);
+        } catch (DaoException e) {
+            log.error("Error in relationDao when user "+id+" try get count of new friends",e);
+        }
+        return incoming != null ? incoming.getIdSet().size() : 0;
     }
 }

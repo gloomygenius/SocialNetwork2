@@ -51,10 +51,11 @@ public class MessageServlet extends HttpServlet {
     @SneakyThrows
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
         request.setCharacterEncoding("UTF-8");
-        request.setAttribute(INCLUDED_PAGE, "messages");
-        long dialog = request.getParameter("dialog") != null ? Long.parseLong(request.getParameter("dialog")) : 0;
-
         User currentUser = (User) request.getSession().getAttribute(CURRENT_USER);
+        request.setAttribute(INCLUDED_PAGE, "messages");
+        long dialog;
+        if (request.getParameter("dialog") != null) dialog = Long.parseLong(request.getParameter("dialog"));
+        else dialog = dialogDao.getPrivateDialog(currentUser.getId(), Long.parseLong(request.getParameter("recipient"))).getId();
 
         if (request.getParameter("message") != null) {
             messageDao.sendMessage(currentUser.getId(), dialog, request.getParameter("message"));

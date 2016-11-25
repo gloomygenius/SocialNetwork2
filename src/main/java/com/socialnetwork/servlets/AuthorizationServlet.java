@@ -94,7 +94,6 @@ public class AuthorizationServlet extends HttpServlet {
         try {
             incoming = relationDao.getIncoming(id);
         } catch (DaoException e) {
-            e.printStackTrace();
             log.error("Error in relationDao when user "+id+" try get count of new friends",e);
         }
         return incoming != null ? incoming.getIdSet().size() : 0;

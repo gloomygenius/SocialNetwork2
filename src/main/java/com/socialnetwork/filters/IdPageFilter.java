@@ -23,11 +23,12 @@ import java.util.regex.Pattern;
 import static com.socialnetwork.filters.SecurityFilter.CURRENT_USER;
 import static com.socialnetwork.listeners.Initializer.PROFILE_DAO;
 import static com.socialnetwork.listeners.Initializer.USER_DAO;
+import static com.socialnetwork.servlets.ErrorHandler.ERROR_MSG;
+import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.USER_NOT_FOUND;
 import static com.socialnetwork.servlets.FriendsServlet.INCLUDED_PAGE;
 
 @Log4j
 public class IdPageFilter implements HttpFilter {
-    private static final String USER_INFO = "userInfo";
     private UserDao userDao;
     private ProfileDao profileDao;
     private Pattern pattern;
@@ -44,21 +45,20 @@ public class IdPageFilter implements HttpFilter {
 
     @Override
     public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        log.info("start id filter");
         Matcher matcher = pattern.matcher(request.getRequestURL());
         HttpSession session = request.getSession(true);
         User user = (User) session.getAttribute(CURRENT_USER);
-        if (matcher.find()) {
-            if (user == null) response.sendRedirect("/index.jsp");
-            else {
-                log.info("ID in url was found, put into session");
+        if (user == null) chain.doFilter(request, response);
+        else {
+            if (matcher.find()) {
                 int id = Integer.parseInt(matcher.group(1));
-                Optional<User> refUser = null;
+                Optional<User> refUser = Optional.empty();
                 try {
                     refUser = userDao.getById(id);
                 } catch (DaoException e) {
-                    e.printStackTrace();
-                    // TODO: 08.11.2016 Обработать
+                    log.error("UserDao exception in IdFilter", e);
+                    request.setAttribute(ERROR_MSG, USER_NOT_FOUND.getPropertyName());
+                    request.getRequestDispatcher("/error").forward(request, response);
                 }
                 if (refUser.isPresent()) {
                     session.setAttribute(REFERENCE_USER, refUser.get());
@@ -67,19 +67,21 @@ public class IdPageFilter implements HttpFilter {
                     try {
                         profile = profileDao.getByUserId(idLoc);
                     } catch (DaoException e) {
-                        e.printStackTrace();
-                        // TODO: 08.11.2016 Обработать
+                        log.error("ProfileDao exception in IdFilter", e);
+                        request.setAttribute(ERROR_MSG, USER_NOT_FOUND.getPropertyName());
+                        request.getRequestDispatcher("/error").forward(request, response);
                     }
                     if (profile.isPresent())
                         session.setAttribute(REFERENCE_PROFILE, profile.get());
                 } else {
-                    session.setAttribute(REFERENCE_USER, new User(0, null, null, null, null, 0, 0));
+                    request.setAttribute(ERROR_MSG, USER_NOT_FOUND.getPropertyName());
+                    request.getRequestDispatcher("/error").forward(request, response);
                 }
-                log.info("forward to personal page");
                 request.setAttribute(INCLUDED_PAGE, "profile");
                 request.getRequestDispatcher("/index.jsp").forward(request, response);
-            }
-        } else
-            chain.doFilter(request, response);
+
+            } else
+                chain.doFilter(request, response);
+        }
     }
 }

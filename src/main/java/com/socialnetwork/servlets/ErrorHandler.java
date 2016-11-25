@@ -27,6 +27,7 @@ public class ErrorHandler extends HttpServlet {
         FRIENDS_SEARCH_FAIL("error.friends.search"),
         LOCALE_ERROR("error.locale"),
         COMMON_ERROR("error.common"),
+        USER_NOT_FOUND("error.userNotFound"),
         EMAIL_ALREADY_EXIST("error.emailExist");
 
         @Getter
@@ -46,7 +47,6 @@ public class ErrorHandler extends HttpServlet {
     private void requestProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.getSession().setAttribute("errorMsg", "error.common");
         request.getSession().setAttribute(INCLUDED_PAGE, "error");
-
         request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
 }

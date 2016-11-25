@@ -51,7 +51,7 @@
                     <p style="font-size: 2em">${user.firstName} ${user.lastName}</p>
                 </div>
                 <div class="col-xs-3">
-                    <a href="#" class="btn btn-success btn-block">Написать сообщение</a><br>
+                    <a href="/messages?recipient=${user.id}" class="btn btn-success btn-block">Написать сообщение</a><br>
                     <a href="/id${user.id}" class="btn btn-info btn-block">Перейти на страницу</a><br>
                     <c:choose>
                         <c:when test="${requestScope.relationMap[user.id]==0}">

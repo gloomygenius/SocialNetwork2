@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="tfmt" uri="/WEB_INF/taglib.tld" %>
 
 <fmt:setLocale value="${sessionScope.language}"/>
 <fmt:setBundle basename="text"/>
@@ -26,7 +27,7 @@
                 <tr>
                     <td>${userMap[message.sender]}</td>
                     <td>${message.message}</td>
-                    <td>${message.time}</td>
+                    <td><tfmt:format time="${message.time}"/></td>
                 </tr>
 
             </c:forEach>

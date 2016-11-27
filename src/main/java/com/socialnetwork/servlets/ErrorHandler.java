@@ -10,9 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/**
- * Created by Vasiliy Bobkov on 16.11.2016.
- */
 @WebServlet("/error")
 public class ErrorHandler extends HttpServlet {
     public static final String INCLUDED_PAGE = "includedPage";

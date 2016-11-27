@@ -1,16 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%--suppress ELValidationInJSP --%>
-<c:set var="language"
-       value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}"
-       scope="session"/>
-<fmt:setLocale value="${language}"/>
+
+<fmt:setLocale value="${sessionScope.language}"/>
 <fmt:setBundle basename="text"/>
+<jsp:useBean id="errorMsg" class="java.lang.String" scope="request"/>
 
 <div class="row">
     <div class="col-xs-12">
-        <form class="form-horizontal" action="/registration" method="POST">
+        <form class="form-horizontal" action="<c:url value="/registration"/>" method="POST">
             <fieldset>
                 <div id="legend">
                     <legend class="area-legend-symbol"><fmt:message key="title.registration"/></legend>

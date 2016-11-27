@@ -1,35 +1,17 @@
-<%--suppress ELValidationInJSP --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
-<%--suppress ELValidationInJSP --%>
-<c:set var="language"
-       value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}"
-       scope="session"/>
-<fmt:setLocale value="${language}"/>
+<fmt:setLocale value="${sessionScope.language}"/>
 <fmt:setBundle basename="text"/>
-<c:set var="currentUser" scope="page" value="${sessionScope.currentUser}"/>
-<c:set var="refUser" scope="page" value="${sessionScope.referenceUser}"/>
-<c:set var="refProfile" scope="page" value="${sessionScope.referenceProfile}"/>
-
-<c:choose>
-    <c:when test="${refUser.id eq 0}">
-        <%--This user does not exist--%>
-        <jsp:forward page="/jsp/error.jsp"/>
-    </c:when>
-    <c:otherwise>
-        <c:set scope="page" var="id" value="${refUser.id}"/>
-        <c:set scope="page" var="firstName" value="${refUser.firstName}"/>
-        <c:set scope="page" var="lastName" value="${refUser.lastName}"/>
-    </c:otherwise>
-</c:choose>
-
+<jsp:useBean id="profile" type="com.socialnetwork.entities.Profile" scope="request"/>
+<jsp:useBean id="currentUser" type="com.socialnetwork.entities.User" scope="session"/>
+<jsp:useBean id="errorMsg" class="java.lang.String" scope="request"/>
+<jsp:useBean id="successMsg" class="java.lang.String" scope="request"/>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <div class="row">
     <div class="col-xs-6">
         <div class="row">
-            <h2>${firstName} ${lastName}</h2>
+            <h2>${currentUser.firstName} ${currentUser.lastName}</h2>
         </div>
         <div>
             <c:if test="${not empty errorMsg}">
@@ -42,7 +24,7 @@
                     <strong><fmt:message key="success"/></strong> <fmt:message key="success.changes"/>
                 </div>
             </c:if>
-            <form class="form-horizontal" action="/edit_profile" method="POST">
+            <form class="form-horizontal" action="<c:url value="/edit_profile"/>" method="POST">
                 <fieldset>
                     <div class="row">
                         <div class="control-group col-xs-12">
@@ -50,7 +32,7 @@
                                     key="profile.telephone"/></label>
                             <div class="controls">
                                 <input type="tel" id="telephone" name="telephone" placeholder="" class="input-xlarge"
-                                       value="${refProfile.telephone}">
+                                       value="${profile.telephone}">
                             </div>
                         </div>
                     </div>
@@ -59,7 +41,7 @@
                             <label class="control-label" for="birthday"><fmt:message key="profile.birthday"/></label>
                             <div class="controls">
                                 <input type="date" id="birthday" name="birthday" placeholder="" class="input-xlarge"
-                                       value="${refProfile.birthday}">
+                                       value="${profile.birthday}">
                             </div>
                         </div>
                     </div>
@@ -69,7 +51,7 @@
                                     key="profile.country"/></label>
                             <div class="controls">
                                 <input type="text" id="country" name="country" placeholder="" class="input-xlarge"
-                                       value="${refProfile.country}">
+                                       value="${profile.country}">
                             </div>
                         </div>
                     </div>
@@ -78,7 +60,7 @@
                             <label class="control-label" for="city"><fmt:message key="profile.city"/></label>
                             <div class="controls">
                                 <input type="text" id="city" name="city" placeholder="" class="input-xlarge"
-                                       value="${refProfile.city}">
+                                       value="${profile.city}">
                             </div>
                         </div>
                     </div>
@@ -88,7 +70,7 @@
                                     key="profile.university"/></label>
                             <div class="controls">
                                 <input type="text" id="university" name="university" placeholder="" class="input-xlarge"
-                                       value="${refProfile.university}">
+                                       value="${profile.university}">
                             </div>
                         </div>
                     </div>
@@ -99,18 +81,18 @@
                             <div class="controls">
                                 <select name="position" id="position">
                                     <option
-                                            <c:if test="${refProfile.position==0}">selected</c:if> value="0">
+                                            <c:if test="${profile.position==0}">selected</c:if> value="0">
                                         <fmt:message key="profile.position.0"/></option>
                                     <option
-                                            <c:if test="${refProfile.position==1}">selected</c:if> value="1">
+                                            <c:if test="${profile.position==1}">selected</c:if> value="1">
                                         <fmt:message key="profile.position.1"/>
                                     </option>
                                     <option
-                                            <c:if test="${refProfile.position==2}">selected</c:if> value="2">
+                                            <c:if test="${profile.position==2}">selected</c:if> value="2">
                                         <fmt:message key="profile.position.2"/>
                                     </option>
                                     <option
-                                            <c:if test="${refProfile.position==3}">selected</c:if> value="3">
+                                            <c:if test="${profile.position==3}">selected</c:if> value="3">
                                         <fmt:message key="profile.position.3"/>
                                     </option>
                                 </select>
@@ -123,7 +105,7 @@
                                     key="profile.about"/></label>
                             <div class="controls">
                                 <textarea id="about" name="about" rows="6" cols="51"
-                                          placeholder="Напишите немного о себе">${refProfile.about}</textarea>
+                                          placeholder="Напишите немного о себе">${profile.about}</textarea>
                             </div>
                         </div>
                     </div>

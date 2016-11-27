@@ -34,10 +34,11 @@ import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.COMMON_ERROR;
 @Log4j
 @WebServlet("/messages")
 public class MessageServlet extends HttpServlet {
-    public static final String INCLUDED_PAGE = "includedPage";
+    private static final String INCLUDED_PAGE = "includedPage";
     private static MessageDao messageDao;
     private static DialogDao dialogDao;
     private static UserDao userDao;
+    private static String MESSAGES = "messages";
 
     @Override
     public void init(ServletConfig servletConfig) {
@@ -56,7 +57,7 @@ public class MessageServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         User currentUser = (User) request.getSession().getAttribute(CURRENT_USER);
         request.setAttribute(INCLUDED_PAGE, "messages");
-        long dialog = 0;
+        long dialog;
         try {
             if (request.getParameter("dialog") != null) dialog = Long.parseLong(request.getParameter("dialog"));
             else
@@ -74,7 +75,7 @@ public class MessageServlet extends HttpServlet {
             request.setAttribute("offset", offset);
             Map<Long, String> userMap = new HashMap<>();
             Set<Message> messageSet = messageDao.getMessages(dialog, limit, offset);
-            request.setAttribute("messages", messageSet);
+            request.setAttribute(MESSAGES, messageSet);
             for (Message message : messageSet) {
                 if (userMap.get(message.getSender()) != null) continue;
                 Optional<User> userOptional = userDao.getById(message.getSender());

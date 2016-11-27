@@ -33,8 +33,8 @@ public class IdPageFilter implements HttpFilter {
     private UserDao userDao;
     private ProfileDao profileDao;
     private Pattern pattern;
-    public final static String REFERENCE_USER = "referenceUser";
-    public final static String REFERENCE_PROFILE = "referenceProfile";
+    public final static String USER = "user";
+    public final static String PROFILE = "profile";
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -64,7 +64,7 @@ public class IdPageFilter implements HttpFilter {
                     request.getRequestDispatcher("/error").forward(request, response);
                 }
                 if (refUser.isPresent()) {
-                    session.setAttribute(REFERENCE_USER, refUser.get());
+                    request.setAttribute(USER, refUser.get());
                     Long idLoc = refUser.get().getId();
                     Optional<Profile> profile = Optional.empty();
                     try {
@@ -74,8 +74,7 @@ public class IdPageFilter implements HttpFilter {
                         request.setAttribute(ERROR_MSG, USER_NOT_FOUND.getPropertyName());
                         request.getRequestDispatcher("/error").forward(request, response);
                     }
-                    if (profile.isPresent())
-                        session.setAttribute(REFERENCE_PROFILE, profile.get());
+                    profile.ifPresent(profile1 -> request.setAttribute(PROFILE, profile1));
                 } else {
                     request.setAttribute(ERROR_MSG, USER_NOT_FOUND.getPropertyName());
                     request.getRequestDispatcher("/error").forward(request, response);

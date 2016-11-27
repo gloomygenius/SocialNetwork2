@@ -1,10 +1,7 @@
 package com.socialnetwork.servlets;
 
 import com.socialnetwork.common.NameNormalizer;
-import com.socialnetwork.dao.DialogDao;
-import com.socialnetwork.dao.MessageDao;
 import com.socialnetwork.dao.ProfileDao;
-import com.socialnetwork.dao.UserDao;
 import com.socialnetwork.dao.exception.DaoException;
 import com.socialnetwork.entities.Profile;
 import com.socialnetwork.entities.User;
@@ -20,12 +17,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.lang.reflect.Parameter;
 import java.time.LocalDate;
 import java.util.Optional;
 
 import static com.socialnetwork.filters.SecurityFilter.CURRENT_USER;
-import static com.socialnetwork.listeners.Initializer.*;
+import static com.socialnetwork.listeners.Initializer.PROFILE_DAO;
 import static com.socialnetwork.servlets.ErrorHandler.ERROR_MSG;
 import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.COMMON_ERROR;
 import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.USER_NOT_FOUND;
@@ -37,20 +33,14 @@ import static com.socialnetwork.servlets.ErrorHandler.SUCCESS_MSG;
 @Log4j
 @WebServlet("/edit_profile")
 public class ProfileEditorServlet extends HttpServlet {
-    static final String INCLUDED_PAGE = "includedPage";
-    private static MessageDao messageDao;
-    private static DialogDao dialogDao;
-    private static UserDao userDao;
+    private static final String INCLUDED_PAGE = "includedPage";
     private static ProfileDao profileDao;
-    public final static String REFERENCE_PROFILE = "referenceProfile";
+    private final static String PROFILE = "profile";
     private User currentUser;
 
     @Override
     public void init(ServletConfig servletConfig) {
         ServletContext servletContext = servletConfig.getServletContext();
-        messageDao = (MessageDao) servletContext.getAttribute(MESSAGE_DAO);
-        dialogDao = (DialogDao) servletContext.getAttribute(DIALOG_DAO);
-        userDao = (UserDao) servletContext.getAttribute(USER_DAO);
         profileDao = (ProfileDao) servletContext.getAttribute(PROFILE_DAO);
     }
 
@@ -77,7 +67,7 @@ public class ProfileEditorServlet extends HttpServlet {
             request.setAttribute(ERROR_MSG, USER_NOT_FOUND.getPropertyName());
             request.getRequestDispatcher("/error").forward(request, response);
         }
-        session.setAttribute(REFERENCE_PROFILE, profile.get());
+        request.setAttribute(PROFILE, profile.get());
         request.setAttribute(INCLUDED_PAGE, "edit_profile");
         request.getRequestDispatcher("/index.jsp").forward(request, response);
     }

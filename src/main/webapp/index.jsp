@@ -83,35 +83,13 @@
                                 [+${sessionScope.newFriends}]
                             </c:if>
                         </a></li>
-                    <li><a href="#"><fmt:message key="menu.myteam"/></a></li>
-                    <li><a href="#"><fmt:message key="menu.events"/></a></li>
-
                 </ul>
             </c:if>
         </div>
         <div class="col-xs-10 col-md-10 col-lg-10">
-
             <c:choose>
-                <c:when test="${requestScope.includedPage=='login'}">
-                    <jsp:include page="jsp/login.jsp"/>
-                </c:when>
-                <c:when test="${requestScope.includedPage=='profile'}">
-                    <jsp:include page="jsp/profile.jsp"/>
-                </c:when>
-                <c:when test="${requestScope.includedPage=='friends'}">
-                    <jsp:include page="jsp/friends.jsp"/>
-                </c:when>
-                <c:when test="${requestScope.includedPage=='dialogues'}">
-                    <jsp:include page="jsp/dialogues.jsp"/>
-                </c:when>
-                <c:when test="${requestScope.includedPage=='messages'}">
-                    <jsp:include page="jsp/messages.jsp"/>
-                </c:when>
-                <c:when test="${requestScope.includedPage=='regpage'}">
-                    <jsp:include page="jsp/regpage.jsp"/>
-                </c:when>
-                <c:when test="${requestScope.includedPage=='error'}">
-                    <jsp:include page="jsp/error.jsp"/>
+                <c:when test="${not empty requestScope.includedPage}">
+                    <jsp:include page="jsp/${requestScope.includedPage}.jsp"/>
                 </c:when>
                 <c:otherwise>
                     <p>Добро пожаловать в социальную сеть "Отрядники"!</p>

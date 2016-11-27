@@ -1,6 +1,6 @@
 package com.socialnetwork.servlets;
 
-import com.socialnetwork.common.NameNormolizer;
+import com.socialnetwork.common.NameNormalizer;
 import com.socialnetwork.connection_pool.ConnectionPool;
 import com.socialnetwork.dao.UserDao;
 import com.socialnetwork.dao.h2.UserDaoImpl;
@@ -21,7 +21,6 @@ import static com.socialnetwork.dao.enums.Roles.USER;
 import static com.socialnetwork.filters.SecurityFilter.CURRENT_USER;
 import static com.socialnetwork.servlets.ErrorHandler.ERROR_MSG;
 import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.EMAIL_ALREADY_EXIST;
-import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.LOGIN_FAIL;
 import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.REGISTRATION_FAIL;
 
 /**
@@ -44,7 +43,6 @@ public class RegistrationServlet extends HttpServlet {
     private void requestProcess(HttpServletRequest request, HttpServletResponse response) {
         ConnectionPool connectionPool = ConnectionPool.getInstance();
         UserDao userDao = new UserDaoImpl(connectionPool);
-        request.setCharacterEncoding("UTF-8");
         String firstName = request.getParameter("first_name");
         String lastName = request.getParameter("last_name");
         String email = request.getParameter("email");
@@ -68,8 +66,8 @@ public class RegistrationServlet extends HttpServlet {
                             0,
                             email,
                             password,
-                            NameNormolizer.normolize(firstName),
-                            NameNormolizer.normolize(lastName),
+                            NameNormalizer.normalize(firstName),
+                            NameNormalizer.normalize(lastName),
                             gender,
                             USER.ordinal()));
                     Optional<User> userOptional = userDao.getByEmail(email);

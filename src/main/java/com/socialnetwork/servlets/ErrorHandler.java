@@ -17,6 +17,7 @@ import java.io.IOException;
 public class ErrorHandler extends HttpServlet {
     public static final String INCLUDED_PAGE = "includedPage";
     public static final String ERROR_MSG = "errorMsg";
+    public static final String SUCCESS_MSG = "successMsg";
     static public final String ERROR_HANDLER = "errorHandler";
 
     @RequiredArgsConstructor
@@ -28,6 +29,7 @@ public class ErrorHandler extends HttpServlet {
         LOCALE_ERROR("error.locale"),
         COMMON_ERROR("error.common"),
         USER_NOT_FOUND("error.userNotFound"),
+        NOT_AUTH("error.notAuth"),
         EMAIL_ALREADY_EXIST("error.emailExist");
 
         @Getter
@@ -45,8 +47,9 @@ public class ErrorHandler extends HttpServlet {
     }
 
     private void requestProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getSession().setAttribute("errorMsg", "error.common");
-        request.getSession().setAttribute(INCLUDED_PAGE, "error");
+        String msg = request.getAttribute(ERROR_MSG) == null ? "error.common" : (String) request.getAttribute(ERROR_MSG);
+        request.setAttribute(ERROR_MSG, msg);
+        request.setAttribute(INCLUDED_PAGE, "error");
         request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
 }

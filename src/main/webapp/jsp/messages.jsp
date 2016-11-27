@@ -34,28 +34,18 @@
             </c:forEach>
             </tbody>
         </table>
-        <%--<c:forEach var="message" items="${requestScope.messages}">
-            <div class="row">
-                <div class="col-xs-3">
-                    <p style="font-size: 2em">${requestScope.userMap[message.sender]}</p>
-                </div>
-                <div class="col-xs-7">
-                    <p>${message.message}</p>
-                </div>
-                <div class="col-xs-2">
-                    <p>${message.time}</p>
-                </div>
-            </div>
-        </c:forEach>--%>
-        <form action="/messages" method="post">
+        <form action="/messages?dialog=${requestScope.dialog}&limit=${requestScope.limit}&offset=${requestScope.offset}" method="post">
             <div class="form-group">
                 <label for="message">Сообщение:</label>
-                <input type="hidden" class="form-control" name="dialog" value="${param.dialog}">
+                <input type="hidden" class="form-control" name="dialog" value="${requestScope.dialog}">
                 <input type="hidden" class="form-control" name="limit" value="${requestScope.limit}">
                 <input type="hidden" class="form-control" name="offset" value="${requestScope.offset}">
                 <input type="text" class="form-control" id="message" name="message">
             </div>
-            <button type="submit" class="btn btn-default">Отправить</button>
+            <button type="submit" class="btn btn-success">Отправить</button>
         </form>
+        <a href="/messages?dialog=${requestScope.dialog}&limit=${requestScope.limit}&offset=${requestScope.offset}">
+            <button type="submit" class="btn btn-primary">Обновить</button>
+        </a>
     </div>
 </div>

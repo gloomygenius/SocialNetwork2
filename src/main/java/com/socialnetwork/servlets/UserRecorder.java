@@ -32,13 +32,11 @@ public class UserRecorder extends HttpServlet {
     private void requestProcess(HttpServletRequest request, HttpServletResponse response) {
         ConnectionPool connectionPool = ConnectionPool.getInstance();
         UserDao userDao = new UserDaoImpl(connectionPool);
-        request.setCharacterEncoding("UTF-8");
         String nextUrl = "/";
-        String firstName = (String) request.getParameter("first_name");
-        String lastName = (String) request.getParameter("last_name");
-        String email = (String) request.getParameter("email");
-        String password = DigestUtils.md5Hex((String) request.getParameter("password"));
-        // TODO: 08.11.2016  допилить
+        String firstName = request.getParameter("first_name");
+        String lastName = request.getParameter("last_name");
+        String email = request.getParameter("email");
+        String password = DigestUtils.md5Hex(request.getParameter("password"));
         int gender = Integer.parseInt(request.getParameter("gender"));
         int role = USER.ordinal();
         //Boolean male = true;

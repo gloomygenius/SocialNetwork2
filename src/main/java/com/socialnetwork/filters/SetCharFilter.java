@@ -20,7 +20,7 @@ public class SetCharFilter implements HttpFilter {
 // установка UTF-8, если не установлена
 
         if (!"UTF-8".equals(encoding))
-            response.setCharacterEncoding("UTF-8");
+            request.setCharacterEncoding("UTF-8");
         next.doFilter(request, response);
     }
 }

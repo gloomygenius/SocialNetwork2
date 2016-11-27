@@ -10,7 +10,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <div class="row">
-    <div class="col-xs-12" id="friends">
+    <div class="col-xs-12">
         <fmt:message key="${param.errorMsg}"/>
     </div>
 </div>

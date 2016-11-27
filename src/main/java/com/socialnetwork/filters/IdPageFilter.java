@@ -24,6 +24,7 @@ import static com.socialnetwork.filters.SecurityFilter.CURRENT_USER;
 import static com.socialnetwork.listeners.Initializer.PROFILE_DAO;
 import static com.socialnetwork.listeners.Initializer.USER_DAO;
 import static com.socialnetwork.servlets.ErrorHandler.ERROR_MSG;
+import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.NOT_AUTH;
 import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.USER_NOT_FOUND;
 import static com.socialnetwork.servlets.FriendsServlet.INCLUDED_PAGE;
 
@@ -47,10 +48,12 @@ public class IdPageFilter implements HttpFilter {
     public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         Matcher matcher = pattern.matcher(request.getRequestURL());
         HttpSession session = request.getSession(true);
-        User user = (User) session.getAttribute(CURRENT_USER);
-        if (user == null) chain.doFilter(request, response);
-        else {
-            if (matcher.find()) {
+        if (matcher.find()) {
+            if (session.getAttribute(CURRENT_USER) == null) {
+                request.setAttribute(INCLUDED_PAGE, "login");
+                request.setAttribute(ERROR_MSG, NOT_AUTH.getPropertyName());
+                request.getRequestDispatcher("/index.jsp").forward(request, response);
+            } else {
                 int id = Integer.parseInt(matcher.group(1));
                 Optional<User> refUser = Optional.empty();
                 try {
@@ -79,9 +82,8 @@ public class IdPageFilter implements HttpFilter {
                 }
                 request.setAttribute(INCLUDED_PAGE, "profile");
                 request.getRequestDispatcher("/index.jsp").forward(request, response);
-
-            } else
-                chain.doFilter(request, response);
-        }
+            }
+        } else
+            chain.doFilter(request, response);
     }
 }

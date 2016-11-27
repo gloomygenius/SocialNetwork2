@@ -71,5 +71,7 @@
                 </div>
             </div>
         </c:forEach>
+        <c:if test="${requestScope.offset!=0}"><a href="/friends?offset=${offset-limit}&limit=${requestScope.limit}">Предыдущая страница</a> </c:if>
+        <c:if test="${requestScope.hasNextPage}"><a href="/friends?offset=${offset+limit}&limit=${requestScope.limit}">Следующая страница</a> </c:if>
     </div>
 </div>

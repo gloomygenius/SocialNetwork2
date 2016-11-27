@@ -14,18 +14,13 @@ public class RegPageServlet extends HttpServlet {
     public static final String INCLUDED_PAGE = "includedPage";
 
     @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request, response);
     }
 
     @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute(INCLUDED_PAGE, "regpage");
-        try {
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
-        } catch (ServletException | IOException e) {
-            e.printStackTrace();
-            // TODO: 09.11.2016 Обработать
-        }
+        request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
 }

@@ -3,6 +3,9 @@ package com.socialnetwork.services;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,7 +21,13 @@ public abstract class Validator {
         INVALID_FIRST_NAME("error.invalid.firstName"),
         INVALID_LAST_NAME("error.invalid.lastName"),
         INVALID_PASSWORD_CONFIRM("error.invalid.password.confirm"),
-        SUCCESS("error.invalid.success");
+        INVALID_BIRTHDAY("error.invalid.birthday"),
+        INVALID_UNIVERSITY("error.invalid.university"),
+        INVALID_CITY("error.invalid.city"),
+        INVALID_COUNTRY("error.invalid.county"),
+        INVALID_TELEPHONE("error.invalid.telephone"),
+        INVALID_ABOUT("error.invalid.about"),
+        SUCCESS("success");
         @Getter
         private final String propertyName;
     }
@@ -60,11 +69,56 @@ public abstract class Validator {
     }
 
     private static boolean isValidName(String name) {
-        final int MAX_CHARS_IN_NAME = 17;
+        int MAX_CHARS_IN_NAME = 17;
         String nPattern = "^([^\\s]*[a-zA-Z\\u0430-\\u044f\\u0451\\u0410-\\u042f\\u0401\\-]){2,}$";
         Pattern p = Pattern.compile(nPattern);
         Matcher m = p.matcher(name);
         if (m.matches() && name.length() < MAX_CHARS_IN_NAME) return true;
         return false;
+    }
+
+    public static ValidCode validateProfile(String telephone, String birthday, String country, String city, String university, String about) {
+        if (!isValidTelephone(telephone)) return ValidCode.INVALID_TELEPHONE;
+        if (!isValidBirthday(birthday)) return ValidCode.INVALID_BIRTHDAY;
+        if (!isValidText(country, 25)) return ValidCode.INVALID_COUNTRY;
+        if (!isValidText(city, 25)) return ValidCode.INVALID_CITY;
+        if (!isValidText(university, 50)) return ValidCode.INVALID_UNIVERSITY;
+        if (!isValidText(about, 50)) return ValidCode.INVALID_ABOUT;
+        return ValidCode.SUCCESS;
+    }
+
+    private static boolean isValidTelephone(String telephone) {
+        int maxChars=20;
+        if (telephone.length() > maxChars) return false;
+        if (telephone.length()==0) return true;
+        String nPattern = "^((8|\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10}$";
+        Pattern p = Pattern.compile(nPattern);
+        Matcher m = p.matcher(telephone);
+        if (!m.matches()) return false;
+        return true;
+    }
+
+    private static boolean isValidText(String text, int maxChars) {
+        if (text.length()==0) return true;
+        if (text.length() > maxChars) return false;
+        String nPattern = "^([\\s]*[a-zA-Z\\u0430-\\u044f\\u0451\\u0410-\\u042f\\u0401\\-]){2,}$";
+        Pattern p = Pattern.compile(nPattern);
+        Matcher m = p.matcher(text);
+        if (!m.matches()) return false;
+        return true;
+    }
+
+    private static boolean isValidBirthday(String birthday) {
+        int maxChars = 17;
+        int minOldForUsers = 14;
+        if (birthday.length() > maxChars) return false;
+        LocalDate localDate;
+        try {
+            localDate = LocalDate.parse(birthday);
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+        if (localDate.isAfter(LocalDate.now().minusYears(minOldForUsers))) return false;
+        return true;
     }
 }

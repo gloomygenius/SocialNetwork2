@@ -51,13 +51,10 @@ public class AuthorizationServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        log.info("Start security filter");
         Map<String, String[]> parameterMap = request.getParameterMap();
         if (parameterMap.containsKey("j_password") && parameterMap.containsKey("j_username")) {
-            log.info("User try to login...");
             Optional<User> authorize = authorize(parameterMap);
             if (authorize.isPresent()) {
-                log.info("Login success");
                 HttpSession session = request.getSession(true);
                 session.setAttribute(CURRENT_USER, authorize.get());
                 session.setAttribute(NEW_FRIENDS,getCountNewFriend(authorize.get().getId()));

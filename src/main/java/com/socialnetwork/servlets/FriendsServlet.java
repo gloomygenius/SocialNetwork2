@@ -1,6 +1,6 @@
 package com.socialnetwork.servlets;
 
-import com.socialnetwork.common.NameNormolizer;
+import com.socialnetwork.common.NameNormalizer;
 import com.socialnetwork.dao.RelationDao;
 import com.socialnetwork.dao.UserDao;
 import com.socialnetwork.dao.enums.RelationType;
@@ -26,7 +26,8 @@ import static com.socialnetwork.listeners.Initializer.RELATION_DAO;
 import static com.socialnetwork.listeners.Initializer.USER_DAO;
 import static com.socialnetwork.servlets.AuthorizationServlet.NEW_FRIENDS;
 import static com.socialnetwork.servlets.ErrorHandler.ERROR_MSG;
-import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.*;
+import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.COMMON_ERROR;
+import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.FRIENDS_SEARCH_FAIL;
 
 /**
  * Created by Vasiliy Bobkov on 09.11.2016.
@@ -74,8 +75,8 @@ public class FriendsServlet extends HttpServlet {
                         request.setAttribute(ERROR_MSG, FRIENDS_SEARCH_FAIL.getPropertyName());
                         request.getRequestDispatcher("/index.jsp").forward(request, response);
                     } else {
-                        names[0] = NameNormolizer.normolize(names[0]);
-                        names[1] = NameNormolizer.normolize(names[1]);
+                        names[0] = NameNormalizer.normalize(names[0]);
+                        names[1] = NameNormalizer.normalize(names[1]);
                         friendIdSet = searchFriends(names);
                     }
                     break;
@@ -86,13 +87,13 @@ public class FriendsServlet extends HttpServlet {
                             id,
                             RelationType.getType(Integer.parseInt(request.getParameter("relation"))));
                     friendIdSet = relationDao.getFriends(currentUser.getId()).getIdSet();
-                    session.setAttribute(NEW_FRIENDS,getCountNewFriend(currentUser.getId()));
+                    session.setAttribute(NEW_FRIENDS, getCountNewFriend(currentUser.getId()));
                     break;
                 case "add":
                     id = Long.parseLong(request.getParameter("id"));
                     relationDao.add(currentUser.getId(), id, FRIEND);
                     friendIdSet = relationDao.getFriends(currentUser.getId()).getIdSet();
-                    session.setAttribute(NEW_FRIENDS,getCountNewFriend(currentUser.getId()));
+                    session.setAttribute(NEW_FRIENDS, getCountNewFriend(currentUser.getId()));
                     break;
                 default:
                     friendIdSet = relationDao.getFriends(currentUser.getId()).getIdSet();
@@ -109,17 +110,25 @@ public class FriendsServlet extends HttpServlet {
 
     private void loadUsersAndRelations(HttpServletRequest request, HttpServletResponse response, Set<Long> friendIdSet) throws ServletException, IOException {
         User currentUser = (User) request.getSession().getAttribute(CURRENT_USER);
-        int offset = request.getParameter("offset") != null ? Integer.parseInt(request.getParameter("offset")) : 0;
-        int limit = request.getParameter("limit") != null ? Integer.parseInt(request.getParameter("limit")) : 10;
+        int offset = getIntParameter("offset", request, 0);
+        int limit = getIntParameter("limit", request, 10);
+
         Optional<User> userOptional;
         Map<Long, Integer> relationSet = new HashMap<>();
         Set<User> friendSet = new TreeSet<>();
         int count = 0;
+        boolean hasNextPage = false;
         for (long id : friendIdSet) {
             if (count < offset) {
                 count++;
                 continue;
             }
+            if (count >= offset + limit) {
+                count++;
+                hasNextPage = true;
+                continue;
+            }
+            count++;
             try {
                 userOptional = userDao.getById(id);
                 if (userOptional.isPresent()) {
@@ -131,10 +140,22 @@ public class FriendsServlet extends HttpServlet {
                 request.setAttribute(ERROR_MSG, COMMON_ERROR.getPropertyName());
                 request.getRequestDispatcher("/error").forward(request, response);
             }
-            if (count >= offset + limit) break;
+
         }
+        request.setAttribute("hasNextPage", hasNextPage);
         request.setAttribute(RELATION_MAP, relationSet);
         request.setAttribute(FRIENDS_SET, friendSet);
+    }
+
+    private int getIntParameter(String paramName, HttpServletRequest request, int defValue) {
+        int value = defValue;
+        if (request.getParameter(paramName) != null) {
+            log.debug(paramName + " " + Integer.parseInt(request.getParameter(paramName)));
+            value = Integer.parseInt(request.getParameter(paramName));
+        }
+
+        request.setAttribute(paramName, value);
+        return value;
     }
 
     private Set<Long> searchFriends(String names[]) throws DaoException {
@@ -148,7 +169,7 @@ public class FriendsServlet extends HttpServlet {
         try {
             incoming = relationDao.getIncoming(id);
         } catch (DaoException e) {
-            log.error("Error in relationDao when user "+id+" try get count of new friends",e);
+            log.error("Error in relationDao when user " + id + " try get count of new friends", e);
         }
         return incoming != null ? incoming.getIdSet().size() : 0;
     }

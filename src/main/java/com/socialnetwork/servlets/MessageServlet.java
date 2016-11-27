@@ -3,9 +3,11 @@ package com.socialnetwork.servlets;
 import com.socialnetwork.dao.DialogDao;
 import com.socialnetwork.dao.MessageDao;
 import com.socialnetwork.dao.UserDao;
+import com.socialnetwork.dao.exception.DaoException;
 import com.socialnetwork.entities.Message;
 import com.socialnetwork.entities.User;
 import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -23,10 +25,13 @@ import java.util.Set;
 
 import static com.socialnetwork.filters.SecurityFilter.CURRENT_USER;
 import static com.socialnetwork.listeners.Initializer.*;
+import static com.socialnetwork.servlets.ErrorHandler.ERROR_MSG;
+import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.COMMON_ERROR;
 
 /**
  * Created by Vasiliy Bobkov on 21.11.2016.
  */
+@Log4j
 @WebServlet("/messages")
 public class MessageServlet extends HttpServlet {
     public static final String INCLUDED_PAGE = "includedPage";
@@ -43,30 +48,30 @@ public class MessageServlet extends HttpServlet {
     }
 
     @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request, response);
     }
 
     @Override
-    @SneakyThrows
-    public void doPost(HttpServletRequest request, HttpServletResponse response) {
-        request.setCharacterEncoding("UTF-8");
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         User currentUser = (User) request.getSession().getAttribute(CURRENT_USER);
         request.setAttribute(INCLUDED_PAGE, "messages");
-        long dialog;
-        if (request.getParameter("dialog") != null) dialog = Long.parseLong(request.getParameter("dialog"));
-        else dialog = dialogDao.getPrivateDialog(currentUser.getId(), Long.parseLong(request.getParameter("recipient"))).getId();
-
-        if (request.getParameter("message") != null) {
-            messageDao.sendMessage(currentUser.getId(), dialog, request.getParameter("message"));
-            dialogDao.updateTime(dialog, LocalDateTime.now());
-        }
-        int limit = request.getParameter("limit") != null ? Integer.parseInt(request.getParameter("limit")) : 15;
-        request.setAttribute("limit", limit);
-        int offset = request.getParameter("offset") != null ? Integer.parseInt(request.getParameter("offset")) : 0;
-        request.setAttribute("offset", offset);
-
+        long dialog = 0;
         try {
+            if (request.getParameter("dialog") != null) dialog = Long.parseLong(request.getParameter("dialog"));
+            else
+                dialog = dialogDao.getPrivateDialog(currentUser.getId(), Long.parseLong(request.getParameter("recipient"))).getId();
+
+
+            request.setAttribute("dialog", dialog);
+            if (request.getParameter("message") != null) {
+                messageDao.sendMessage(currentUser.getId(), dialog, request.getParameter("message"));
+                dialogDao.updateTime(dialog, LocalDateTime.now());
+            }
+            int limit = request.getParameter("limit") != null ? Integer.parseInt(request.getParameter("limit")) : 15;
+            request.setAttribute("limit", limit);
+            int offset = request.getParameter("offset") != null ? Integer.parseInt(request.getParameter("offset")) : 0;
+            request.setAttribute("offset", offset);
             Map<Long, String> userMap = new HashMap<>();
             Set<Message> messageSet = messageDao.getMessages(dialog, limit, offset);
             request.setAttribute("messages", messageSet);
@@ -77,9 +82,10 @@ public class MessageServlet extends HttpServlet {
             }
             request.setAttribute("userMap", userMap);
             request.getRequestDispatcher("/index.jsp").forward(request, response);
-        } catch (ServletException | IOException e) {
-            e.printStackTrace();
-            // TODO: 09.11.2016 Обработать
+        } catch (DaoException e) {
+            log.error("Getting privat dialog of id" + currentUser.getId() + " error", e);
+            request.setAttribute(ERROR_MSG, COMMON_ERROR.getPropertyName());
+            request.getRequestDispatcher("/error").forward(request, response);
         }
     }
 }

@@ -2,6 +2,7 @@ package com.socialnetwork.filters;
 
 import com.socialnetwork.common.HttpFilter;
 import com.socialnetwork.dao.ProfileDao;
+import com.socialnetwork.dao.RelationDao;
 import com.socialnetwork.dao.UserDao;
 import com.socialnetwork.dao.exception.DaoException;
 import com.socialnetwork.entities.Profile;
@@ -22,6 +23,7 @@ import java.util.regex.Pattern;
 
 import static com.socialnetwork.filters.SecurityFilter.CURRENT_USER;
 import static com.socialnetwork.listeners.Initializer.PROFILE_DAO;
+import static com.socialnetwork.listeners.Initializer.RELATION_DAO;
 import static com.socialnetwork.listeners.Initializer.USER_DAO;
 import static com.socialnetwork.servlets.ErrorHandler.ERROR_MSG;
 import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.NOT_AUTH;
@@ -30,11 +32,14 @@ import static com.socialnetwork.servlets.FriendsServlet.INCLUDED_PAGE;
 
 @Log4j
 public class IdPageFilter implements HttpFilter {
+    private static final String RELATION = "relation";
     private UserDao userDao;
     private ProfileDao profileDao;
     private Pattern pattern;
-    public final static String USER = "user";
-    public final static String PROFILE = "profile";
+    private final static String USER = "user";
+    private final static String PROFILE = "profile";
+    private RelationDao relationDao;
+    private User currentUser;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -42,45 +47,44 @@ public class IdPageFilter implements HttpFilter {
         userDao = (UserDao) servletContext.getAttribute(USER_DAO);
         profileDao = (ProfileDao) servletContext.getAttribute(PROFILE_DAO);
         pattern = Pattern.compile("\\/id([\\d]+)$");
+        relationDao = (RelationDao) servletContext.getAttribute(RELATION_DAO);
     }
 
     @Override
     public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         Matcher matcher = pattern.matcher(request.getRequestURL());
         HttpSession session = request.getSession(true);
+        currentUser = (User) session.getAttribute(CURRENT_USER);
         if (matcher.find()) {
-            if (session.getAttribute(CURRENT_USER) == null) {
+            if (currentUser == null) {
                 request.setAttribute(INCLUDED_PAGE, "login");
                 request.setAttribute(ERROR_MSG, NOT_AUTH.getPropertyName());
                 request.getRequestDispatcher("/index.jsp").forward(request, response);
             } else {
                 int id = Integer.parseInt(matcher.group(1));
-                Optional<User> refUser = Optional.empty();
+                Optional<User> refUser;
                 try {
                     refUser = userDao.getById(id);
-                } catch (DaoException e) {
-                    log.error("UserDao exception in IdFilter", e);
-                    request.setAttribute(ERROR_MSG, USER_NOT_FOUND.getPropertyName());
-                    request.getRequestDispatcher("/error").forward(request, response);
-                }
-                if (refUser.isPresent()) {
-                    request.setAttribute(USER, refUser.get());
-                    Long idLoc = refUser.get().getId();
-                    Optional<Profile> profile = Optional.empty();
-                    try {
+                    if (refUser.isPresent()) {
+                        User user = refUser.get();
+                        request.setAttribute(USER, user);
+                        Long idLoc = user.getId();
+                        Optional<Profile> profile;
                         profile = profileDao.getByUserId(idLoc);
-                    } catch (DaoException e) {
-                        log.error("ProfileDao exception in IdFilter", e);
+                        if (user.getId() != currentUser.getId())
+                            request.setAttribute(RELATION, relationDao.getRelationBetween(currentUser.getId(), user.getId()));
+                        profile.ifPresent(profile1 -> request.setAttribute(PROFILE, profile1));
+                        request.setAttribute(INCLUDED_PAGE,"profile");
+                        request.getRequestDispatcher("/index.jsp").forward(request, response);
+                    } else {
                         request.setAttribute(ERROR_MSG, USER_NOT_FOUND.getPropertyName());
                         request.getRequestDispatcher("/error").forward(request, response);
                     }
-                    profile.ifPresent(profile1 -> request.setAttribute(PROFILE, profile1));
-                } else {
+                } catch (DaoException e) {
                     request.setAttribute(ERROR_MSG, USER_NOT_FOUND.getPropertyName());
+                    log.error("Dao exception in IdFilter", e);
                     request.getRequestDispatcher("/error").forward(request, response);
                 }
-                request.setAttribute(INCLUDED_PAGE, "profile");
-                request.getRequestDispatcher("/index.jsp").forward(request, response);
             }
         } else
             chain.doFilter(request, response);

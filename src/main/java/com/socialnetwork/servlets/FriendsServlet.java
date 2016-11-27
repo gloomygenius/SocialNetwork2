@@ -29,9 +29,6 @@ import static com.socialnetwork.servlets.ErrorHandler.ERROR_MSG;
 import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.COMMON_ERROR;
 import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.FRIENDS_SEARCH_FAIL;
 
-/**
- * Created by Vasiliy Bobkov on 09.11.2016.
- */
 @Log4j
 @WebServlet("/friends")
 public class FriendsServlet extends HttpServlet {
@@ -114,7 +111,7 @@ public class FriendsServlet extends HttpServlet {
         int limit = getIntParameter("limit", request, 10);
 
         Optional<User> userOptional;
-        Map<Long, Integer> relationSet = new HashMap<>();
+        Map<Long, Integer> relationMap = new HashMap<>();
         Set<User> friendSet = new TreeSet<>();
         int count = 0;
         boolean hasNextPage = false;
@@ -133,7 +130,7 @@ public class FriendsServlet extends HttpServlet {
                 userOptional = userDao.getById(id);
                 if (userOptional.isPresent()) {
                     friendSet.add(userOptional.get());
-                    relationSet.put(id, relationDao.getRelationBetween(currentUser.getId(), id));
+                    relationMap.put(id, relationDao.getRelationBetween(currentUser.getId(), id));
                 }
             } catch (DaoException e) {
                 log.error("Getting friends of id" + currentUser.getId() + " error", e);
@@ -143,7 +140,7 @@ public class FriendsServlet extends HttpServlet {
 
         }
         request.setAttribute("hasNextPage", hasNextPage);
-        request.setAttribute(RELATION_MAP, relationSet);
+        request.setAttribute(RELATION_MAP, relationMap);
         request.setAttribute(FRIENDS_SET, friendSet);
     }
 

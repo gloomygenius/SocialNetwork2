@@ -6,13 +6,11 @@ import com.socialnetwork.dao.UserDao;
 import com.socialnetwork.dao.exception.DaoException;
 import com.socialnetwork.entities.Message;
 import com.socialnetwork.entities.User;
-import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

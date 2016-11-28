@@ -1,7 +1,6 @@
 package com.socialnetwork.servlets;
 
 import com.socialnetwork.dao.DialogDao;
-import com.socialnetwork.dao.MessageDao;
 import com.socialnetwork.dao.UserDao;
 import com.socialnetwork.dao.exception.DaoException;
 import com.socialnetwork.entities.Dialog;
@@ -11,7 +10,6 @@ import lombok.extern.log4j.Log4j;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,7 +21,6 @@ import java.util.TreeMap;
 
 import static com.socialnetwork.filters.SecurityFilter.CURRENT_USER;
 import static com.socialnetwork.listeners.Initializer.DIALOG_DAO;
-import static com.socialnetwork.listeners.Initializer.MESSAGE_DAO;
 import static com.socialnetwork.listeners.Initializer.USER_DAO;
 
 @Log4j

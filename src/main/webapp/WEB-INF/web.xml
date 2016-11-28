@@ -36,6 +36,41 @@
     </servlet>
 
     <servlet>
+        <servlet-name>AuthServlet</servlet-name>
+        <servlet-class>com.socialnetwork.servlets.AuthorizationServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>DialoguesServlet</servlet-name>
+        <servlet-class>com.socialnetwork.servlets.DialoguesServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>ErrorHandler</servlet-name>
+        <servlet-class>com.socialnetwork.servlets.ErrorHandler</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>FriendsServlet</servlet-name>
+        <servlet-class>com.socialnetwork.servlets.FriendsServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>LocaleServlet</servlet-name>
+        <servlet-class>com.socialnetwork.servlets.LocaleServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>MessageServlet</servlet-name>
+        <servlet-class>com.socialnetwork.servlets.MessageServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>ProfileEditorServlet</servlet-name>
+        <servlet-class>com.socialnetwork.servlets.ProfileEditorServlet</servlet-class>
+    </servlet>
+
+    <servlet>
         <servlet-name>RegPage</servlet-name>
         <servlet-class>com.socialnetwork.servlets.RegPageServlet</servlet-class>
     </servlet>
@@ -53,6 +88,41 @@
     <servlet-mapping>
         <servlet-name>RegPage</servlet-name>
         <url-pattern>/regpage</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>AuthServlet</servlet-name>
+        <url-pattern>/j_security_check</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>DialoguesServlet</servlet-name>
+        <url-pattern>/dialogues</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ErrorHandler</servlet-name>
+        <url-pattern>/error</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>FriendsServlet</servlet-name>
+        <url-pattern>/friends</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>LocaleServlet</servlet-name>
+        <url-pattern>/locale</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>MessageServlet</servlet-name>
+        <url-pattern>/messages</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ProfileEditorServlet</servlet-name>
+        <url-pattern>/edit_profile</url-pattern>
     </servlet-mapping>
 
     <!--Filters naming-->
@@ -75,6 +145,9 @@
         <filter-name>securityFilter</filter-name>
         <url-pattern>/</url-pattern>
         <url-pattern>/index.jsp</url-pattern>
+        <url-pattern>/messages</url-pattern>
+        <url-pattern>/dialogues</url-pattern>
+        <url-pattern>/friends</url-pattern>
         <url-pattern>/jsp/*</url-pattern>
     </filter-mapping>
 
@@ -88,5 +161,11 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <!--Error mapping-->
+
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error</location>
+    </error-page>
 
 </web-app>

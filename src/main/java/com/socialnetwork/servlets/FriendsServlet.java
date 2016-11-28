@@ -30,7 +30,6 @@ import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.COMMON_ERROR;
 import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.FRIENDS_SEARCH_FAIL;
 
 @Log4j
-@WebServlet("/friends")
 public class FriendsServlet extends HttpServlet {
     public static final String INCLUDED_PAGE = "includedPage";
     private static final String FRIENDS_SET = "friendsSet";

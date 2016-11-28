@@ -32,7 +32,6 @@ import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.COMMON_ERROR;
  * Created by Vasiliy Bobkov on 21.11.2016.
  */
 @Log4j
-@WebServlet("/messages")
 public class MessageServlet extends HttpServlet {
     private static final String INCLUDED_PAGE = "includedPage";
     private static MessageDao messageDao;

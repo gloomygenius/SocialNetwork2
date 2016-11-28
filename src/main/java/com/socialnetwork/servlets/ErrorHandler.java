@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/error")
 public class ErrorHandler extends HttpServlet {
     public static final String INCLUDED_PAGE = "includedPage";
     public static final String ERROR_MSG = "errorMsg";

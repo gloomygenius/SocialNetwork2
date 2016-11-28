@@ -13,11 +13,7 @@ import java.io.IOException;
 import static com.socialnetwork.servlets.ErrorHandler.ERROR_MSG;
 import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.LOCALE_ERROR;
 
-/**
- * Created by Vasiliy Bobkov on 23.11.2016.
- */
 @Log4j
-@WebServlet("/locale")
 public class LocaleServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

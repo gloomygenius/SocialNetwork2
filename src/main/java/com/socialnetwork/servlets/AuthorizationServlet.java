@@ -32,7 +32,6 @@ import static com.socialnetwork.servlets.FriendsServlet.INCLUDED_PAGE;
  * Created by Vasiliy Bobkov on 09.11.2016.
  */
 @Log4j
-@WebServlet("/j_security_check")
 public class AuthorizationServlet extends HttpServlet {
     private static UserDao userDao;
     private static RelationDao relationDao;

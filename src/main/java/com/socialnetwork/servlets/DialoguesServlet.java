@@ -26,11 +26,7 @@ import static com.socialnetwork.listeners.Initializer.DIALOG_DAO;
 import static com.socialnetwork.listeners.Initializer.MESSAGE_DAO;
 import static com.socialnetwork.listeners.Initializer.USER_DAO;
 
-/**
- * Created by Vasiliy Bobkov on 10.11.2016.
- */
 @Log4j
-@WebServlet("/dialogues")
 public class DialoguesServlet extends HttpServlet {
     public static final String INCLUDED_PAGE = "includedPage";
     private static DialogDao dialogDao;
@@ -62,9 +58,7 @@ public class DialoguesServlet extends HttpServlet {
             for (Dialog dialog : dialogSet) {
                 int sender = (int) currentUser.getId();
                 bufferUser = userDao.getById(dialog.getRecipient(sender));
-                if (bufferUser.isPresent()) {
-                    map.put(dialog, bufferUser.get());
-                }
+                bufferUser.ifPresent(user -> map.put(dialog, user));
             }
         } catch (DaoException e) {
             log.error("Error in dialogDao when user " + currentUser.getId() + " try get dialogues list", e);

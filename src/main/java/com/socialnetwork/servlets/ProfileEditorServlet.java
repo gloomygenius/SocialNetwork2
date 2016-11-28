@@ -31,7 +31,6 @@ import static com.socialnetwork.servlets.ErrorHandler.SUCCESS_MSG;
  * Created by Vasiliy Bobkov on 26.11.2016.
  */
 @Log4j
-@WebServlet("/edit_profile")
 public class ProfileEditorServlet extends HttpServlet {
     private static final String INCLUDED_PAGE = "includedPage";
     private static ProfileDao profileDao;
@@ -67,7 +66,7 @@ public class ProfileEditorServlet extends HttpServlet {
             request.setAttribute(ERROR_MSG, USER_NOT_FOUND.getPropertyName());
             request.getRequestDispatcher("/error").forward(request, response);
         }
-        request.setAttribute(PROFILE, profile.get());
+        profile.ifPresent(profile1 -> request.setAttribute(PROFILE, profile1));
         request.setAttribute(INCLUDED_PAGE, "edit_profile");
         request.getRequestDispatcher("/index.jsp").forward(request, response);
     }

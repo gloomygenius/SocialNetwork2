@@ -4,6 +4,7 @@
 <fmt:setBundle basename="text"/>
 <jsp:useBean id="errorMsg" class="java.lang.String" scope="request"/>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="custom" uri="/WEB_INF/taglib.tld" %>
 
 
 <div class="row">
@@ -42,7 +43,7 @@
         <c:forEach var="user" items="${requestScope.friendsSet}">
             <div class="row">
                 <div class="col-xs-3">
-                    <img src="img/default_ava_min.png">
+                    <img class="center-block" src="<custom:link id="${user.id}" type="min_ava" alt="img/default_ava_min.png"/>">
                 </div>
                 <div class="col-xs-6">
                     <p style="font-size: 2em">${user.firstName} ${user.lastName}</p>

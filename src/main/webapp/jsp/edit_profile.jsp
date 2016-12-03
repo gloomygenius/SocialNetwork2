@@ -105,7 +105,7 @@
                                     key="profile.about"/></label>
                             <div class="controls">
                                 <textarea id="about" name="about" rows="6" cols="51"
-                                          placeholder="Напишите немного о себе">${profile.about}</textarea>
+                                          placeholder="<fmt:message key="profile.writeAbout"/>">${profile.about}</textarea>
                             </div>
                         </div>
                     </div>
@@ -116,6 +116,14 @@
                         </div>
                     </div>
                 </fieldset>
+            </form>
+            <h3><fmt:message key="profile.avaUpload"/></h3>
+            <fmt:message key="profile.selectPhoto"/>: <br />
+            <form action="${pageContext.request.contextPath}/upload_photo" method="post"
+                  enctype="multipart/form-data">
+                <input type="file" name="file" size="50" accept="image/jpeg"/>
+                <br />
+                <input type="submit" value="<fmt:message key="profile.upload"/>" />
             </form>
         </div>
     </div>

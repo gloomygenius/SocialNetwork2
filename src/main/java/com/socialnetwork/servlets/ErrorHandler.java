@@ -25,6 +25,8 @@ public class ErrorHandler extends HttpServlet {
         COMMON_ERROR("error.common"),
         USER_NOT_FOUND("error.userNotFound"),
         NOT_AUTH("error.notAuth"),
+        SELECT_FILE_ERROR("error.selectFile"),
+        FILE_UPLOAD_ERROR("error.fileUpload"),
         EMAIL_ALREADY_EXIST("error.emailExist");
 
         @Getter

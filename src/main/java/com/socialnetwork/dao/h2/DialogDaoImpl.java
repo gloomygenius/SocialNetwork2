@@ -136,26 +136,6 @@ public class DialogDaoImpl implements DialogDao {
     }
 
     @Override
-    public void createDialog(long creator, Set<Long> participantIdSet) {
-
-    }
-
-    @Override
-    public void createDialog(long creator, Set<Long> participantIdSet, String description) {
-
-    }
-
-    @Override
-    public void updateDescription() {
-
-    }
-
-    @Override
-    public void updatePartiсipant() {
-
-    }
-
-    @Override
     public void updateTime(long dialog, LocalDateTime time) throws DaoException {
         try (Connection connection = connectionPool.takeConnection();
              Statement statement = connection.createStatement()) {

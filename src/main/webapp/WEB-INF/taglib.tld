@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
         version="2.1">
     <tlib-version>1.0</tlib-version>
-    <short-name>tfmt</short-name>
+    <short-name>custom</short-name>
     <uri>/WEB_INF/taglib.tld</uri>
     <tag>
         <name>format</name>
@@ -13,6 +13,26 @@
         <body-content>empty</body-content>
         <attribute>
             <name>time</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+    <tag>
+        <name>link</name>
+        <tag-class>com.socialnetwork.jsp_tags.PhotoLink</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>alt</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>type</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>

@@ -3,6 +3,8 @@ package com.socialnetwork.services;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import javax.imageio.ImageReader;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
@@ -13,6 +15,11 @@ import java.util.regex.Pattern;
  * Created by Vasiliy Bobkov on 16.11.2016.
  */
 public abstract class Validator {
+
+    public static ValidCode validateImage(ImageReader reader) throws IOException {
+        if ((reader.getWidth(0) < 200) || (reader.getHeight(0) < 200)) return ValidCode.INVALID_PIXEL_SIZE;
+        return ValidCode.SUCCESS;
+    }
 
     @RequiredArgsConstructor
     public enum ValidCode {
@@ -27,6 +34,7 @@ public abstract class Validator {
         INVALID_COUNTRY("error.invalid.county"),
         INVALID_TELEPHONE("error.invalid.telephone"),
         INVALID_ABOUT("error.invalid.about"),
+        INVALID_PIXEL_SIZE("error.invalid.pixelSize"),
         SUCCESS("success");
         @Getter
         private final String propertyName;
@@ -73,8 +81,7 @@ public abstract class Validator {
         String nPattern = "^([^\\s]*[a-zA-Z\\u0430-\\u044f\\u0451\\u0410-\\u042f\\u0401\\-]){2,}$";
         Pattern p = Pattern.compile(nPattern);
         Matcher m = p.matcher(name);
-        if (m.matches() && name.length() < MAX_CHARS_IN_NAME) return true;
-        return false;
+        return m.matches() && name.length() < MAX_CHARS_IN_NAME;
     }
 
     public static ValidCode validateProfile(String telephone, String birthday, String country, String city, String university, String about) {
@@ -88,24 +95,22 @@ public abstract class Validator {
     }
 
     private static boolean isValidTelephone(String telephone) {
-        int maxChars=20;
+        int maxChars = 20;
         if (telephone.length() > maxChars) return false;
-        if (telephone.length()==0) return true;
+        if (telephone.length() == 0) return true;
         String nPattern = "^((8|\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10}$";
         Pattern p = Pattern.compile(nPattern);
         Matcher m = p.matcher(telephone);
-        if (!m.matches()) return false;
-        return true;
+        return m.matches();
     }
 
     private static boolean isValidText(String text, int maxChars) {
-        if (text.length()==0) return true;
+        if (text.length() == 0) return true;
         if (text.length() > maxChars) return false;
         String nPattern = "^([\\s]*[a-zA-Z\\u0430-\\u044f\\u0451\\u0410-\\u042f\\u0401\\-]){2,}$";
         Pattern p = Pattern.compile(nPattern);
         Matcher m = p.matcher(text);
-        if (!m.matches()) return false;
-        return true;
+        return m.matches();
     }
 
     private static boolean isValidBirthday(String birthday) {
@@ -118,7 +123,6 @@ public abstract class Validator {
         } catch (DateTimeParseException e) {
             return false;
         }
-        if (localDate.isAfter(LocalDate.now().minusYears(minOldForUsers))) return false;
-        return true;
+        return !localDate.isAfter(LocalDate.now().minusYears(minOldForUsers));
     }
 }

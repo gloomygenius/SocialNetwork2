@@ -1,6 +1,8 @@
 package com.socialnetwork.jsp_tags;
 
-import org.apache.log4j.Logger;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.log4j.Log4j;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -9,8 +11,10 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+@Log4j
+@Setter
+@Getter
 public class TimeFormatter extends TagSupport {
-    private static final Logger log = Logger.getLogger(TimeFormatter.class);
     private LocalDateTime time;
 
     @Override
@@ -23,13 +27,5 @@ public class TimeFormatter extends TagSupport {
             log.error("Error in tag class TimeFormatter");
         }
         return SKIP_BODY;
-    }
-
-    public LocalDateTime getTime() {
-        return this.time;
-    }
-
-    public void setTime(LocalDateTime time) {
-        this.time = time;
     }
 }

@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="custom" uri="/WEB_INF/taglib.tld" %>
 
 <fmt:setLocale value="${sessionScope.language}"/>
 <fmt:setBundle basename="text"/>
@@ -12,7 +13,7 @@
 <div class="row">
     <div class="col-xs-3" id="avatar">
         <div class="row">
-            <img src="<c:url value="/img/default_ava.png"/>" alt="avatar"/>
+            <img class="center-block" src="<custom:link id="${user.id}" type="min_ava" alt="img/default_ava_min.png"/>" alt="avatar"/>
         </div>
         <c:if test="${user.id==currentUser.id}">
             <div class="row">

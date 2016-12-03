@@ -74,6 +74,11 @@
         <servlet-name>RegPage</servlet-name>
         <servlet-class>com.socialnetwork.servlets.RegPageServlet</servlet-class>
     </servlet>
+
+    <servlet>
+        <servlet-name>UploadServlet</servlet-name>
+        <servlet-class>com.socialnetwork.servlets.UploadServlet</servlet-class>
+    </servlet>
     <!--Servlet mapping-->
     <servlet-mapping>
         <servlet-name>Logout</servlet-name>
@@ -123,6 +128,11 @@
     <servlet-mapping>
         <servlet-name>ProfileEditorServlet</servlet-name>
         <url-pattern>/edit_profile</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>UploadServlet</servlet-name>
+        <url-pattern>/upload_photo</url-pattern>
     </servlet-mapping>
 
     <!--Filters naming-->

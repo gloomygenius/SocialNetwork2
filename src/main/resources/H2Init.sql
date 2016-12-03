@@ -18,7 +18,7 @@ CREATE TABLE Users (
 
 CREATE TABLE Relations (
   sender_id     BIGINT NOT NULL,
-  recipient_id       BIGINT NOT NULL,
+  recipient_id  BIGINT NOT NULL,
   relation_type INT    NOT NULL,
   FOREIGN KEY (sender_id) REFERENCES Users (id),
   FOREIGN KEY (recipient_id) REFERENCES Users (id)

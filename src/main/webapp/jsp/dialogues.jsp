@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="tfmt" uri="/WEB_INF/taglib.tld" %>
+<%@ taglib prefix="custom" uri="/WEB_INF/taglib.tld" %>
 
 <fmt:setLocale value="${sessionScope.language}"/>
 <fmt:setBundle basename="text"/>
@@ -19,7 +19,7 @@
                 </div>
                 <div class="col-xs-2">
                     <p>Последнее сообщение:<br>
-                            <tfmt:format time="${dialog.key.lastUpdate}"/></p>
+                            <custom:format time="${dialog.key.lastUpdate}"/></p>
                 </div>
             </div>
         </c:forEach>

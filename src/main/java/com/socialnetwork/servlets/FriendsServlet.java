@@ -56,8 +56,8 @@ public class FriendsServlet extends HttpServlet {
         User currentUser = (User) session.getAttribute(CURRENT_USER);
         Set<Long> friendIdSet = new HashSet<>();
         try {
-            String section = request.getParameter("action") == null ? "friends" : request.getParameter("action");
-            switch (section) {
+            String action = request.getParameter("action") == null ? "friends" : request.getParameter("action");
+            switch (action) {
                 case "incoming":
                     friendIdSet = relationDao.getIncoming(currentUser.getId()).getIdSet();
                     break;
@@ -65,6 +65,7 @@ public class FriendsServlet extends HttpServlet {
                     friendIdSet = relationDao.getRequest(currentUser.getId()).getIdSet();
                     break;
                 case "search":
+                    request.setAttribute("action",action);
                     String[] names = request.getParameter("names").split(" ");
                     if (names.length != 2) {
                         request.setAttribute(ERROR_MSG, FRIENDS_SEARCH_FAIL.getPropertyName());

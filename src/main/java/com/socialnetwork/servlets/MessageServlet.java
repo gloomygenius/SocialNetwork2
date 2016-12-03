@@ -1,17 +1,11 @@
 package com.socialnetwork.servlets;
 
-import com.socialnetwork.dao.DialogDao;
-import com.socialnetwork.dao.MessageDao;
-import com.socialnetwork.dao.UserDao;
 import com.socialnetwork.dao.exception.DaoException;
 import com.socialnetwork.entities.Message;
 import com.socialnetwork.entities.User;
 import lombok.extern.log4j.Log4j;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -21,29 +15,11 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.socialnetwork.filters.SecurityFilter.CURRENT_USER;
-import static com.socialnetwork.listeners.Initializer.*;
-import static com.socialnetwork.servlets.ErrorHandler.ERROR_MSG;
 import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.COMMON_ERROR;
 
-/**
- * Created by Vasiliy Bobkov on 21.11.2016.
- */
 @Log4j
-public class MessageServlet extends HttpServlet {
-    private static final String INCLUDED_PAGE = "includedPage";
-    private static MessageDao messageDao;
-    private static DialogDao dialogDao;
-    private static UserDao userDao;
+public class MessageServlet extends CommonHttpServlet {
     private static String MESSAGES = "messages";
-
-    @Override
-    public void init(ServletConfig servletConfig) {
-        ServletContext servletContext = servletConfig.getServletContext();
-        messageDao = (MessageDao) servletContext.getAttribute(MESSAGE_DAO);
-        dialogDao = (DialogDao) servletContext.getAttribute(DIALOG_DAO);
-        userDao = (UserDao) servletContext.getAttribute(USER_DAO);
-    }
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

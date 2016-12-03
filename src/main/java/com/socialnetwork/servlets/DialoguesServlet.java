@@ -1,16 +1,11 @@
 package com.socialnetwork.servlets;
 
-import com.socialnetwork.dao.DialogDao;
-import com.socialnetwork.dao.UserDao;
 import com.socialnetwork.dao.exception.DaoException;
 import com.socialnetwork.entities.Dialog;
 import com.socialnetwork.entities.User;
 import lombok.extern.log4j.Log4j;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -19,22 +14,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 
-import static com.socialnetwork.filters.SecurityFilter.CURRENT_USER;
-import static com.socialnetwork.listeners.Initializer.DIALOG_DAO;
-import static com.socialnetwork.listeners.Initializer.USER_DAO;
-
 @Log4j
-public class DialoguesServlet extends HttpServlet {
-    public static final String INCLUDED_PAGE = "includedPage";
-    private static DialogDao dialogDao;
-    private static UserDao userDao;
-
-    @Override
-    public void init(ServletConfig servletConfig) {
-        ServletContext servletContext = servletConfig.getServletContext();
-        dialogDao = (DialogDao) servletContext.getAttribute(DIALOG_DAO);
-        userDao = (UserDao) servletContext.getAttribute(USER_DAO);
-    }
+public class DialoguesServlet extends CommonHttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

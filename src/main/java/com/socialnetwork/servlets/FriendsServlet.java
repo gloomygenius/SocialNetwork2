@@ -1,18 +1,13 @@
 package com.socialnetwork.servlets;
 
 import com.socialnetwork.common.NameNormalizer;
-import com.socialnetwork.dao.RelationDao;
-import com.socialnetwork.dao.UserDao;
 import com.socialnetwork.dao.enums.RelationType;
 import com.socialnetwork.dao.exception.DaoException;
 import com.socialnetwork.entities.Relation;
 import com.socialnetwork.entities.User;
 import lombok.extern.log4j.Log4j;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -20,28 +15,14 @@ import java.io.IOException;
 import java.util.*;
 
 import static com.socialnetwork.dao.enums.RelationType.FRIEND;
-import static com.socialnetwork.filters.SecurityFilter.CURRENT_USER;
-import static com.socialnetwork.listeners.Initializer.RELATION_DAO;
-import static com.socialnetwork.listeners.Initializer.USER_DAO;
 import static com.socialnetwork.servlets.AuthorizationServlet.NEW_FRIENDS;
-import static com.socialnetwork.servlets.ErrorHandler.ERROR_MSG;
 import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.COMMON_ERROR;
 import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.FRIENDS_SEARCH_FAIL;
 
 @Log4j
-public class FriendsServlet extends HttpServlet {
-    public static final String INCLUDED_PAGE = "includedPage";
-    private static final String FRIENDS_SET = "friendsSet";
-    private static final String RELATION_MAP = "relationMap";
-    private static RelationDao relationDao;
-    private static UserDao userDao;
-
-    @Override
-    public void init(ServletConfig servletConfig) {
-        ServletContext servletContext = servletConfig.getServletContext();
-        relationDao = (RelationDao) servletContext.getAttribute(RELATION_DAO);
-        userDao = (UserDao) servletContext.getAttribute(USER_DAO);
-    }
+public class FriendsServlet extends CommonHttpServlet {
+    private final String FRIENDS_SET = "friendsSet";
+    private final String RELATION_MAP = "relationMap";
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -58,6 +39,9 @@ public class FriendsServlet extends HttpServlet {
         try {
             String action = request.getParameter("action") == null ? "friends" : request.getParameter("action");
             switch (action) {
+                case  "friends":
+                    friendIdSet = relationDao.getFriends(currentUser.getId()).getIdSet();
+                    break;
                 case "incoming":
                     friendIdSet = relationDao.getIncoming(currentUser.getId()).getIdSet();
                     break;
@@ -65,7 +49,7 @@ public class FriendsServlet extends HttpServlet {
                     friendIdSet = relationDao.getRequest(currentUser.getId()).getIdSet();
                     break;
                 case "search":
-                    request.setAttribute("action",action);
+                    request.setAttribute("action", action);
                     String[] names = request.getParameter("names").split(" ");
                     if (names.length != 2) {
                         request.setAttribute(ERROR_MSG, FRIENDS_SEARCH_FAIL.getPropertyName());

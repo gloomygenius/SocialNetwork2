@@ -1,29 +1,21 @@
 package com.socialnetwork.filters;
 
 import com.socialnetwork.common.HttpFilter;
-import com.socialnetwork.dao.UserDao;
 import lombok.extern.log4j.Log4j;
 
-import javax.servlet.*;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import static com.socialnetwork.listeners.Initializer.USER_DAO;
-import static com.socialnetwork.servlets.FriendsServlet.INCLUDED_PAGE;
+import static com.socialnetwork.servlets.CommonHttpServlet.CURRENT_USER;
+import static com.socialnetwork.servlets.CommonHttpServlet.INCLUDED_PAGE;
 
 
 @Log4j
 public class SecurityFilter implements HttpFilter {
-    public static String CURRENT_USER = "currentUser";
-    private UserDao userDao;
-
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-        ServletContext servletContext = filterConfig.getServletContext();
-        userDao = (UserDao) servletContext.getAttribute(USER_DAO);
-    }
 
     @Override
     public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {

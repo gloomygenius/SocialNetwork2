@@ -9,7 +9,6 @@ import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j;
 import org.apache.commons.codec.digest.DigestUtils;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -17,7 +16,7 @@ import java.io.IOException;
 import static com.socialnetwork.dao.enums.Roles.USER;
 
 @Log4j
-public class UserRecorder extends HttpServlet {
+public class UserRecorder extends CommonHttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
@@ -28,6 +27,7 @@ public class UserRecorder extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) {
         requestProcess(request, response);
     }
+
     @SneakyThrows
     private void requestProcess(HttpServletRequest request, HttpServletResponse response) {
         ConnectionPool connectionPool = ConnectionPool.getInstance();
@@ -51,7 +51,7 @@ public class UserRecorder extends HttpServlet {
         try {
             response.sendRedirect(nextUrl);
         } catch (IOException e) {
-            log.warn("Redirect error",e);
+            log.warn("Redirect error", e);
         }
     }
 }

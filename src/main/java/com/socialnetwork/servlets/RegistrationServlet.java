@@ -10,7 +10,6 @@ import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j;
 import org.apache.commons.codec.digest.DigestUtils;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
@@ -18,16 +17,11 @@ import java.util.Optional;
 import static com.socialnetwork.dao.enums.Gender.FEMALE;
 import static com.socialnetwork.dao.enums.Gender.MALE;
 import static com.socialnetwork.dao.enums.Roles.USER;
-import static com.socialnetwork.filters.SecurityFilter.CURRENT_USER;
-import static com.socialnetwork.servlets.ErrorHandler.ERROR_MSG;
 import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.EMAIL_ALREADY_EXIST;
 import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.REGISTRATION_FAIL;
 
-/**
- * Created by Vasiliy Bobkov on 13.11.2016.
- */
 @Log4j
-public class RegistrationServlet extends HttpServlet {
+public class RegistrationServlet extends CommonHttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
@@ -79,7 +73,7 @@ public class RegistrationServlet extends HttpServlet {
                         throw new Exception();
                     }
                 } catch (Exception e) {
-                    log.error("Add new user "+email+" failed");
+                    log.error("Add new user " + email + " failed");
                     request.setAttribute(ERROR_MSG, REGISTRATION_FAIL.getPropertyName());
                     request.getRequestDispatcher("/regpage").forward(request, response);
                 }

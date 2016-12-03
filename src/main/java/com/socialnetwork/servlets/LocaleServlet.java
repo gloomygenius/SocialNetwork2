@@ -3,17 +3,15 @@ package com.socialnetwork.servlets;
 import lombok.extern.log4j.Log4j;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import static com.socialnetwork.servlets.ErrorHandler.ERROR_MSG;
 import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.LOCALE_ERROR;
 
 @Log4j
-public class LocaleServlet extends HttpServlet {
+public class LocaleServlet extends CommonHttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         requestProcess(request, response);

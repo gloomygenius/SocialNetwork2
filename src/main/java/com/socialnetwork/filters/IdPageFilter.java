@@ -21,10 +21,8 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.socialnetwork.filters.SecurityFilter.CURRENT_USER;
-import static com.socialnetwork.listeners.Initializer.PROFILE_DAO;
-import static com.socialnetwork.listeners.Initializer.RELATION_DAO;
-import static com.socialnetwork.listeners.Initializer.USER_DAO;
+import static com.socialnetwork.listeners.Initializer.*;
+import static com.socialnetwork.servlets.CommonHttpServlet.CURRENT_USER;
 import static com.socialnetwork.servlets.ErrorHandler.ERROR_MSG;
 import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.NOT_AUTH;
 import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.USER_NOT_FOUND;

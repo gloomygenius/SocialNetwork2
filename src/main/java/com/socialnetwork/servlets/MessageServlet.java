@@ -1,8 +1,8 @@
 package com.socialnetwork.servlets;
 
 import com.socialnetwork.dao.exception.DaoException;
-import com.socialnetwork.entities.Message;
-import com.socialnetwork.entities.User;
+import com.socialnetwork.models.Message;
+import com.socialnetwork.models.User;
 import lombok.extern.log4j.Log4j;
 
 import javax.servlet.ServletException;

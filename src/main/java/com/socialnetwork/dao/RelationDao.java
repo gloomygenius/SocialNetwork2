@@ -2,11 +2,8 @@ package com.socialnetwork.dao;
 
 import com.socialnetwork.dao.enums.RelationType;
 import com.socialnetwork.dao.exception.DaoException;
-import com.socialnetwork.entities.Relation;
+import com.socialnetwork.models.Relation;
 
-/**
- * Created by Vasiliy Bobkov on 08.11.2016.
- */
 public interface RelationDao {
 
     Relation getFriends(long userId) throws DaoException;

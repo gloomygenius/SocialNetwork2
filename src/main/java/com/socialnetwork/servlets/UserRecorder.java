@@ -4,7 +4,7 @@ package com.socialnetwork.servlets;
 import com.socialnetwork.connection_pool.ConnectionPool;
 import com.socialnetwork.dao.UserDao;
 import com.socialnetwork.dao.h2.UserDaoImpl;
-import com.socialnetwork.entities.User;
+import com.socialnetwork.models.User;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j;
 import org.apache.commons.codec.digest.DigestUtils;

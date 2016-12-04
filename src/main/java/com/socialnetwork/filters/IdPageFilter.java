@@ -5,8 +5,8 @@ import com.socialnetwork.dao.ProfileDao;
 import com.socialnetwork.dao.RelationDao;
 import com.socialnetwork.dao.UserDao;
 import com.socialnetwork.dao.exception.DaoException;
-import com.socialnetwork.entities.Profile;
-import com.socialnetwork.entities.User;
+import com.socialnetwork.models.Profile;
+import com.socialnetwork.models.User;
 import lombok.extern.log4j.Log4j;
 
 import javax.servlet.FilterChain;

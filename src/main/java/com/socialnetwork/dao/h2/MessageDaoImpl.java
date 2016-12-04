@@ -4,7 +4,7 @@ import com.socialnetwork.connection_pool.ConnectionPool;
 import com.socialnetwork.connection_pool.ConnectionPoolException;
 import com.socialnetwork.dao.MessageDao;
 import com.socialnetwork.dao.exception.DaoException;
-import com.socialnetwork.entities.Message;
+import com.socialnetwork.models.Message;
 import lombok.Cleanup;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;

@@ -1,7 +1,7 @@
 package com.socialnetwork.dao;
 
 import com.socialnetwork.dao.exception.DaoException;
-import com.socialnetwork.entities.Dialog;
+import com.socialnetwork.models.Dialog;
 
 import java.time.LocalDateTime;
 import java.util.Set;

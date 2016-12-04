@@ -11,9 +11,6 @@ import java.time.format.DateTimeParseException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Created by Vasiliy Bobkov on 16.11.2016.
- */
 public abstract class Validator {
 
     public static ValidCode validateImage(ImageReader reader) throws IOException {
@@ -31,7 +28,7 @@ public abstract class Validator {
         INVALID_BIRTHDAY("error.invalid.birthday"),
         INVALID_UNIVERSITY("error.invalid.university"),
         INVALID_CITY("error.invalid.city"),
-        INVALID_COUNTRY("error.invalid.county"),
+        INVALID_COUNTRY("error.invalid.country"),
         INVALID_TELEPHONE("error.invalid.telephone"),
         INVALID_ABOUT("error.invalid.about"),
         INVALID_PIXEL_SIZE("error.invalid.pixelSize"),

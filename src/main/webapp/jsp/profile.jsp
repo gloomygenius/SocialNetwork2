@@ -4,9 +4,9 @@
 
 <fmt:setLocale value="${sessionScope.language}"/>
 <fmt:setBundle basename="text"/>
-<jsp:useBean id="user" type="com.socialnetwork.entities.User" scope="request"/>
-<jsp:useBean id="profile" type="com.socialnetwork.entities.Profile" scope="request"/>
-<jsp:useBean id="currentUser" type="com.socialnetwork.entities.User" scope="session"/>
+<jsp:useBean id="user" type="com.socialnetwork.models.User" scope="request"/>
+<jsp:useBean id="profile" type="com.socialnetwork.models.Profile" scope="request"/>
+<jsp:useBean id="currentUser" type="com.socialnetwork.models.User" scope="session"/>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -75,6 +75,12 @@
                     <div class="row">
                         <div class="col-xs-6"><fmt:message key="profile.telephone"/>:</div>
                         <div class="col-xs-6">${profile.telephone}</div>
+                    </div>
+                </c:if>
+                <c:if test="${not empty profile.country}">
+                    <div class="row">
+                        <div class="col-xs-6"><fmt:message key="profile.country"/>:</div>
+                        <div class="col-xs-6">${profile.country}</div>
                     </div>
                 </c:if>
                 <c:if test="${not empty profile.city}">

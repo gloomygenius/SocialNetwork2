@@ -1,13 +1,10 @@
-package com.socialnetwork.entities;
+package com.socialnetwork.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Value;
 
 import java.time.LocalDateTime;
 
-/**
- * Created by Vasiliy Bobkov on 15.11.2016.
- */
 @Value
 @AllArgsConstructor
 public class Message implements Comparable<Message> {

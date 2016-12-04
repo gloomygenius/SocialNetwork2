@@ -3,7 +3,7 @@ package com.socialnetwork.dao.h2;
 import com.socialnetwork.common.DataScriptExecutor;
 import com.socialnetwork.connection_pool.ConnectionPool;
 import com.socialnetwork.dao.DialogDao;
-import com.socialnetwork.entities.Dialog;
+import com.socialnetwork.models.Dialog;
 import lombok.SneakyThrows;
 import org.junit.BeforeClass;
 import org.junit.Test;

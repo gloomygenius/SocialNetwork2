@@ -4,7 +4,7 @@ import com.socialnetwork.connection_pool.ConnectionPool;
 import com.socialnetwork.connection_pool.ConnectionPoolException;
 import com.socialnetwork.dao.ProfileDao;
 import com.socialnetwork.dao.exception.DaoException;
-import com.socialnetwork.entities.Profile;
+import com.socialnetwork.models.Profile;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 
@@ -12,9 +12,6 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.Optional;
 
-/**
- * Created by Vasiliy Bobkov on 07.11.2016.
- */
 @Log4j
 @RequiredArgsConstructor
 public class ProfileDaoImpl implements ProfileDao {

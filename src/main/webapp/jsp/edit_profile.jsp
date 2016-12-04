@@ -2,8 +2,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <fmt:setLocale value="${sessionScope.language}"/>
 <fmt:setBundle basename="text"/>
-<jsp:useBean id="profile" type="com.socialnetwork.entities.Profile" scope="request"/>
-<jsp:useBean id="currentUser" type="com.socialnetwork.entities.User" scope="session"/>
+<jsp:useBean id="profile" type="com.socialnetwork.models.Profile" scope="request"/>
+<jsp:useBean id="currentUser" type="com.socialnetwork.models.User" scope="session"/>
 <jsp:useBean id="errorMsg" class="java.lang.String" scope="request"/>
 <jsp:useBean id="successMsg" class="java.lang.String" scope="request"/>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>

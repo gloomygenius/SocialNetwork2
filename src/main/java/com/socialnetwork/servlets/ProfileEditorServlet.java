@@ -2,8 +2,8 @@ package com.socialnetwork.servlets;
 
 import com.socialnetwork.common.NameNormalizer;
 import com.socialnetwork.dao.exception.DaoException;
-import com.socialnetwork.entities.Profile;
-import com.socialnetwork.entities.User;
+import com.socialnetwork.models.Profile;
+import com.socialnetwork.models.User;
 import com.socialnetwork.services.Validator;
 import lombok.extern.log4j.Log4j;
 
@@ -35,14 +35,13 @@ public class ProfileEditorServlet extends CommonHttpServlet {
         } catch (DaoException e) {
             request.setAttribute(ERROR_MSG, COMMON_ERROR);
         }
-
         HttpSession session = request.getSession();
         currentUser = (User) session.getAttribute(CURRENT_USER);
         Optional<Profile> profile = Optional.empty();
         try {
             profile = profileDao.getByUserId(currentUser.getId());
         } catch (DaoException e) {
-            log.error("ProfileDao exception in IdFilter", e);
+            log.error("ProfileDao exception in ProfileEditorServlet", e);
             request.setAttribute(ERROR_MSG, USER_NOT_FOUND.getPropertyName());
             request.getRequestDispatcher("/error").forward(request, response);
         }

@@ -1,6 +1,6 @@
 package com.socialnetwork.servlets;
 
-import com.socialnetwork.entities.User;
+import com.socialnetwork.models.User;
 import com.socialnetwork.services.Validator;
 import lombok.extern.log4j.Log4j;
 import org.apache.commons.fileupload.FileItem;

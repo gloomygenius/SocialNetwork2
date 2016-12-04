@@ -1,15 +1,10 @@
-package com.socialnetwork.entities;
+package com.socialnetwork.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
 
 import java.util.Set;
-
-
-/**
- * Created by Vasiliy Bobkov on 06.11.2016.
- */
 
 @Value
 @AllArgsConstructor

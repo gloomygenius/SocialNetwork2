@@ -6,7 +6,7 @@ import com.socialnetwork.connection_pool.ConnectionPoolException;
 import com.socialnetwork.dao.RelationDao;
 import com.socialnetwork.dao.UserDao;
 import com.socialnetwork.dao.enums.RelationType;
-import com.socialnetwork.entities.User;
+import com.socialnetwork.models.User;
 import lombok.SneakyThrows;
 import org.junit.BeforeClass;
 import org.junit.Test;

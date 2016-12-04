@@ -5,7 +5,7 @@ import com.socialnetwork.connection_pool.ConnectionPoolException;
 import com.socialnetwork.dao.RelationDao;
 import com.socialnetwork.dao.enums.RelationType;
 import com.socialnetwork.dao.exception.DaoException;
-import com.socialnetwork.entities.Relation;
+import com.socialnetwork.models.Relation;
 import lombok.Cleanup;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;

@@ -55,7 +55,7 @@ public class DialogDaoImpl implements DialogDao {
             }
 
         } catch (SQLException | ConnectionPoolException e) {
-            throw new DaoException("Error in getPrivateDialog() ",e);
+            throw new DaoException("Error in getPrivateDialog() ", e);
         }
     }
 
@@ -64,8 +64,9 @@ public class DialogDaoImpl implements DialogDao {
         Set<Dialog> dialogSet = new TreeSet<>();
         try (Connection connection = connectionPool.takeConnection();
              PreparedStatement selectStatement = connection.prepareStatement(
-                     "SELECT DISTINCT d.id, d.last_update FROM Dialogues d, Dialog_Participants dp  WHERE  (d.id=dp.dialog_id AND dp.user_id=?) " +
-                             "OR d.creator= ? ORDER BY d.last_update DESC LIMIT ? OFFSET ? ")
+                     "SELECT DISTINCT d.id, d.last_update FROM Dialogues d, Dialog_Participants dp  " +
+                             "WHERE  (d.id=dp.dialog_id AND dp.user_id=?) OR d.creator= ? " +
+                             "ORDER BY d.last_update DESC LIMIT ? OFFSET ? ")
         ) {
             selectStatement.setLong(1, participant);
             selectStatement.setLong(2, participant);
@@ -103,7 +104,7 @@ public class DialogDaoImpl implements DialogDao {
                 );
             } else throw new DaoException("Error in DialogDao ");
         } catch (SQLException | ConnectionPoolException e) {
-            throw new DaoException("Error in DialogDao ",e);
+            throw new DaoException("Error in DialogDao ", e);
         }
     }
 
@@ -111,17 +112,19 @@ public class DialogDaoImpl implements DialogDao {
     public void createPrivateDialog(long creator, long participant) throws DaoException {
         try (Connection connection = connectionPool.takeConnection()) {
             connection.setAutoCommit(false);
-            try (Statement statement = connection.createStatement()) {
-                statement.executeUpdate("INSERT INTO Dialogues(creator, last_update) VALUES (" + creator + ", '" + Timestamp.valueOf(LocalDateTime.now()) + "');");
-                ResultSet generatedKeys = statement.getGeneratedKeys();
+            try (PreparedStatement prepStateForDialogues = connection.prepareStatement(
+                    "INSERT INTO Dialogues(creator, last_update) VALUES (?,?);")) {
+                prepStateForDialogues.setLong(1, creator);
+                prepStateForDialogues.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
+                prepStateForDialogues.executeUpdate();
+                ResultSet generatedKeys = prepStateForDialogues.getGeneratedKeys();
                 if (generatedKeys.next()) {
-                    statement.executeUpdate(
-                            "INSERT INTO Dialog_Participants(dialog_id, user_id) VALUES ("
-                                    + String.valueOf(generatedKeys.getLong(1))
-                                    + ","
-                                    + String.valueOf(participant)
-                                    + ")"
-                    );
+                    @Cleanup PreparedStatement prepStateForParticipant = connection.prepareStatement(
+                            "INSERT INTO Dialog_Participants(dialog_id, user_id) VALUES (?,?)");
+                    prepStateForParticipant.setLong(1, generatedKeys.getLong(1));
+                    prepStateForParticipant.setLong(2, participant);
+                    prepStateForParticipant.executeUpdate();
+                    connection.commit();
                 } else
                     throw new DaoException("Error in DialogDao ");
             } catch (DaoException e) {
@@ -129,22 +132,22 @@ public class DialogDaoImpl implements DialogDao {
                 connection.setAutoCommit(true);
                 throw e;
             }
-            connection.commit();
         } catch (SQLException | ConnectionPoolException e) {
-            throw new DaoException("Error in DialogDao ",e);
+            throw new DaoException("Error in DialogDao ", e);
         }
     }
 
     @Override
     public void updateTime(long dialog, LocalDateTime time) throws DaoException {
         try (Connection connection = connectionPool.takeConnection();
-             Statement statement = connection.createStatement()) {
-            statement.executeUpdate("UPDATE Dialogues SET last_update='"
-                    + Timestamp.valueOf(time)
-                    + "' WHERE id="
-                    + dialog+";");
+             PreparedStatement statement = connection.prepareStatement(
+                     "UPDATE Dialogues SET last_update=? WHERE id=?;"
+             )) {
+            statement.setTimestamp(1, Timestamp.valueOf(time));
+            statement.setLong(2, dialog);
+            statement.executeUpdate();
         } catch (SQLException | ConnectionPoolException e) {
-            throw new DaoException("Error in DialogDao ",e);
+            throw new DaoException("Error in DialogDao ", e);
         }
     }
 }

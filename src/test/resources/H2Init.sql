@@ -50,6 +50,10 @@ CREATE TABLE Dialog_Participants (
   FOREIGN KEY (user_id) REFERENCES Users (id)
 );
 
+CREATE INDEX INDEX_EMAIL ON Users(email);
+CREATE INDEX INDEX_F_NAME ON Users(first_name);
+CREATE INDEX INDEX_L_NAME ON Users(last_name);
+
 INSERT INTO Users (email, password, first_name, last_name, gender, role)
 VALUES ('admin@exam.com', '123456', 'Василий', 'Бобков', 0, 2);
 INSERT INTO Users (email, password, first_name, last_name, gender, role)

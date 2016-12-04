@@ -4,18 +4,31 @@ import com.socialnetwork.common.DataScriptExecutor;
 import com.socialnetwork.connection_pool.ConnectionPool;
 import com.socialnetwork.dao.DialogDao;
 import com.socialnetwork.models.Dialog;
+import lombok.Setter;
 import lombok.SneakyThrows;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import javax.validation.constraints.AssertTrue;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**Test for DialogDaoImpl
  * Created by Vasiliy Bobkov on 15.11.2016.
  */
 public class DialogDaoImplTest {
+    @Test
+    @SneakyThrows
+    public void updateTime() throws Exception {
+        LocalDateTime time = LocalDateTime.now();
+        dialogDao.updateTime(1, time);
+        assertTrue(dialogDao.getDialog(1).getLastUpdate().equals(time));
+    }
+
     private static ConnectionPool connectionPool;
     private DialogDao dialogDao = new DialogDaoImpl(connectionPool);
 

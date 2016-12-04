@@ -16,6 +16,10 @@ CREATE TABLE Users (
   about      VARCHAR(255),
 );
 
+CREATE INDEX INDEX_EMAIL ON Users(email);
+CREATE INDEX INDEX_F_NAME ON Users(first_name);
+CREATE INDEX INDEX_L_NAME ON Users(last_name);
+
 CREATE TABLE Relations (
   sender_id     BIGINT NOT NULL,
   recipient_id  BIGINT NOT NULL,

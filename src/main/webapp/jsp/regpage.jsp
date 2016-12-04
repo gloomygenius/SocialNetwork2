@@ -57,7 +57,7 @@
                         </option>
                         <option
                                 <c:if test="${param.gender=='female'}">selected</c:if> value="female">
-                            <fmt:message key="regform.male"/>
+                            <fmt:message key="regform.female"/>
                         </option>
                     </select>
                 </div>

@@ -8,9 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class ErrorHandler extends CommonHttpServlet {
+import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.COMMON_ERROR;
+import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.ERROR_404;
 
-    static public final String ERROR_HANDLER = "errorHandler";
+public class ErrorHandler extends CommonHttpServlet {
 
     @RequiredArgsConstructor
     public enum ErrorCode {
@@ -41,7 +42,9 @@ public class ErrorHandler extends CommonHttpServlet {
     }
 
     private void requestProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String msg = request.getAttribute(ERROR_MSG) == null ? "error.common" : (String) request.getAttribute(ERROR_MSG);
+        String code = request.getParameter("code");
+        String msg = request.getAttribute(ERROR_MSG) != null ? (String) request.getAttribute(ERROR_MSG) :
+                code.equals("404") ? ERROR_404.getPropertyName() : COMMON_ERROR.getPropertyName();
         request.setAttribute(ERROR_MSG, msg);
         request.setAttribute(INCLUDED_PAGE, "error");
         request.getRequestDispatcher("/index.jsp").forward(request, response);

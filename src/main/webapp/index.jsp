@@ -43,7 +43,7 @@
 
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">Выбрать язык<span class="caret"></span></a>
+                       aria-expanded="false"><fmt:message key="menu.chooseLocale"/><span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li>
                             <a href="/locale?language=ru_RU<c:if test="${not empty pageContext.request.queryString}">&${pageContext.request.queryString}</c:if>">Русский</a>
@@ -55,10 +55,6 @@
                 </li>
                 <c:if test="${not empty currentUser}">
                     <li><a href="${pageContext.request.contextPath}/logout"><fmt:message key="menu.logout"/></a></li>
-                    <%--suppress ELValidationInJSP --%>
-                    <c:if test="${currentUser.role==2}">
-                        <li><a href="#">Админка</a></li>
-                    </c:if>
                 </c:if>
 
             </ul>
@@ -70,7 +66,7 @@
         <div class="col-xs-2 col-md-2 col-lg-2">
             <c:if test="${not empty currentUser}">
                 <ul class="nav nav-list">
-                    <li class="nav-header">Навигация</li>
+                    <li class="nav-header"><fmt:message key="menu.navigation"/>Навигация</li>
                     <li><a href="/id${currentUser.id}"><fmt:message key="menu.mypage"/></a></li>
                     <li>
                         <a href="<c:url value="/dialogues"/>"><fmt:message key="menu.dialogues"/></a></li>

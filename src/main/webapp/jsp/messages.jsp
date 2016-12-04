@@ -12,20 +12,20 @@
     <div class="col-xs-12" id="dialogues">
         <c:if test="${messages.size() == requestScope.limit}">
             <a href="<c:url value="/messages?dialog=${param.dialog}&limit=${requestScope.limit+15}&offset=${requestScope.offset}"/>">
-                Посмотреть предыдущие сообщения</a>
+                <fmt:message key="messages.showPrevious"/></a>
         </c:if>
         <table class="table">
             <thead>
             <tr>
-                <th>Отправитель</th>
-                <th>Сообщение</th>
-                <th>Дата</th>
+                <th><fmt:message key="messages.sender"/></th>
+                <th><fmt:message key="messages.message"/></th>
+                <th><fmt:message key="messages.date"/></th>
             </tr>
             </thead>
             <tbody>
             <c:forEach var="message" items="${messages}">
                 <tr>
-                    <td>${userMap[message.sender]}</td>
+                    <td><a href="/id${message.sender}">${userMap[message.sender]}</a></td>
                     <td>${message.message}</td>
                     <td><tfmt:format time="${message.time}"/></td>
                 </tr>
@@ -36,16 +36,16 @@
         <form action="<c:url value="/messages?dialog=${requestScope.dialog}&limit=${requestScope.limit}&offset=${requestScope.offset}"/>"
               method="post">
             <div class="form-group">
-                <label for="message">Сообщение:</label>
+                <label for="message"><fmt:message key="messages.message"/>:</label>
                 <input type="hidden" class="form-control" name="dialog" value="${requestScope.dialog}">
                 <input type="hidden" class="form-control" name="limit" value="${requestScope.limit}">
                 <input type="hidden" class="form-control" name="offset" value="${requestScope.offset}">
                 <input type="text" class="form-control" id="message" name="message">
             </div>
-            <button type="submit" class="btn btn-success">Отправить</button>
+            <button type="submit" class="btn btn-success"><fmt:message key="messages.send"/></button>
         </form>
         <a href="<c:url value="/messages?dialog=${requestScope.dialog}&limit=${requestScope.limit}&offset=${requestScope.offset}"/>">
-            <button type="submit" class="btn btn-primary">Обновить</button>
+            <button type="submit" class="btn btn-primary"><fmt:message key="messages.refresh"/></button>
         </a>
     </div>
 </div>

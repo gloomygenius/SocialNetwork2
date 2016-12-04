@@ -23,26 +23,26 @@
             </div>
         </c:if>
         <c:if test="${user.id!=currentUser.id}">
-            <a href="<c:url value="/messages?recipient=${user.id}"/>" class="btn btn-success btn-block">Написать
-                сообщение</a><br>
+            <a href="<c:url value="/messages?recipient=${user.id}"/>" class="btn btn-success btn-block">
+                <fmt:message key="friends.writeMessage"/></a><br>
             <c:choose>
                 <c:when test="${requestScope.relation==0}">
                     <a href="<c:url value="/friends?action=add&id=${user.id}"/>"
-                       class="btn btn-primary btn-block">Добавить в друзья</a><br>
+                       class="btn btn-primary btn-block"><fmt:message key="friends.add"/></a><br>
                 </c:when>
                 <c:when test="${requestScope.relation==1}">
                     <a href="<c:url value="/friends?action=remove&id=${user.id}&relation=1"/>"
-                       class="btn btn-warning btn-block">Отменить заявку в друзья</a><br>
+                       class="btn btn-warning btn-block"><fmt:message key="friends.cancelRequest"/></a><br>
                 </c:when>
                 <c:when test="${requestScope.relation==2}">
                     <a href="<c:url value="/friends?action=add&id=${user.id}"/>"
-                       class="btn btn-primary btn-block">Принять заявку в друзья</a><br>
+                       class="btn btn-primary btn-block"><fmt:message key="friends.acceptIncoming"/></a><br>
                     <a href="<c:url value="/friends?action=remove&id=${user.id}&relation=2"/>"
-                       class="btn btn-danger btn-block">Отклонить заявку в друзья</a><br>
+                       class="btn btn-danger btn-block"><fmt:message key="friends.cancelIncoming"/></a><br>
                 </c:when>
                 <c:when test="${requestScope.relation==3}">
                     <a href="<c:url value="/friends?action=remove&id=${user.id}&relation=3"/>"
-                       class="btn btn-danger btn-block">Удалить из друзей</a><br>
+                       class="btn btn-danger btn-block"><fmt:message key="friends.delete"/></a><br>
                 </c:when>
             </c:choose>
         </c:if>
@@ -52,7 +52,7 @@
             <h2>${user.firstName} ${user.lastName}</h2>
         </div>
         <div>
-            <p>Информация о пользователе:</p>
+            <p><fmt:message key="profile.information"/>:</p>
             <div class="row">
                 <div class="col-xs-6"><fmt:message key="profile.gender"/>:</div>
                 <div class="col-xs-6">

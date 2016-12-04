@@ -11,14 +11,16 @@
         <c:forEach var="dialog" items="${dialogues}">
             <div class="row">
                 <div class="col-xs-6">
-                    <p style="font-size: 2em">${dialog.value.firstName} ${dialog.value.lastName}</p>
+                    <p style="font-size: 2em">
+                        <a href="/id${dialog.value.id}">${dialog.value.firstName} ${dialog.value.lastName}</a>
+                    </p>
                 </div>
                 <div class="col-xs-4">
-                    <a href="<c:url value="/messages?dialog=${dialog.key.id}"/>" class="btn btn-success center-block">Открыть
-                        диалог</a>
+                    <a href="<c:url value="/messages?dialog=${dialog.key.id}"/>" class="btn btn-success center-block">
+                        <fmt:message key="dialogues.open"/></a>
                 </div>
                 <div class="col-xs-2">
-                    <p>Последнее сообщение:<br>
+                    <p><fmt:message key="dialogues.lastMessage"/>:<br>
                             <custom:format time="${dialog.key.lastUpdate}"/></p>
                 </div>
             </div>

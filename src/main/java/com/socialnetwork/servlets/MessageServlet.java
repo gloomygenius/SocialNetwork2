@@ -57,7 +57,7 @@ public class MessageServlet extends CommonHttpServlet {
             request.setAttribute("userMap", userMap);
             request.getRequestDispatcher("/index.jsp").forward(request, response);
         } catch (DaoException e) {
-            log.error("Getting privat dialog of id" + currentUser.getId() + " error", e);
+            log.error("Getting private dialog of id" + currentUser.getId() + " error", e);
             request.setAttribute(ERROR_MSG, COMMON_ERROR.getPropertyName());
             request.getRequestDispatcher("/error").forward(request, response);
         }

@@ -8,7 +8,7 @@
 
 <div class="row">
     <div class="col-xs-12">
-        <form class="form-horizontal" action="<c:url value="/registration"/>" method="POST">
+        <form class="form-horizontal" action="<c:url value="/regpage"/>" method="POST">
             <fieldset>
                 <div id="legend">
                     <legend class="area-legend-symbol"><fmt:message key="title.registration"/></legend>

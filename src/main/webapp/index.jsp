@@ -66,7 +66,7 @@
         <div class="col-xs-2 col-md-2 col-lg-2">
             <c:if test="${not empty currentUser}">
                 <ul class="nav nav-list">
-                    <li class="nav-header"><fmt:message key="menu.navigation"/>Навигация</li>
+                    <li class="nav-header"><fmt:message key="menu.navigation"/></li>
                     <li><a href="/id${currentUser.id}"><fmt:message key="menu.mypage"/></a></li>
                     <li>
                         <a href="<c:url value="/dialogues"/>"><fmt:message key="menu.dialogues"/></a></li>
@@ -85,7 +85,7 @@
                     <jsp:include page="jsp/${requestScope.includedPage}.jsp"/>
                 </c:when>
                 <c:otherwise>
-                    <h1>Добро пожаловать в социальную сеть "Отрядники"!</h1>
+                    <h1><fmt:message key="index.welcome"/></h1>
                 </c:otherwise>
             </c:choose>
         </div>

@@ -21,9 +21,15 @@
                 </div>
                 <div class="col-xs-2">
                     <p><fmt:message key="dialogues.lastMessage"/>:<br>
-                            <custom:format time="${dialog.key.lastUpdate}"/></p>
+                        <custom:format time="${dialog.key.lastUpdate}"/></p>
                 </div>
             </div>
         </c:forEach>
+        <c:if test="${(not empty requestScope.offset)&&requestScope.offset!=0}"><a
+                href="<c:url value="/dialogues?offset=${requestScope.offset-requestScope.limit}&limit=${requestScope.limit}"/>">
+            <fmt:message key="previousPage"/></a> </c:if>
+        <c:if test="${requestScope.hasNextPage}"><a
+                href="<c:url value="/dialogues?offset=${requestScope.offset+requestScope.limit}&limit=${requestScope.limit}"/>">
+            <fmt:message key="nextPage"/></a> </c:if>
     </div>
 </div>

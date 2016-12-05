@@ -14,7 +14,7 @@ import java.util.Set;
  */
 public interface DialogDao {
     /**
-     * Return private dialog. Sender and recipient can be replaced.
+     * Return private dialog. Sender and recipient can be replaced. If dialog not exist, then return new dialog.
      * @param from sender id
      * @param to recipient id
      * @return {@code Dialog}
@@ -41,7 +41,7 @@ public interface DialogDao {
     Dialog getDialog(long id) throws DaoException;
 
     /**
-     * Create private dialog between tho users.
+     * Create private dialog between tho users, if not exist.
      * @param creator user id
      * @param participant user id
      * @throws DaoException if error from data base

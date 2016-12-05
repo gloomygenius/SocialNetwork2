@@ -71,11 +71,6 @@
     </servlet>
 
     <servlet>
-        <servlet-name>RegPage</servlet-name>
-        <servlet-class>com.socialnetwork.servlets.RegPageServlet</servlet-class>
-    </servlet>
-
-    <servlet>
         <servlet-name>UploadServlet</servlet-name>
         <servlet-class>com.socialnetwork.servlets.UploadServlet</servlet-class>
     </servlet>
@@ -87,11 +82,6 @@
 
     <servlet-mapping>
         <servlet-name>Registration</servlet-name>
-        <url-pattern>/registration</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>RegPage</servlet-name>
         <url-pattern>/regpage</url-pattern>
     </servlet-mapping>
 

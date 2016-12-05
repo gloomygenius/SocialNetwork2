@@ -20,7 +20,6 @@ public class SecurityFilter implements HttpFilter {
     @Override
     public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpSession session = request.getSession(true);
-        log.info("Start SecurityFilter");
         if (session.getAttribute(CURRENT_USER) != null)
             chain.doFilter(request, response);
         else {

@@ -26,8 +26,10 @@ public class DialoguesServlet extends CommonHttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute(INCLUDED_PAGE, "dialogues");
         User currentUser = (User) request.getSession().getAttribute(CURRENT_USER);
-        int limit = request.getAttribute("limit") != null ? (int) request.getAttribute("limit") : -1;
-        int offset = request.getAttribute("offset") != null ? (int) request.getAttribute("offset") : 0;
+        int offset = getIntParameter("offset", request, 0);
+        int limit = getIntParameter("limit", request, 10);
+
+        boolean hasNextPage=false;
         Map<Dialog, User> map = new TreeMap<>();
         try {
             Set<Dialog> dialogSet = dialogDao.getLastDialogues(currentUser.getId(), limit, offset);
@@ -38,10 +40,21 @@ public class DialoguesServlet extends CommonHttpServlet {
                 bufferUser = userDao.getById(dialog.getRecipient(sender));
                 bufferUser.ifPresent(user -> map.put(dialog, user));
             }
+            if (dialogSet.size()==limit) hasNextPage=true;
         } catch (DaoException e) {
             log.error("Error in dialogDao when user " + currentUser.getId() + " try get dialogues list", e);
         }
+        request.setAttribute("hasNextPage", hasNextPage);
         request.setAttribute("dialogues", map);
         request.getRequestDispatcher("/index.jsp").forward(request, response);
+    }
+    private int getIntParameter(String paramName, HttpServletRequest request, int defValue) {
+        int value = defValue;
+        if (request.getParameter(paramName) != null) {
+            log.debug(paramName + " " + Integer.parseInt(request.getParameter(paramName)));
+            value = Integer.parseInt(request.getParameter(paramName));
+        }
+        request.setAttribute(paramName, value);
+        return value;
     }
 }

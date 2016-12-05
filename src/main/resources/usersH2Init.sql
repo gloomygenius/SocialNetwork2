@@ -53,6 +53,12 @@ INSERT INTO Dialogues (creator, description, last_update) VALUES (1, 'test dialo
 INSERT INTO Dialogues (creator, description, last_update) VALUES (1, 'test dialog 4', '2016-11-11 10:28:42');
 INSERT INTO Dialogues (creator, description, last_update) VALUES (1, 'test dialog 5', '2016-11-14 10:28:42');
 INSERT INTO Dialogues (creator, description, last_update) VALUES (1, 'test dialog 6', '2016-11-12 10:28:42');
+INSERT INTO Dialogues (creator, description, last_update) VALUES (1, 'test dialog 6', '2016-11-11 10:28:42');
+INSERT INTO Dialogues (creator, description, last_update) VALUES (1, 'test dialog 6', '2016-11-10 10:28:42');
+INSERT INTO Dialogues (creator, description, last_update) VALUES (1, 'test dialog 6', '2016-11-09 10:28:42');
+INSERT INTO Dialogues (creator, description, last_update) VALUES (1, 'test dialog 6', '2016-11-08 10:28:42');
+INSERT INTO Dialogues (creator, description, last_update) VALUES (1, 'test dialog 6', '2016-11-07 10:28:42');
+INSERT INTO Dialogues (creator, description, last_update) VALUES (1, 'test dialog 6', '2016-11-06 10:28:42');
 
 INSERT INTO Dialog_Participants (dialog_id, user_id) VALUES (1, 2);
 INSERT INTO Dialog_Participants (dialog_id, user_id) VALUES (2, 3);
@@ -60,6 +66,12 @@ INSERT INTO Dialog_Participants (dialog_id, user_id) VALUES (3, 4);
 INSERT INTO Dialog_Participants (dialog_id, user_id) VALUES (4, 5);
 INSERT INTO Dialog_Participants (dialog_id, user_id) VALUES (5, 6);
 INSERT INTO Dialog_Participants (dialog_id, user_id) VALUES (6, 7);
+INSERT INTO Dialog_Participants (dialog_id, user_id) VALUES (7, 8);
+INSERT INTO Dialog_Participants (dialog_id, user_id) VALUES (8, 9);
+INSERT INTO Dialog_Participants (dialog_id, user_id) VALUES (9, 10);
+INSERT INTO Dialog_Participants (dialog_id, user_id) VALUES (10, 11);
+INSERT INTO Dialog_Participants (dialog_id, user_id) VALUES (11, 12);
+INSERT INTO Dialog_Participants (dialog_id, user_id) VALUES (12, 13);
 
 INSERT INTO Messages (sender, dialog, message, msg_time) VALUES (1, 1, 'Привет!', '2016-11-15 10:01:42');
 INSERT INTO Messages (sender, dialog, message, msg_time) VALUES (2, 1, 'Привет!', '2016-11-15 10:02:42');

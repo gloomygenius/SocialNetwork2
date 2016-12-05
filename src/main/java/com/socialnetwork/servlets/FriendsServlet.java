@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.*;
 
 import static com.socialnetwork.dao.enums.RelationType.FRIEND;
+import static com.socialnetwork.dao.enums.RelationType.REQUEST;
 import static com.socialnetwork.servlets.AuthorizationServlet.NEW_FRIENDS;
 import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.COMMON_ERROR;
 import static com.socialnetwork.servlets.ErrorHandler.ErrorCode.FRIENDS_SEARCH_FAIL;
@@ -71,7 +72,11 @@ public class FriendsServlet extends CommonHttpServlet {
                     break;
                 case "add":
                     id = Long.parseLong(request.getParameter("id"));
-                    relationDao.add(currentUser.getId(), id, FRIEND);
+                    int relation =relationDao.getRelationBetween(currentUser.getId(),id);
+                    RelationType type;
+                    if (relation==0) type=REQUEST;
+                    else type=FRIEND;
+                    relationDao.add(currentUser.getId(), id, type);
                     friendIdSet = relationDao.getFriends(currentUser.getId()).getIdSet();
                     session.setAttribute(NEW_FRIENDS, getCountNewFriend(currentUser.getId()));
                     break;

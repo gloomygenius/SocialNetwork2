@@ -45,7 +45,7 @@ public class UploadServlet extends CommonHttpServlet {
 
         // Check that we have a file upload request
         boolean isMultipart = ServletFileUpload.isMultipartContent(request);
-        log.info("isMultipart:" + isMultipart);
+        log.debug("isMultipart:" + isMultipart);
         if (!isMultipart) {
             request.setAttribute(ERROR_MSG, SELECT_FILE_ERROR.getPropertyName());
         } else {
@@ -64,11 +64,11 @@ public class UploadServlet extends CommonHttpServlet {
             try {
                 List fileItems = upload.parseRequest(request);
                 Iterator i = fileItems.iterator();
-                log.info("get iterator");
+                log.debug("get iterator");
                 while (i.hasNext()) {
-                    log.info("iterator has next");
+                    log.debug("iterator has next");
                     FileItem fi = (FileItem) i.next();
-                    log.info("is form field:" + fi.isFormField());
+                    log.debug("is form field:" + fi.isFormField());
                     if (!fi.isFormField()) {
                         // Write the file
                         HttpSession session = request.getSession();
@@ -85,7 +85,7 @@ public class UploadServlet extends CommonHttpServlet {
                     }
                 }
             } catch (Exception e) {
-                log.info("Upload file exception", e);
+                log.debug("Upload file exception", e);
                 request.setAttribute(ERROR_MSG, FILE_UPLOAD_ERROR.getPropertyName());
             }
         }
@@ -104,8 +104,8 @@ public class UploadServlet extends CommonHttpServlet {
                 String path = file.getAbsolutePath();
                 code = Validator.validateImage(reader);
                 if (code == Validator.ValidCode.SUCCESS) {
-                    log.info("last index:" + path.lastIndexOf("\\"));
-                    log.info(path.substring(0, path.lastIndexOf("\\")) + "\\min_" + path.substring(path.lastIndexOf("\\")));
+                    log.debug("last index:" + path.lastIndexOf("\\"));
+                    log.debug(path.substring(0, path.lastIndexOf("\\")) + "\\min_" + path.substring(path.lastIndexOf("\\")) + 1);
                     file = new File(path.substring(0, path.lastIndexOf("\\")) + "\\min_" + path.substring(path.lastIndexOf("\\") + 1));
                     ImageIO.write(scaledImage, "jpg", file);
                 }

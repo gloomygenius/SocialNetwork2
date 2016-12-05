@@ -11,6 +11,7 @@ import lombok.extern.log4j.Log4j;
 
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
@@ -80,7 +81,7 @@ public class DialogDaoImpl implements DialogDao {
         } catch (SQLException | ConnectionPoolException e) {
             throw new DaoException("Error in DialogDao");
         }
-        return dialogSet;
+        return Collections.unmodifiableSet(dialogSet);
     }
 
     @Override
